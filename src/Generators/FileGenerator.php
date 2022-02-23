@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\Modules\Generators;
+namespace Savannabits\AcaciaGenerator\Generators;
 
 use Illuminate\Filesystem\Filesystem;
-use Savannabits\Modules\Exceptions\FileAlreadyExistException;
+use Savannabits\AcaciaGenerator\Exceptions\FileAlreadyExistException;
 
 class FileGenerator extends Generator
 {

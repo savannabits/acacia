@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Traits;
+namespace Savannabits\AcaciaGenerator\Traits;
 
 trait ModuleCommandTrait
 {

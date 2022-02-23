@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules;
+namespace Savannabits\AcaciaGenerator;
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Translation\Translator;
-use Savannabits\Modules\Contracts\ActivatorInterface;
+use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 
 abstract class Module
 {

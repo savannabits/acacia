@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Facades;
+namespace Savannabits\AcaciaGenerator\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

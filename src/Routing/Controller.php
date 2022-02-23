@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Routing;
+namespace Savannabits\AcaciaGenerator\Routing;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;

@@ -1,52 +1,52 @@
 <?php
 
-namespace Savannabits\Modules\Providers;
+namespace Savannabits\AcaciaGenerator\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Savannabits\Modules\Commands\CommandMakeCommand;
-use Savannabits\Modules\Commands\ComponentClassMakeCommand;
-use Savannabits\Modules\Commands\ComponentViewMakeCommand;
-use Savannabits\Modules\Commands\ControllerMakeCommand;
-use Savannabits\Modules\Commands\DisableCommand;
-use Savannabits\Modules\Commands\DumpCommand;
-use Savannabits\Modules\Commands\EnableCommand;
-use Savannabits\Modules\Commands\EventMakeCommand;
-use Savannabits\Modules\Commands\FactoryMakeCommand;
-use Savannabits\Modules\Commands\InstallCommand;
-use Savannabits\Modules\Commands\JobMakeCommand;
-use Savannabits\Modules\Commands\AcaciaGeneratorV6Migrator;
-use Savannabits\Modules\Commands\ListCommand;
-use Savannabits\Modules\Commands\ListenerMakeCommand;
-use Savannabits\Modules\Commands\MailMakeCommand;
-use Savannabits\Modules\Commands\MiddlewareMakeCommand;
-use Savannabits\Modules\Commands\MigrateCommand;
-use Savannabits\Modules\Commands\MigrateRefreshCommand;
-use Savannabits\Modules\Commands\MigrateResetCommand;
-use Savannabits\Modules\Commands\MigrateRollbackCommand;
-use Savannabits\Modules\Commands\MigrateStatusCommand;
-use Savannabits\Modules\Commands\MigrationMakeCommand;
-use Savannabits\Modules\Commands\ModelMakeCommand;
-use Savannabits\Modules\Commands\ModuleDeleteCommand;
-use Savannabits\Modules\Commands\ModuleMakeCommand;
-use Savannabits\Modules\Commands\NotificationMakeCommand;
-use Savannabits\Modules\Commands\PolicyMakeCommand;
-use Savannabits\Modules\Commands\ProviderMakeCommand;
-use Savannabits\Modules\Commands\PublishCommand;
-use Savannabits\Modules\Commands\PublishConfigurationCommand;
-use Savannabits\Modules\Commands\PublishMigrationCommand;
-use Savannabits\Modules\Commands\PublishTranslationCommand;
-use Savannabits\Modules\Commands\RequestMakeCommand;
-use Savannabits\Modules\Commands\ResourceMakeCommand;
-use Savannabits\Modules\Commands\RouteProviderMakeCommand;
-use Savannabits\Modules\Commands\RuleMakeCommand;
-use Savannabits\Modules\Commands\SeedCommand;
-use Savannabits\Modules\Commands\SeedMakeCommand;
-use Savannabits\Modules\Commands\SetupCommand;
-use Savannabits\Modules\Commands\TestMakeCommand;
-use Savannabits\Modules\Commands\UnUseCommand;
-use Savannabits\Modules\Commands\UpdateCommand;
-use Savannabits\Modules\Commands\UseCommand;
+use Savannabits\AcaciaGenerator\Commands\CommandMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ComponentClassMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ComponentViewMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ControllerMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\DisableCommand;
+use Savannabits\AcaciaGenerator\Commands\DumpCommand;
+use Savannabits\AcaciaGenerator\Commands\EnableCommand;
+use Savannabits\AcaciaGenerator\Commands\EventMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\FactoryMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\InstallCommand;
+use Savannabits\AcaciaGenerator\Commands\JobMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\AcaciaGeneratorV6Migrator;
+use Savannabits\AcaciaGenerator\Commands\ListCommand;
+use Savannabits\AcaciaGenerator\Commands\ListenerMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MailMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MiddlewareMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateRefreshCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateResetCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateRollbackCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateStatusCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrationMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ModelMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ModuleDeleteCommand;
+use Savannabits\AcaciaGenerator\Commands\ModuleMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\NotificationMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\PolicyMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ProviderMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
+use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\RuleMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\SeedCommand;
+use Savannabits\AcaciaGenerator\Commands\SeedMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\SetupCommand;
+use Savannabits\AcaciaGenerator\Commands\TestMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\UnUseCommand;
+use Savannabits\AcaciaGenerator\Commands\UpdateCommand;
+use Savannabits\AcaciaGenerator\Commands\UseCommand;
 
 class ConsoleServiceProvider extends ServiceProvider
 {
@@ -54,7 +54,7 @@ class ConsoleServiceProvider extends ServiceProvider
      * Namespace of the console commands
      * @var string
      */
-    protected $consoleNamespace = "Savannabits\\Modules\\Commands";
+    protected $consoleNamespace = "Savannabits\\AcaciaGenerator\\Commands";
 
     /**
      * The available commands

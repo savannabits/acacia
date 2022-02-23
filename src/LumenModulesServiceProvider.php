@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\Modules;
+namespace Savannabits\AcaciaGenerator;
 
-use Savannabits\Modules\Support\Stub;
+use Savannabits\AcaciaGenerator\Support\Stub;
 
 class LumenModulesServiceProvider extends ModulesServiceProvider
 {

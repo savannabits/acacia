@@ -1,13 +1,13 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Support\Str;
-use Savannabits\Modules\Support\Config\GenerateConfigReader;
-use Savannabits\Modules\Support\Migrations\NameParser;
-use Savannabits\Modules\Support\Migrations\SchemaParser;
-use Savannabits\Modules\Support\Stub;
-use Savannabits\Modules\Traits\ModuleCommandTrait;
+use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\AcaciaGenerator\Support\Migrations\NameParser;
+use Savannabits\AcaciaGenerator\Support\Migrations\SchemaParser;
+use Savannabits\AcaciaGenerator\Support\Stub;
+use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 

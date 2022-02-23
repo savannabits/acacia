@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Exceptions;
+namespace Savannabits\AcaciaGenerator\Exceptions;
 
 class InvalidJsonException extends \Exception
 {

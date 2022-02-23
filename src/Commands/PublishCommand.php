@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\Modules\Module;
-use Savannabits\Modules\Publishing\AssetPublisher;
+use Savannabits\AcaciaGenerator\Module;
+use Savannabits\AcaciaGenerator\Publishing\AssetPublisher;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PublishCommand extends Command

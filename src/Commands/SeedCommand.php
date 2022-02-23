@@ -1,15 +1,15 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use ErrorException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Str;
-use Savannabits\Modules\Contracts\RepositoryInterface;
-use Savannabits\Modules\Module;
-use Savannabits\Modules\Support\Config\GenerateConfigReader;
-use Savannabits\Modules\Traits\ModuleCommandTrait;
+use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
+use Savannabits\AcaciaGenerator\Module;
+use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;

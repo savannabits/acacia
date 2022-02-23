@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\Modules\Migrations\Migrator;
-use Savannabits\Modules\Module;
+use Savannabits\AcaciaGenerator\Migrations\Migrator;
+use Savannabits\AcaciaGenerator\Module;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -25,7 +25,7 @@ class MigrateCommand extends Command
     protected $description = 'Migrate the migrations from the specified module or from all modules.';
 
     /**
-     * @var \Savannabits\Modules\Contracts\RepositoryInterface
+     * @var \Savannabits\AcaciaGenerator\Contracts\RepositoryInterface
      */
     protected $module;
 

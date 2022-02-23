@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\Modules\Publishing;
+namespace Savannabits\AcaciaGenerator\Publishing;
 
-use Savannabits\Modules\Support\Config\GenerateConfigReader;
+use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 
 class LangPublisher extends Publisher
 {

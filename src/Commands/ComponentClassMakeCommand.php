@@ -1,11 +1,11 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Support\Str;
-use Savannabits\Modules\Support\Config\GenerateConfigReader;
-use Savannabits\Modules\Support\Stub;
-use Savannabits\Modules\Traits\ModuleCommandTrait;
+use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\AcaciaGenerator\Support\Stub;
+use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
 class ComponentClassMakeCommand extends GeneratorCommand

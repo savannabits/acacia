@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\Modules\Providers;
+namespace Savannabits\AcaciaGenerator\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Savannabits\Modules\Contracts\RepositoryInterface;
+use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
 
 class BootstrapServiceProvider extends ServiceProvider
 {

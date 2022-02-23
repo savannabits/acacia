@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\Modules\Contracts;
+namespace Savannabits\AcaciaGenerator\Contracts;
 
-use Savannabits\Modules\Exceptions\ModuleNotFoundException;
-use Savannabits\Modules\Module;
+use Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException;
+use Savannabits\AcaciaGenerator\Module;
 
 interface RepositoryInterface
 {
@@ -31,7 +31,7 @@ interface RepositoryInterface
     /**
      * Get modules as modules collection instance.
      *
-     * @return \Savannabits\Modules\Collection
+     * @return \Savannabits\AcaciaGenerator\Collection
      */
     public function toCollection();
 
@@ -157,7 +157,7 @@ interface RepositoryInterface
      * Delete a specific module.
      * @param string $module
      * @return bool
-     * @throws \Savannabits\Modules\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
      */
     public function delete(string $module): bool;
 

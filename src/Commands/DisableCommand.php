@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\Modules\Module;
+use Savannabits\AcaciaGenerator\Module;
 use Symfony\Component\Console\Input\InputArgument;
 
 class DisableCommand extends Command

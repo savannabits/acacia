@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Contracts;
+namespace Savannabits\AcaciaGenerator\Contracts;
 
 interface PublisherInterface
 {

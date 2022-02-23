@@ -1,11 +1,11 @@
 <?php
 
-namespace Savannabits\Modules;
+namespace Savannabits\AcaciaGenerator;
 
 use Illuminate\Support\ServiceProvider;
-use Savannabits\Modules\Providers\BootstrapServiceProvider;
-use Savannabits\Modules\Providers\ConsoleServiceProvider;
-use Savannabits\Modules\Providers\ContractsServiceProvider;
+use Savannabits\AcaciaGenerator\Providers\BootstrapServiceProvider;
+use Savannabits\AcaciaGenerator\Providers\ConsoleServiceProvider;
+use Savannabits\AcaciaGenerator\Providers\ContractsServiceProvider;
 
 abstract class ModulesServiceProvider extends ServiceProvider
 {

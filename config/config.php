@@ -1,6 +1,6 @@
 <?php
 
-use Savannabits\Modules\Activators\FileActivator;
+use Savannabits\AcaciaGenerator\Activators\FileActivator;
 
 return [
 

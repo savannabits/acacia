@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\Modules\Contracts\RepositoryInterface;
-use Savannabits\Modules\Module;
+use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
+use Savannabits\AcaciaGenerator\Module;
 
 class AcaciaGeneratorV6Migrator extends Command
 {

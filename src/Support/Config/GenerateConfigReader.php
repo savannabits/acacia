@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\Modules\Support\Config;
+namespace Savannabits\AcaciaGenerator\Support\Config;
 
 class GenerateConfigReader
 {

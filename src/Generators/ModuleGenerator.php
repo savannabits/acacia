@@ -1,15 +1,15 @@
 <?php
 
-namespace Savannabits\Modules\Generators;
+namespace Savannabits\AcaciaGenerator\Generators;
 
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Savannabits\Modules\Contracts\ActivatorInterface;
-use Savannabits\Modules\FileRepository;
-use Savannabits\Modules\Support\Config\GenerateConfigReader;
-use Savannabits\Modules\Support\Stub;
+use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
+use Savannabits\AcaciaGenerator\FileRepository;
+use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\AcaciaGenerator\Support\Stub;
 
 class ModuleGenerator extends Generator
 {
@@ -51,7 +51,7 @@ class ModuleGenerator extends Generator
     /**
      * The module instance.
      *
-     * @var \Savannabits\Modules\Module
+     * @var \Savannabits\AcaciaGenerator\Module
      */
     protected $module;
 
@@ -227,7 +227,7 @@ class ModuleGenerator extends Generator
     /**
      * Get the module instance.
      *
-     * @return \Savannabits\Modules\Module
+     * @return \Savannabits\AcaciaGenerator\Module
      */
     public function getModule()
     {

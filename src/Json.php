@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\Modules;
+namespace Savannabits\AcaciaGenerator;
 
 use Illuminate\Filesystem\Filesystem;
-use Savannabits\Modules\Exceptions\InvalidJsonException;
+use Savannabits\AcaciaGenerator\Exceptions\InvalidJsonException;
 
 class Json
 {

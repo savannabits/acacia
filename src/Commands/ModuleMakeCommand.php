@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\Modules\Commands;
+namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\Modules\Contracts\ActivatorInterface;
-use Savannabits\Modules\Generators\ModuleGenerator;
+use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
+use Savannabits\AcaciaGenerator\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 

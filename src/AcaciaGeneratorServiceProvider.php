@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\Modules;
+namespace Savannabits\AcaciaGenerator;
 
-use Savannabits\Modules\Contracts\RepositoryInterface;
-use Savannabits\Modules\Exceptions\InvalidActivatorClass;
-use Savannabits\Modules\Support\Stub;
+use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
+use Savannabits\AcaciaGenerator\Exceptions\InvalidActivatorClass;
+use Savannabits\AcaciaGenerator\Support\Stub;
 
 class AcaciaGeneratorServiceProvider extends ModulesServiceProvider
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Savannabits\Modules\Laravel;
+namespace Savannabits\AcaciaGenerator\Laravel;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Foundation\ProviderRepository;
 use Illuminate\Support\Str;
-use Savannabits\Modules\Module as BaseModule;
+use Savannabits\AcaciaGenerator\Module as BaseModule;
 
 class Module extends BaseModule
 {
