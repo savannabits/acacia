@@ -3,6 +3,7 @@
 namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Console\Command;
+use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 use Savannabits\AcaciaGenerator\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -29,11 +30,17 @@ class ModuleMakeCommand extends Command
      */
     public function handle() : int
     {
-        $names = $this->argument('name');
+        $names = $this->argument('table');
         $success = true;
 
         foreach ($names as $name) {
-            $code = with(new ModuleGenerator($name))
+            $schematic = Schematic::query()->where("table_name","=", $name)->first();
+            if (!$schematic) {
+                \Log::info("Not Found");
+                $this->warn("Schematic for $name not found.");
+                continue;
+            }
+            $code = with(new ModuleGenerator($schematic->model_class))
                 ->setFilesystem($this->laravel['files'])
                 ->setModule($this->laravel['modules'])
                 ->setConfig($this->laravel['config'])
@@ -60,7 +67,7 @@ class ModuleMakeCommand extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The names of modules will be created.'],
+            ['table', InputArgument::IS_ARRAY, 'The table names for the modules that will be will be generated.'],
         ];
     }
 

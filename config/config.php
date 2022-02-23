@@ -1,6 +1,47 @@
 <?php
 
 use Savannabits\AcaciaGenerator\Activators\FileActivator;
+use Savannabits\AcaciaGenerator\Commands\AcaciaGeneratorV6Migrator;
+use Savannabits\AcaciaGenerator\Commands\CommandMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ControllerMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\DisableCommand;
+use Savannabits\AcaciaGenerator\Commands\DumpCommand;
+use Savannabits\AcaciaGenerator\Commands\EnableCommand;
+use Savannabits\AcaciaGenerator\Commands\EventMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\FactoryMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\InstallCommand;
+use Savannabits\AcaciaGenerator\Commands\JobMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ListCommand;
+use Savannabits\AcaciaGenerator\Commands\ListenerMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MailMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MiddlewareMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateRefreshCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateResetCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateRollbackCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrateStatusCommand;
+use Savannabits\AcaciaGenerator\Commands\MigrationMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ModelMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ModuleDeleteCommand;
+use Savannabits\AcaciaGenerator\Commands\ModuleMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\NotificationMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\PolicyMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ProviderMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
+use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
+use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\RuleMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\SeedCommand;
+use Savannabits\AcaciaGenerator\Commands\SeedMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\SetupCommand;
+use Savannabits\AcaciaGenerator\Commands\TestMakeCommand;
+use Savannabits\AcaciaGenerator\Commands\UnUseCommand;
+use Savannabits\AcaciaGenerator\Commands\UpdateCommand;
+use Savannabits\AcaciaGenerator\Commands\UseCommand;
 
 return [
 
@@ -13,7 +54,7 @@ return [
     |
     */
 
-    'namespace' => 'Modules',
+    'namespace' => 'Acacia',
 
     /*
     |--------------------------------------------------------------------------
@@ -28,14 +69,14 @@ return [
         'enabled' => false,
         'path' => base_path() . '/vendor/savannabits/acacia-generator/src/Commands/stubs',
         'files' => [
-            'routes/web' => 'Routes/web.php',
-            'routes/api' => 'Routes/api.php',
-            'views/index' => 'Resources/views/index.blade.php',
-            'views/master' => 'Resources/views/layouts/master.blade.php',
-            'scaffold/config' => 'Config/config.php',
+            'routes/web' => 'routes/web.php',
+            'routes/api' => 'routes/api.php',
+            'views/index' => 'resources/views/index.blade.php',
+            'views/master' => 'resources/views/layouts/master.blade.php',
+            'scaffold/config' => 'config/config.php',
             'composer' => 'composer.json',
-            'assets/js/app' => 'Resources/assets/js/app.js',
-            'assets/sass/app' => 'Resources/assets/sass/app.scss',
+            'assets/js/app' => 'resources/assets/js/app.js',
+            'assets/sass/app' => 'resources/assets/sass/app.scss',
             'webpack' => 'webpack.mix.js',
             'package' => 'package.json',
         ],
@@ -70,7 +111,7 @@ return [
         |
         */
 
-        'modules' => base_path('Modules'),
+        'modules' => base_path('acacia'),
         /*
         |--------------------------------------------------------------------------
         | Modules assets path
@@ -80,13 +121,13 @@ return [
         |
         */
 
-        'assets' => public_path('modules'),
+        'assets' => public_path('acacia-modules'),
         /*
         |--------------------------------------------------------------------------
         | The migrations path
         |--------------------------------------------------------------------------
         |
-        | Where you run 'module:publish-migration' command, where do you publish the
+        | Where you run 'acacia:publish-migration' command, where do you publish the
         | the migration files?
         |
         */
@@ -100,22 +141,22 @@ return [
         | Set the generate key to false to not generate that folder
         */
         'generator' => [
-            'config' => ['path' => 'Config', 'generate' => true],
-            'command' => ['path' => 'Console', 'generate' => true],
-            'migration' => ['path' => 'Database/Migrations', 'generate' => true],
-            'seeder' => ['path' => 'Database/Seeders', 'generate' => true],
-            'factory' => ['path' => 'Database/factories', 'generate' => true],
-            'model' => ['path' => 'Entities', 'generate' => true],
-            'routes' => ['path' => 'Routes', 'generate' => true],
+            'config' => ['path' => 'config', 'generate' => true],
+            'command' => ['path' => 'console', 'generate' => true],
+            'migration' => ['path' => 'database/migrations', 'generate' => true],
+            'seeder' => ['path' => 'database/seeders', 'generate' => true],
+            'factory' => ['path' => 'database/factories', 'generate' => true],
+            'model' => ['path' => 'entities', 'generate' => true],
+            'routes' => ['path' => 'routes', 'generate' => true],
             'controller' => ['path' => 'Http/Controllers', 'generate' => true],
             'filter' => ['path' => 'Http/Middleware', 'generate' => true],
             'request' => ['path' => 'Http/Requests', 'generate' => true],
             'provider' => ['path' => 'Providers', 'generate' => true],
-            'assets' => ['path' => 'Resources/assets', 'generate' => true],
-            'lang' => ['path' => 'Resources/lang', 'generate' => true],
-            'views' => ['path' => 'Resources/views', 'generate' => true],
-            'test' => ['path' => 'Tests/Unit', 'generate' => true],
-            'test-feature' => ['path' => 'Tests/Feature', 'generate' => true],
+            'assets' => ['path' => 'resources/assets', 'generate' => true],
+            'lang' => ['path' => 'resources/lang', 'generate' => true],
+            'views' => ['path' => 'resources/views', 'generate' => true],
+            'test' => ['path' => 'tests/Unit', 'generate' => true],
+            'test-feature' => ['path' => 'tests/Feature', 'generate' => true],
             'repository' => ['path' => 'Repositories', 'generate' => false],
             'event' => ['path' => 'Events', 'generate' => false],
             'listener' => ['path' => 'Listeners', 'generate' => false],
@@ -125,7 +166,7 @@ return [
             'emails' => ['path' => 'Emails', 'generate' => false],
             'notifications' => ['path' => 'Notifications', 'generate' => false],
             'resource' => ['path' => 'Transformers', 'generate' => false],
-            'component-view' => ['path' => 'Resources/views/components', 'generate' => false],
+            'component-view' => ['path' => 'resources/views/components', 'generate' => false],
             'component-class' => ['path' => 'View/Component', 'generate' => false],
         ],
     ],

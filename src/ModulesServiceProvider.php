@@ -41,7 +41,7 @@ abstract class ModulesServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($configPath, 'modules');
         $this->publishes([
             $configPath => config_path('modules.php'),
-        ], 'config');
+        ], 'acacia-generator-config');
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class ModulesServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [Contracts\RepositoryInterface::class, 'modules'];
     }

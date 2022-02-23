@@ -374,7 +374,7 @@ class ModuleGenerator extends Generator
     public function generateResources()
     {
         if (GenerateConfigReader::read('seeder')->generate() === true) {
-            $this->console->call('module:make-seed', [
+            $this->console->call('acacia:make-seed', [
                 'name' => $this->getName(),
                 'module' => $this->getName(),
                 '--master' => true,
@@ -382,19 +382,19 @@ class ModuleGenerator extends Generator
         }
 
         if (GenerateConfigReader::read('provider')->generate() === true) {
-            $this->console->call('module:make-provider', [
+            $this->console->call('acacia:make-provider', [
                 'name' => $this->getName() . 'ServiceProvider',
                 'module' => $this->getName(),
                 '--master' => true,
             ]);
-            $this->console->call('module:route-provider', [
+            $this->console->call('acacia:route-provider', [
                 'module' => $this->getName(),
             ]);
         }
 
         if (GenerateConfigReader::read('controller')->generate() === true) {
             $options = $this->type=='api'?['--api'=>true]:[];
-            $this->console->call('module:make-controller', [
+            $this->console->call('acacia:make-controller', [
                 'controller' => $this->getName() . 'Controller',
                 'module' => $this->getName(),
             ]+$options);
