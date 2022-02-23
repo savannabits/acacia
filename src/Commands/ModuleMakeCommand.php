@@ -78,7 +78,7 @@ class ModuleMakeCommand extends Command
             ['api', null, InputOption::VALUE_NONE, 'Generate an api module.'],
             ['web', null, InputOption::VALUE_NONE, 'Generate a web module.'],
             ['disabled', 'd', InputOption::VALUE_NONE, 'Do not enable the module at creation.'],
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when the module already exists.'],
+            ['force', 'F', InputOption::VALUE_NONE, 'Force the operation to run when the module already exists.'],
         ];
     }
 

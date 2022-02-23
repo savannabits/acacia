@@ -1,0 +1,4 @@
+    public function $METHOD$() : \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo($MODEL$::class, '$FK$','$RELATED_KEY$');
+    }

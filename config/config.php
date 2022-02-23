@@ -66,14 +66,14 @@ return [
     */
 
     'stubs' => [
-        'enabled' => false,
+        'enabled' => true,
         'path' => base_path() . '/vendor/savannabits/acacia-generator/src/Commands/stubs',
         'files' => [
-            'routes/web' => 'routes/web.php',
-            'routes/api' => 'routes/api.php',
+            'routes/web' => 'Routes/web.php',
+            'routes/api' => 'Routes/api.php',
             'views/index' => 'resources/views/index.blade.php',
             'views/master' => 'resources/views/layouts/master.blade.php',
-            'scaffold/config' => 'config/config.php',
+            'scaffold/config' => 'Config/config.php',
             'composer' => 'composer.json',
             'assets/js/app' => 'resources/assets/js/app.js',
             'assets/sass/app' => 'resources/assets/sass/app.scss',
@@ -141,13 +141,13 @@ return [
         | Set the generate key to false to not generate that folder
         */
         'generator' => [
-            'config' => ['path' => 'config', 'generate' => true],
-            'command' => ['path' => 'console', 'generate' => true],
-            'migration' => ['path' => 'database/migrations', 'generate' => true],
-            'seeder' => ['path' => 'database/seeders', 'generate' => true],
-            'factory' => ['path' => 'database/factories', 'generate' => true],
-            'model' => ['path' => 'entities', 'generate' => true],
-            'routes' => ['path' => 'routes', 'generate' => true],
+            'config' => ['path' => 'Config', 'generate' => true],
+            'command' => ['path' => 'Console', 'generate' => true],
+            'migration' => ['path' => 'Database/Migrations', 'generate' => true],
+            'seeder' => ['path' => 'Database/Seeders', 'generate' => true],
+            'factory' => ['path' => 'Database/Factories', 'generate' => true],
+            'model' => ['path' => 'Entities', 'generate' => true],
+            'routes' => ['path' => 'Routes', 'generate' => true],
             'controller' => ['path' => 'Http/Controllers', 'generate' => true],
             'filter' => ['path' => 'Http/Middleware', 'generate' => true],
             'request' => ['path' => 'Http/Requests', 'generate' => true],
@@ -253,8 +253,8 @@ return [
     'composer' => [
         'vendor' => 'savannabits',
         'author' => [
-            'name' => 'Nicolas Widart',
-            'email' => 'n.widart@gmail.com',
+            'name' => 'Samson Maosa',
+            'email' => 'maosa.sam@gmail.com',
         ],
     ],
 
