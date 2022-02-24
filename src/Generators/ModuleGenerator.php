@@ -6,8 +6,10 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 use Savannabits\AcaciaGenerator\FileRepository;
+use Savannabits\AcaciaGenerator\Module;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 
@@ -51,7 +53,7 @@ class ModuleGenerator extends Generator
     /**
      * The module instance.
      *
-     * @var \Savannabits\AcaciaGenerator\Module
+     * @var Module
      */
     protected $module;
 
@@ -75,6 +77,7 @@ class ModuleGenerator extends Generator
      * @var bool
      */
     protected $isActive = false;
+    private ?Schematic $schematic;
 
     /**
      * The constructor.
@@ -86,6 +89,7 @@ class ModuleGenerator extends Generator
      */
     public function __construct(
         $name,
+        Schematic $schematic = null,
         FileRepository $module = null,
         Config $config = null,
         Filesystem $filesystem = null,
@@ -93,6 +97,7 @@ class ModuleGenerator extends Generator
         ActivatorInterface $activator = null
     ) {
         $this->name = $name;
+        $this->schematic = $schematic;
         $this->config = $config;
         $this->filesystem = $filesystem;
         $this->console = $console;
@@ -133,17 +138,25 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
+        if ($this->schematic) {
+            return Str::studly($this->schematic->model_class);
+        }
         return Str::studly($this->name);
+    }
+
+    public function getPluralName(): string
+    {
+        return Str::plural($this->getName());
     }
 
     /**
      * Get the laravel config instance.
      *
-     * @return Config
+     * @return Config|null
      */
-    public function getConfig()
+    public function getConfig(): ?Config
     {
         return $this->config;
     }
@@ -155,7 +168,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setConfig($config)
+    public function setConfig(Config $config): static
     {
         $this->config = $config;
 
@@ -169,7 +182,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setActivator(ActivatorInterface $activator)
+    public function setActivator(ActivatorInterface $activator): static
     {
         $this->activator = $activator;
 
@@ -203,9 +216,9 @@ class ModuleGenerator extends Generator
     /**
      * Get the laravel console instance.
      *
-     * @return Console
+     * @return Console|null
      */
-    public function getConsole()
+    public function getConsole(): ?Console
     {
         return $this->console;
     }
@@ -217,7 +230,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setConsole($console)
+    public function setConsole(Console $console): static
     {
         $this->console = $console;
 
@@ -227,9 +240,9 @@ class ModuleGenerator extends Generator
     /**
      * Get the module instance.
      *
-     * @return \Savannabits\AcaciaGenerator\Module
+     * @return Module|FileRepository|null
      */
-    public function getModule()
+    public function getModule(): Module|FileRepository|null
     {
         return $this->module;
     }
@@ -241,7 +254,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setModule($module)
+    public function setModule(mixed $module): static
     {
         $this->module = $module;
 
@@ -253,7 +266,7 @@ class ModuleGenerator extends Generator
      *
      * @return array
      */
-    public function getFolders()
+    public function getFolders(): array
     {
         return $this->module->config('paths.generator');
     }
@@ -263,7 +276,7 @@ class ModuleGenerator extends Generator
      *
      * @return array
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->module->config('stubs.files');
     }
@@ -275,7 +288,7 @@ class ModuleGenerator extends Generator
      *
      * @return $this
      */
-    public function setForce($force)
+    public function setForce(bool|int $force): static
     {
         $this->force = $force;
 
@@ -284,10 +297,11 @@ class ModuleGenerator extends Generator
 
     /**
      * Generate the module.
+     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
      */
     public function generate() : int
     {
-        $name = $this->getName();
+        $name = $this->getPluralName();
 
         if ($this->module->has($name)) {
             if ($this->force) {
@@ -331,7 +345,7 @@ class ModuleGenerator extends Generator
                 continue;
             }
 
-            $path = $this->module->getModulePath($this->getName()) . '/' . $folder->getPath();
+            $path = $this->module->getModulePath($this->getPluralName()) . '/' . $folder->getPath();
 
             $this->filesystem->makeDirectory($path, 0755, true);
             if (config('modules.stubs.gitkeep')) {
@@ -356,7 +370,7 @@ class ModuleGenerator extends Generator
     public function generateFiles()
     {
         foreach ($this->getFiles() as $stub => $file) {
-            $path = $this->module->getModulePath($this->getName()) . $file;
+            $path = $this->module->getModulePath($this->getPluralName()) . $file;
 
             if (!$this->filesystem->isDirectory($dir = dirname($path))) {
                 $this->filesystem->makeDirectory($dir, 0775, true);
@@ -373,31 +387,61 @@ class ModuleGenerator extends Generator
      */
     public function generateResources()
     {
+        // Seeder
+
         if (GenerateConfigReader::read('seeder')->generate() === true) {
             $this->console->call('acacia:make-seed', [
-                'name' => $this->getName(),
-                'module' => $this->getName(),
+                'name' => $this->getPluralName(),
+                'module' => $this->getPluralName(),
                 '--master' => true,
             ]);
         }
 
+        // Provider
         if (GenerateConfigReader::read('provider')->generate() === true) {
             $this->console->call('acacia:make-provider', [
-                'name' => $this->getName() . 'ServiceProvider',
-                'module' => $this->getName(),
+                'name' => $this->getPluralName() . 'ServiceProvider',
+                'module' => $this->getPluralName(),
                 '--master' => true,
             ]);
             $this->console->call('acacia:route-provider', [
-                'module' => $this->getName(),
+                'module' => $this->getPluralName(),
             ]);
         }
 
+        // Factory
+        if (GenerateConfigReader::read('model')->generate() === true) {
+//            $options = ['--schematic'=> $this->schematic];
+            $options = [];
+            $this->console->call('acacia:make-factory', [
+                    'name' => $this->schematic?->model_class ?: $this->getName(),
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
+        // Model
+        if (GenerateConfigReader::read('model')->generate() === true) {
+            $options = ['--schematic'=> $this->schematic];
+            $this->console->call('acacia:make-model', [
+                    'model' => $this->schematic?->model_class ?: $this->getName(),
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
+
+        // Controller
         if (GenerateConfigReader::read('controller')->generate() === true) {
-            $options = $this->type=='api'?['--api'=>true]:[];
+            $options = $this->type=='api' ? ['--api' => true] : [];
             $this->console->call('acacia:make-controller', [
-                'controller' => $this->getName() . 'Controller',
-                'module' => $this->getName(),
+                'controller' =>$this->schematic?->controller_class ?:  $this->getName() . 'Controller',
+                'module' => $this->getPluralName(),
             ]+$options);
+        }
+        // API Controller
+        if (GenerateConfigReader::read('api-controller')->generate() === true) {
+            $options = ['--api' => true];
+            $this->console->call('acacia:make-controller', [
+                    'controller' => "Api/".$this->getName() . 'Controller',
+                    'module' => $this->getPluralName(),
+                ]+$options);
         }
     }
 
@@ -465,7 +509,7 @@ class ModuleGenerator extends Generator
      */
     private function generateModuleJsonFile()
     {
-        $path = $this->module->getModulePath($this->getName()) . 'module.json';
+        $path = $this->module->getModulePath($this->getPluralName()) . 'module.json';
 
         if (!$this->filesystem->isDirectory($dir = dirname($path))) {
             $this->filesystem->makeDirectory($dir, 0775, true);
@@ -482,7 +526,7 @@ class ModuleGenerator extends Generator
      */
     private function cleanModuleJsonFile()
     {
-        $path = $this->module->getModulePath($this->getName()) . 'module.json';
+        $path = $this->module->getModulePath($this->getPluralName()) . 'module.json';
 
         $content = $this->filesystem->get($path);
         $namespace = $this->getModuleNamespaceReplacement();
@@ -496,13 +540,31 @@ class ModuleGenerator extends Generator
     }
 
     /**
+     * @param Schematic|null $schematic
+     * @return ModuleGenerator
+     */
+    public function setSchematic(?Schematic $schematic): ModuleGenerator
+    {
+        $this->schematic = $schematic;
+        return $this;
+    }
+
+    /**
+     * @return Schematic|null
+     */
+    public function getSchematic(): ?Schematic
+    {
+        return $this->schematic;
+    }
+
+    /**
      * Get the module name in lower case.
      *
      * @return string
      */
     protected function getLowerNameReplacement()
     {
-        return strtolower($this->getName());
+        return strtolower($this->getPluralName());
     }
 
     /**
@@ -512,7 +574,7 @@ class ModuleGenerator extends Generator
      */
     protected function getStudlyNameReplacement()
     {
-        return $this->getName();
+        return $this->getPluralName();
     }
 
     /**

@@ -40,9 +40,9 @@ class ModelMakeCommand extends GeneratorCommand
 
     public function handle() : int
     {
-        $this->schematic = null;
-        if ($this->argument('table')) {
-            $this->schematic = Schematic::query()->where("table_name","=", $this->argument('table'))->first();
+        $this->schematic = $this->option('schematic');
+        if (!$this->schematic) {
+            $this->schematic = Schematic::query()->where("model_class", "=", $this->argument('model'))->first();
         }
         if (parent::handle() === E_ERROR) {
             return E_ERROR;
@@ -85,7 +85,6 @@ class ModelMakeCommand extends GeneratorCommand
         return [
             ['model', InputArgument::REQUIRED, 'The name of model will be created.'],
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],
-            ['table', InputArgument::OPTIONAL, 'The table to be used.'],
         ];
     }
 
@@ -97,6 +96,7 @@ class ModelMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
+            ['schematic',null,InputOption::VALUE_OPTIONAL,'The schematic model to use for generation', null],
             ['fillable', null, InputOption::VALUE_OPTIONAL, 'The fillable attributes.', null],
             ['migration', 'm', InputOption::VALUE_NONE, 'Flag to create associated migrations', null],
         ];
@@ -182,7 +182,7 @@ class ModelMakeCommand extends GeneratorCommand
                 $related = $relation->related?->model_class;
                 $content .= (new Stub('/partials/belongs-to.stub', [
                     "METHOD" => $relation->method,
-                    "MODEL"     => "\Acacia\\$related\\Entities\\$related",
+                    "MODEL"     => "\Acacia\\".Str::pluralStudly($related)."\Entities\\$related",
                     "FK" => $relation->local_key,
                     "RELATED_KEY" => $relation->related_key,
                 ]))->render()."\n";
