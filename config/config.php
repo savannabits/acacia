@@ -86,13 +86,14 @@ return [
             'package' => 'package.json',
         ],
         'replacements' => [
-            'routes/web' => ['LOWER_NAME', 'STUDLY_NAME'],
-            'routes/api' => ['LOWER_NAME'],
+            'routes/web' => ['LOWER_NAME', 'STUDLY_SINGULAR_NAME'],
+            'routes/api' => ['LOWER_NAME', 'STUDLY_SINGULAR_NAME'],
             'webpack' => ['LOWER_NAME'],
             'json' => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE', 'PROVIDER_NAMESPACE'],
             'views/index' => ['LOWER_NAME'],
             'views/master' => ['LOWER_NAME', 'STUDLY_NAME'],
             'scaffold/config' => ['STUDLY_NAME'],
+            'js/pages/index' => ['LOWER_NAME','STUDLY_NAME','JS_INDEX_COLUMNS','JS_INDEX_TITLE','JS_INDEX_SEARCHABLE_COLS'],
             'composer' => [
                 'LOWER_NAME',
                 'STUDLY_NAME',
@@ -174,7 +175,7 @@ return [
             'resource'          => ['path' => 'Transformers', 'generate' => false],
             'component-view'    => ['path' => 'resources/views/components', 'generate' => false],
             'component-class'   => ['path' => 'View/Component', 'generate' => false],
-            'vue-pages'   => ['path' => 'Js/Pages', 'generate' => true],
+            'vue-pages'         => ['path' => 'Js/Pages', 'generate' => true],
         ],
     ],
 

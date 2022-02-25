@@ -4,6 +4,7 @@ namespace Savannabits\AcaciaGenerator\Generators;
 
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Savannabits\Acacia\Models\Schematic;
@@ -329,7 +330,9 @@ class ModuleGenerator extends Generator
         $this->activator->setActiveByName($name, $this->isActive);
 
         $this->console->info("Module [{$name}] created successfully.");
-
+        $this->console->alert("Making the code look prettier");
+        shell_exec("cd acacia && npx prettier --write $name/");
+        $this->console->alert('DONE');
         return 0;
     }
 
@@ -543,7 +546,7 @@ class ModuleGenerator extends Generator
      * @param Schematic|null $schematic
      * @return ModuleGenerator
      */
-    public function setSchematic(?Schematic $schematic): ModuleGenerator
+    public function setSchematic(Schematic|Model|null $schematic): ModuleGenerator
     {
         $this->schematic = $schematic;
         return $this;
@@ -575,6 +578,10 @@ class ModuleGenerator extends Generator
     protected function getStudlyNameReplacement()
     {
         return $this->getPluralName();
+    }
+    protected function getStudlySingularNameReplacement(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -620,5 +627,33 @@ class ModuleGenerator extends Generator
     protected function getProviderNamespaceReplacement(): string
     {
         return str_replace('\\', '\\\\', GenerateConfigReader::read('provider')->getNamespace());
+    }
+
+    protected function getJsIndexColumnsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where("in_list","=", true)->get();
+        $content = "";
+        $stub = "partials/pages/dt-column";
+        foreach ($fields as $field) {
+            $content .= (new Stub(
+                '/' . $stub . '.stub',
+                [
+                    "FIELD_NAME" =>$field->name,
+                    "FIELD_TITLE" =>$field->title,
+                    "SORTABLE" => "true",
+                ]
+            )
+            )->render();
+        }
+        return $content;
+    }
+    protected function getJsIndexSearchableColsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where("in_list","=", true)->get();
+        return json_encode($fields->pluck("name")->values());
+    }
+    protected function getJsIndexTitleReplacement(): string
+    {
+        return Str::replace("-", " ", Str::title(Str::slug($this->getPluralName())));
     }
 }

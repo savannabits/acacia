@@ -41,6 +41,7 @@ class ModuleMakeCommand extends Command
                 continue;
             }
             $code = with(new ModuleGenerator($schematic->model_class))
+                ->setSchematic($schematic)
                 ->setFilesystem($this->laravel['files'])
                 ->setModule($this->laravel['modules'])
                 ->setConfig($this->laravel['config'])

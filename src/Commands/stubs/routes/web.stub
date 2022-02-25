@@ -11,6 +11,9 @@
 |
 */
 
-Route::prefix('$LOWER_NAME$')->group(function() {
-    Route::get('/', '$STUDLY_NAME$Controller@index');
-});
+Route::prefix(config('acacia.route_prefix','acacia'))
+    ->middleware(['auth:sanctum'])
+    ->as('acacia.backend.')
+    ->group(function() {
+        Route::resource('$LOWER_NAME$', '$STUDLY_SINGULAR_NAME$Controller');
+    });
