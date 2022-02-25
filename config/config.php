@@ -94,6 +94,7 @@ return [
             'views/master' => ['LOWER_NAME', 'STUDLY_NAME'],
             'scaffold/config' => ['STUDLY_NAME'],
             'js/pages/index' => ['LOWER_NAME','STUDLY_NAME','JS_INDEX_COLUMNS','JS_INDEX_TITLE','JS_INDEX_SEARCHABLE_COLS'],
+            'js/pages/edit' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_EDIT_TITLE'],
             'composer' => [
                 'LOWER_NAME',
                 'STUDLY_NAME',

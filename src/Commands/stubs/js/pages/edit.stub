@@ -1,0 +1,46 @@
+<template>
+    <Head :title="`$JS_EDIT_TITLE$`">
+    </Head>
+    <Backend>
+        <template #header>
+            <div class="flex items-center flex-wrap gap-x-2">
+                <BackLink :href="route('acacia.backend.$LOWER_NAME$.index')"/>
+                <h4 class="font-bold text-xl">$JS_EDIT_TITLE$</h4>
+            </div>
+        </template>
+        <div class="mx-auto container max-w-4xl flex items-center justify-center mt-4">
+            <div class="rounded w-full p-2 bg-white">
+                Edit Form goes here
+            </div>
+        </div>
+    </Backend>
+</template>
+
+<script lang="ts">
+    import {defineComponent} from "vue";
+    export default defineComponent({
+        name: "Edit$STUDLY_SINGULAR_NAME$",
+    })
+</script>
+<script setup lang="ts">
+    import {computed, nextTick, Ref, ref} from "vue";
+    import {useForm, usePage} from "@inertiajs/inertia-vue3";
+    import Backend from "@Acacia/Core/Js/Layouts/Backend.vue";
+    import Label from "@Acacia/Core/Js/Components/Label.vue";
+    import BackLink from "@Acacia/Core/Js/Components/BackLink.vue";
+    import InputText from "primevue/inputtext";
+    import Button from "primevue/button";
+    import axios from "axios";
+    import route from "ziggy-js";
+    import {Inertia} from "@inertiajs/inertia";
+    import {useConfirm} from "primevue/useconfirm";
+    import {useToast} from "primevue/usetoast";
+
+    const model = computed(() => usePage().props.value?.model);
+    const form = useForm({...model.value})
+
+    const confirm = useConfirm();
+    const toast = useToast();
+</script>
+<style scoped>
+</style>

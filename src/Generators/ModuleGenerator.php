@@ -432,7 +432,7 @@ class ModuleGenerator extends Generator
 
         // Controller
         if (GenerateConfigReader::read('controller')->generate() === true) {
-            $options = $this->type=='api' ? ['--api' => true] : [];
+            $options = ['--api' => $this->type ==='api','--schematic' => $this->schematic];
             $this->console->call('acacia:make-controller', [
                 'controller' =>$this->schematic?->controller_class ?:  $this->getName() . 'Controller',
                 'module' => $this->getPluralName(),
@@ -440,7 +440,7 @@ class ModuleGenerator extends Generator
         }
         // API Controller
         if (GenerateConfigReader::read('api-controller')->generate() === true) {
-            $options = ['--api' => true];
+            $options = ['--api' => true, '--schematic' => $this->schematic];
             $this->console->call('acacia:make-controller', [
                     'controller' => "Api/".$this->getName() . 'Controller',
                     'module' => $this->getPluralName(),
@@ -655,5 +655,9 @@ class ModuleGenerator extends Generator
     protected function getJsIndexTitleReplacement(): string
     {
         return Str::replace("-", " ", Str::title(Str::slug($this->getPluralName())));
+    }
+    protected function getJsEditTitleReplacement(): string
+    {
+        return "Edit ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
     }
 }

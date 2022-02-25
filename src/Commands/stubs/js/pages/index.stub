@@ -48,7 +48,7 @@
 <script lang="ts" setup>
     import Head from "@inertiajs/inertia-vue3"
     import Backend from "@Acacia/Core/Js/Layouts/Backend.vue"
-    import PrimeDatatables from "@/Components/PrimeDatatables.vue";
+    import PrimeDatatables from "@Acacia/Core/Js/Components/PrimeDatatables.vue";
     import Column from "primevue/column";
     import Button from "primevue/button";
     import ContextMenu from "primevue/contextmenu";
