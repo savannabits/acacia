@@ -1,0 +1,4 @@
+<div class="my-2">
+    <label>$LABEL$</label>
+    <Textarea v-model="$V_MODEL$" class="block w-full" :autoResize="true" rows="5" cols="30"></Textarea>
+</div>

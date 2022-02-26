@@ -26,13 +26,8 @@
     import {computed, nextTick, Ref, ref} from "vue";
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
     import Backend from "@Acacia/Core/Js/Layouts/Backend.vue";
-    import Label from "@Acacia/Core/Js/Components/Label.vue";
     import BackLink from "@Acacia/Core/Js/Components/BackLink.vue";
-    import InputText from "primevue/inputtext";
-    import Button from "primevue/button";
-    import axios from "axios";
     import route from "ziggy-js";
-    import {Inertia} from "@inertiajs/inertia";
     import {useConfirm} from "primevue/useconfirm";
     import {useToast} from "primevue/usetoast";
 

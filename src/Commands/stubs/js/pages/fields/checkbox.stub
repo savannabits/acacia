@@ -1,0 +1,4 @@
+<div class="my-2">
+    <Checkbox id="$LOWER_NAME$" v-model="$V_MODEL$" :binary="true" />
+    <label for="$LOWER_NAME$">$LABEL$</label>
+</div>

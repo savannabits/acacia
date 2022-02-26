@@ -8,6 +8,9 @@
         </template>
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                    <Button @click="createModal = true" aria-label="New Comment" label="New $STUDLY_SINGULAR_NAME$" icon="pi pi-plus"/>
+                </div>
                 <PrimeDatatables
                     :api-url="apiUrl"
                     :column-filters="{}"
@@ -35,6 +38,23 @@
             </div>
         </div>
         <ContextMenu ref="contextMenu" :model="options"/>
+        <Dialog position="top"
+                :maximizable="true"
+                v-model:visible="createModal"
+                :modal="true"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+        >
+            <template #header>
+                <h4 class="font-black text-xl">
+                    New $STUDLY_SINGULAR_NAME$
+                </h4>
+            </template>
+            <CreateForm v-if="createModal"/>
+            <template #footer>
+                <Button label="Open in a Page" icon="pi pi-window" @click="$inertia.visit(route('acacia.backend.$LOWER_NAME$.create'))" class="p-button-text"/>
+                <Button label="Close" icon="pi pi-times" @click="createModal=false" class="p-button-text"/>
+            </template>
+        </Dialog>
     </Backend>
 </template>
 
@@ -59,6 +79,9 @@
     import {useToast} from "primevue/usetoast";
     import {Inertia} from "@inertiajs/inertia";
     import axios from "axios";
+    import Dialog from "primevue/dialog"
+    import CreateForm from"./Partials/CreateForm.vue"
+
 
     const apiUrl = route('api.v1.$LOWER_NAME$.dt');
     const stateKey = '$LOWER_NAME$-dt'
@@ -69,6 +92,7 @@
     const confirm = useConfirm();
     const toast = useToast();
     const refreshTime = ref(null) as Ref<string | null>;
+    const createModal = ref(false);
     const makeOptionsMenu = (row) => [
         {
             label: "Manage",

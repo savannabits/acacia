@@ -2,6 +2,8 @@
 
 namespace Savannabits\AcaciaGenerator\Generators;
 
+use Acacia\Core\Constants\FormFields;
+use Acacia\Core\Entities\AcaciaMenu;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
@@ -307,6 +309,8 @@ class ModuleGenerator extends Generator
         if ($this->module->has($name)) {
             if ($this->force) {
                 $this->module->delete($name);
+                // Delete menu
+                $this->deleteMenuEntry();
             } else {
                 $this->console->error("Module [{$name}] already exist!");
 
@@ -321,6 +325,7 @@ class ModuleGenerator extends Generator
         if ($this->type !== 'plain') {
             $this->generateFiles();
             $this->generateResources();
+            $this->makeMenuEntry();
         }
 
         if ($this->type === 'plain') {
@@ -659,5 +664,61 @@ class ModuleGenerator extends Generator
     protected function getJsEditTitleReplacement(): string
     {
         return "Edit ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+    }
+
+    protected function getJsCreateTitleReplacement(): string
+    {
+        return "New ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+    }
+
+    public function getCreateFormFieldsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $content = "";
+        foreach ($fields as $field) {
+            $content .= (new FieldMaker($field))->render();
+        }
+        return $content;
+    }
+    public function getCreateComponentImportsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $content = "";
+        foreach ($fields as $field) {
+            $import = (new FieldMaker($field))->getComponentImport();
+            if (!Str::contains($content,$import)) {
+                $content .= $import;
+            }
+        }
+        return $content;
+    }
+    public function getCreateFormObjectReplacement(): string
+    {
+        return $this->schematic->fields()->where("is_vue","=",true)
+            ->get()
+            ->keyBy('name')->map(function ($field) {
+            return match ($field->html_type) {
+                FormFields::SWITCH, FormFields::CHECKBOX => false,
+                default => null,
+            };
+        })->toJson();
+
+    }
+
+    public function makeMenuEntry() {
+        $baseRoute = "acacia.backend.".$this->getLowerNameReplacement();
+        $menu = new AcaciaMenu([
+            "title" => $this->getJsIndexTitleReplacement(),
+            "icon" => "pi pi-box",
+            "route"=> "$baseRoute.index",
+            "active_pattern" => "$baseRoute.*",
+            "position" => 0,
+            "parent_id" => 1,
+        ]);
+        $menu->save();
+    }
+    public function deleteMenuEntry() {
+        $route = "acacia.backend.".$this->getLowerNameReplacement().".index";
+        AcaciaMenu::query()->where("route","=", $route)->forceDelete();
     }
 }
