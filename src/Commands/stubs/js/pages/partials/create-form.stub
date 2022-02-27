@@ -1,10 +1,10 @@
 <template>
     <form @submit.prevent="createModel">
-        <div class="p-dialog-content">
+        <div class="">
             $CREATE_FORM_FIELDS$
         </div>
 
-        <div class="p-dialog-footer pt-2 border-t-2">
+        <div class="text-right min-w-[300px] pt-2 border-t-2">
             <Button type="submit" icon="pi pi-check" label="Save"/>
         </div>
     </form>

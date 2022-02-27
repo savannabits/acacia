@@ -707,15 +707,18 @@ class ModuleGenerator extends Generator
 
     public function makeMenuEntry() {
         $baseRoute = "acacia.backend.".$this->getLowerNameReplacement();
-        $menu = new AcaciaMenu([
-            "title" => $this->getJsIndexTitleReplacement(),
-            "icon" => "pi pi-box",
-            "route"=> "$baseRoute.index",
-            "active_pattern" => "$baseRoute.*",
-            "position" => 0,
-            "parent_id" => 1,
-        ]);
-        $menu->save();
+        $exists = AcaciaMenu::query()->where("route","=","$baseRoute.index")->exists();
+        if (!$exists) {
+            $menu = new AcaciaMenu([
+                "title" => $this->getJsIndexTitleReplacement(),
+                "icon" => "pi pi-box",
+                "route"=> "$baseRoute.index",
+                "active_pattern" => "$baseRoute.*",
+                "position" => 0,
+                "parent_id" => 1,
+            ]);
+            $menu->save();
+        }
     }
     public function deleteMenuEntry() {
         $route = "acacia.backend.".$this->getLowerNameReplacement().".index";

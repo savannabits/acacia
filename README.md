@@ -1,10 +1,10 @@
-# Laravel-Modules
+# Acacia-Generator
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/savannabits/acacia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/acacia-generator)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/nWidart/acacia-generator/master.svg?style=flat-square)](https://travis-ci.org/nWidart/acacia-generator)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/nWidart/acacia-generator.svg?maxAge=86400&style=flat-square)](https://scrutinizer-ci.com/g/nWidart/acacia-generator/?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/nWidart/acacia-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/nWidart/acacia-generator)
+[![Build Status](https://img.shields.io/travis/savannabits/acacia-generator/master.svg?style=flat-square)](https://travis-ci.org/savannabits/acacia-generator)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/savannabits/acacia-generator.svg?maxAge=86400&style=flat-square)](https://scrutinizer-ci.com/g/savannabits/acacia-generator/?branch=master)
+[![Quality Score](https://img.shields.io/scrutinizer/g/savannabits/acacia-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/savannabits/acacia-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/acacia-generator.svg?style=flat-square)](https://packagist.org/packages/savannabits/acacia-generator)
 
 | **Laravel**  |  **acacia-generator** |

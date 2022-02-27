@@ -4,6 +4,7 @@ namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Support\Str;
 use Savannabits\Acacia\Models\Schematic;
+use Savannabits\AcaciaGenerator\Facades\Module;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
@@ -179,13 +180,19 @@ class ModelMakeCommand extends GeneratorCommand
         $content = "/********* BELONGS TO **********/\n";
         if ($this->schematic) {
             foreach ($this->schematic->relationships()->where("type","BelongsTo")->get() as $relation) {
-                $related = $relation->related?->model_class;
-                $content .= (new Stub('/partials/belongs-to.stub', [
-                    "METHOD" => $relation->method,
-                    "MODEL"     => "\Acacia\\".Str::pluralStudly($related)."\Entities\\$related",
-                    "FK" => $relation->local_key,
-                    "RELATED_KEY" => $relation->related_key,
-                ]))->render()."\n";
+                $this->comment($relation->related_id);
+                $related = $relation->related;
+                if ($related) {
+                    $module = Module::find($related?->module_name);
+                    $studlyName = $module->getStudlyName();
+                    $relatedModel = $related->model_class;
+                    $content .= (new Stub('/partials/belongs-to.stub', [
+                        "METHOD" => $relation->method,
+                        "MODEL"     => "\Acacia\\$studlyName\Entities\\$relatedModel",
+                        "FK" => $relation->local_key,
+                        "RELATED_KEY" => $relation->related_key,
+                    ]))->render();
+                }
             }
         }
         return $content;
