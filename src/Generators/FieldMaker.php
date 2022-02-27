@@ -18,7 +18,10 @@ class FieldMaker
             "LABEL" => $this->field->title,
             "V_MODEL" => "form.".$this->field->name
         ];
-//        $stub = "/js/pages/fields/".$this->field->html_type.".stub";
+        if ($this->field->html_type ===FormFields::SELECT) {
+            $replacements["OPTIONS_ROUTE"] =$this->field->options_route_name;
+            $replacements["OPTIONS_LABEL"] =$this->field->options_label_field ?? 'id';
+        }
         $stub = match ($this->field->html_type) {
             FormFields::SWITCH => "switch",
             FormFields::CHECKBOX => "checkbox",
@@ -26,6 +29,9 @@ class FieldMaker
             FormFields::TEXTAREA => 'textarea',
             FormFields::PASSWORD => 'password',
             FormFields::MASK => 'mask',
+            FormFields::SELECT => 'rich-select',
+            FormFields::DATE => 'date',
+            FormFields::DATETIME => 'datetime',
             default => "text",
         };
         return (new Stub("/js/pages/fields/$stub.stub",$replacements))->render();
@@ -40,6 +46,8 @@ class FieldMaker
             FormFields::PASSWORD => "import Password from 'primevue/password';",
             FormFields::MASK => "import InputMask from 'primevue/inputmask';",
             FormFields::TEXTAREA => "import Textarea from 'primevue/textarea';",
+            FormFields::SELECT => "import AcaciaRichSelect from '@/Components/AcaciaRichSelect.vue';",
+            FormFields::DATETIME, FormFields::DATE => "import AcaciaDatepicker from '@/Components/AcaciaDatepicker.vue';",
             default => null,
         };
     }

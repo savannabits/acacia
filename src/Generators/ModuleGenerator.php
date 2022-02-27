@@ -9,6 +9,7 @@ use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Models\Field;
 use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 use Savannabits\AcaciaGenerator\FileRepository;
@@ -673,17 +674,55 @@ class ModuleGenerator extends Generator
 
     public function getCreateFormFieldsReplacement(): string
     {
-        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
         $content = "";
         foreach ($fields as $field) {
             $content .= (new FieldMaker($field))->render();
         }
+        // Add belongsTo relationships as selects
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $content .= (new FieldMaker($field))->render();
+        }
         return $content;
+    }
+    private function relationshipToField($relationship): Field
+    {
+        $labelFieldOpts = $relationship->related->fields()->where("is_guarded","=",false)->get()->pluck('name')->values();
+        if ($labelFieldOpts->has('name')) {
+            $labelField = "name";
+        } else if ($labelFieldOpts->has('title')) {
+            $labelField = "title";
+        } elseif ($labelFieldOpts->count()) {
+            $labelField = $labelFieldOpts->first();
+        } else {
+            $labelField = "id";
+        }
+        $field = new Field();
+        $field->forceFill([
+            "title" => Str::replace('-'," ", Str::title(Str::slug($relationship->method))),
+            "name" => $relationship->method,
+            "db_type" => "relationship",
+            "html_type" => FormFields::SELECT,
+            "has_options" => true,
+            "is_vue" => true,
+            "in_form" => true,
+            "options_route_name" => "api.v1.".$relationship->related?->route_name.".index",
+            "options_label_field" => $labelField
+        ]);
+        return $field;
     }
     public function getCreateComponentImportsReplacement(): string
     {
-        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
         $content = "";
+        // BelongsTo Relationships
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $fields->push($field);
+        }
         foreach ($fields as $field) {
             $import = (new FieldMaker($field))->getComponentImport();
             if (!Str::contains($content,$import)) {
@@ -694,8 +733,15 @@ class ModuleGenerator extends Generator
     }
     public function getCreateFormObjectReplacement(): string
     {
-        return $this->schematic->fields()->where("is_vue","=",true)
-            ->get()
+        $fields = $this->schematic->fields()->where("in_form","=",true)
+            ->get();
+        // BelongsTo Relationships
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $fields->push($field);
+        }
+        return $fields
             ->keyBy('name')->map(function ($field) {
             return match ($field->html_type) {
                 FormFields::SWITCH, FormFields::CHECKBOX => false,

@@ -19,7 +19,11 @@ class $CLASS$ extends Controller
     public function index(Request $request): JsonResponse
     {
         $data = $MODEL_NAME$::query()->paginate();
-        return \response()->json($data);
+        return \response()->json([
+            "success" => true,
+            "message" => 'Get all $MODULE_NAME$',
+            "payload" => $data,
+        ]);
     }
 
     /**

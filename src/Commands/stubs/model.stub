@@ -4,6 +4,7 @@ namespace $NAMESPACE$;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use $MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory;
 $IMPORTS$
 
 class $CLASS$ extends Model
@@ -11,10 +12,11 @@ class $CLASS$ extends Model
     use HasFactory;
 
     protected $fillable = $FILLABLE$;
+    protected $hidden = $HIDDEN$;
 
-    protected static function newFactory(): \$MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory
+    protected static function newFactory(): $NAME$Factory
     {
-        return \$MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory::new();
+        return $NAME$Factory::new();
     }
     $BELONGS_TO$
     $MORPH_TO$

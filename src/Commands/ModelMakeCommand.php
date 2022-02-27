@@ -123,6 +123,7 @@ class ModelMakeCommand extends GeneratorCommand
         $replace = [
             'NAME'              => $this->getModelName(),
             'FILLABLE'          => $this->getFillable(),
+            'HIDDEN'          => $this->getHidden(),
             'NAMESPACE'         => $this->getClassNamespace($module),
             'CLASS'             => $this->getClass(),
             'LOWER_NAME'        => $module->getLowerName(),
@@ -175,12 +176,21 @@ class ModelMakeCommand extends GeneratorCommand
         return '[]';
     }
 
+    /**
+     * @return string|null
+     */
+    private function getHidden(): ?string
+    {
+        $arrays = $this->schematic->fields()->where("is_hidden","=",true)->get();
+        return $arrays?->pluck('name')->toJson() ?? '[]';
+    }
+
+
     public function getBelongsTo(): string
     {
         $content = "/********* BELONGS TO **********/\n";
         if ($this->schematic) {
             foreach ($this->schematic->relationships()->where("type","BelongsTo")->get() as $relation) {
-                $this->comment($relation->related_id);
                 $related = $relation->related;
                 if ($related) {
                     $module = Module::find($related?->module_name);
