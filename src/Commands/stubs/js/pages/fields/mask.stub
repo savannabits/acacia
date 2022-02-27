@@ -1,0 +1,4 @@
+<div class="my-2">
+    <label>$LABEL$</label>
+    <InputMask mask="$MASK$" v-model="$V_MODEL$" placeholder="$PLACEHOLDER$" slotChar="$SLOT_CHAR$"></InputMask>
+</div>

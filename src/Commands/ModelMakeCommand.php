@@ -3,6 +3,8 @@
 namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Models\Schematic;
+use Savannabits\AcaciaGenerator\Facades\Module;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
@@ -34,8 +36,15 @@ class ModelMakeCommand extends GeneratorCommand
      */
     protected $description = 'Create a new model for the specified module.';
 
+    protected ?Schematic $schematic;
+    protected ?string $imports=null;
+
     public function handle() : int
     {
+        $this->schematic = $this->option('schematic');
+        if (!$this->schematic) {
+            $this->schematic = Schematic::query()->where("model_class", "=", $this->argument('model'))->first();
+        }
         if (parent::handle() === E_ERROR) {
             return E_ERROR;
         }
@@ -88,6 +97,7 @@ class ModelMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
+            ['schematic',null,InputOption::VALUE_OPTIONAL,'The schematic model to use for generation', null],
             ['fillable', null, InputOption::VALUE_OPTIONAL, 'The fillable attributes.', null],
             ['migration', 'm', InputOption::VALUE_NONE, 'Flag to create associated migrations', null],
         ];
@@ -110,8 +120,7 @@ class ModelMakeCommand extends GeneratorCommand
     protected function getTemplateContents()
     {
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
-
-        return (new Stub('/model.stub', [
+        $replace = [
             'NAME'              => $this->getModelName(),
             'FILLABLE'          => $this->getFillable(),
             'NAMESPACE'         => $this->getClassNamespace($module),
@@ -120,7 +129,11 @@ class ModelMakeCommand extends GeneratorCommand
             'MODULE'            => $this->getModuleName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
-        ]))->render();
+            'BELONGS_TO'        => $this->getBelongsTo() ?? "",
+            'MORPH_TO'        => $this->getMorphTo() ?? "",
+            'IMPORTS'       => ''
+        ];
+        return (new Stub('/model.stub', $replace))->render();
     }
 
     /**
@@ -140,7 +153,7 @@ class ModelMakeCommand extends GeneratorCommand
      */
     private function getModelName()
     {
-        return Str::studly($this->argument('model'));
+        return $this->schematic?->model_class ?: Str::studly($this->argument('model'));
     }
 
     /**
@@ -154,10 +167,49 @@ class ModelMakeCommand extends GeneratorCommand
             $arrays = explode(',', $fillable);
 
             return json_encode($arrays);
+        } elseif($this->schematic) {
+            $arrays = $this->schematic->fields()->where("is_guarded","=",false)->get();
+            return $arrays?->pluck('name')->toJson();
         }
 
         return '[]';
     }
+
+    public function getBelongsTo(): string
+    {
+        $content = "/********* BELONGS TO **********/\n";
+        if ($this->schematic) {
+            foreach ($this->schematic->relationships()->where("type","BelongsTo")->get() as $relation) {
+                $this->comment($relation->related_id);
+                $related = $relation->related;
+                if ($related) {
+                    $module = Module::find($related?->module_name);
+                    $studlyName = $module->getStudlyName();
+                    $relatedModel = $related->model_class;
+                    $content .= (new Stub('/partials/belongs-to.stub', [
+                        "METHOD" => $relation->method,
+                        "MODEL"     => "\Acacia\\$studlyName\Entities\\$relatedModel",
+                        "FK" => $relation->local_key,
+                        "RELATED_KEY" => $relation->related_key,
+                    ]))->render();
+                }
+            }
+        }
+        return $content;
+    }
+    public function getMorphTo(): string
+    {
+        $content = "/********* MORPH TO **********/\n";
+        if ($this->schematic) {
+            foreach ($this->schematic->relationships()->where("type","MorphTo")->get() as $relation) {
+                $content .= (new Stub('/partials/morph-to.stub', [
+                    "METHOD" => $relation->method,
+                ]))->render()."\n";
+            }
+        }
+        return $content;
+    }
+
 
     /**
      * Get default namespace.

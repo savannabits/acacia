@@ -2,7 +2,9 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
@@ -12,6 +14,30 @@ use Symfony\Component\Console\Input\InputOption;
 class ControllerMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
+
+    private Schematic|Model|null $schematic;
+
+    public function handle() : int
+    {
+        if ($this->option('schematic')) {
+            $this->schematic = $this->option('schematic');
+        } elseif ($this->option('table')) {
+            $this->schematic = Schematic::query()->where("table_name","=", trim($this->option('table')))->first();
+        } else {
+            $err = "Error: You must either pass the --table or --schematic option";
+            $this->comment($err);
+            abort(400,$err);
+        }
+        if (!$this->schematic) {
+            $err = "We don't know how to generate this controller because it does not have an existing schematic";
+            $this->comment($err);
+            abort(400,$err);
+        }
+        if (parent::handle() === E_ERROR) {
+            return E_ERROR;
+        }
+        return 0;
+    }
 
     /**
      * The name of argument being used.
@@ -48,6 +74,11 @@ class ControllerMakeCommand extends GeneratorCommand
         return $path . $controllerPath->getPath() . '/' . $this->getControllerName() . '.php';
     }
 
+    public function getModelNamespace() {
+        $module = $this->laravel['modules'];
+
+        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
+    }
     /**
      * @return string
      */
@@ -56,8 +87,8 @@ class ControllerMakeCommand extends GeneratorCommand
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         return (new Stub($this->getStubName(), [
-            'MODULENAME'        => $module->getStudlyName(),
-            'CONTROLLERNAME'    => $this->getControllerName(),
+            'MODULE_NAME'        => $module->getStudlyName(),
+            'CONTROLLER_NAME'    => $this->getControllerName(),
             'NAMESPACE'         => $module->getStudlyName(),
             'CLASS_NAMESPACE'   => $this->getClassNamespace($module),
             'CLASS'             => $this->getControllerNameWithoutNamespace(),
@@ -65,7 +96,10 @@ class ControllerMakeCommand extends GeneratorCommand
             'MODULE'            => $this->getModuleName(),
             'NAME'              => $this->getModuleName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
+            'MODEL_NAME'        => $this->getModelName(),
+            'MODEL_CAMEL_NAME'  => Str::camel($this->getModelName()),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
+            'MODEL_NAMESPACE'  => $this->getModelNamespace(),
         ]))->render();
     }
 
@@ -88,6 +122,8 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
+            ['schematic',null, InputOption::VALUE_OPTIONAL,'The schematic model to use for generation', null],
+            ['table',null,InputOption::VALUE_OPTIONAL,'Optional table name to use for generation', null],
             ['plain', 'p', InputOption::VALUE_NONE, 'Generate a plain controller', null],
             ['api', null, InputOption::VALUE_NONE, 'Exclude the create and edit methods from the controller.'],
         ];
@@ -105,6 +141,10 @@ class ControllerMakeCommand extends GeneratorCommand
         }
 
         return $controller;
+    }
+
+    public function getModelName(){
+        return $this->schematic?->model_class;
     }
 
     /**

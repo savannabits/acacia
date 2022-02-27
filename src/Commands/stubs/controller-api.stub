@@ -2,6 +2,9 @@
 
 namespace $CLASS_NAMESPACE$;
 
+use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -10,11 +13,23 @@ class $CLASS$ extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        //
+        $data = $MODEL_NAME$::query()->paginate();
+        return \response()->json($data);
+    }
+
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public function dt(Request $request): LengthAwarePaginator
+    {
+        $q = $MODEL_NAME$::query();
+        return \PrimevueDatatables::of($q)->make();
     }
 
     /**

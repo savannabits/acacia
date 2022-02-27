@@ -1,0 +1,55 @@
+<template>
+    <form @submit.prevent="createModel">
+        <div class="">
+            $CREATE_FORM_FIELDS$
+        </div>
+
+        <div class="text-right min-w-[300px] pt-2 border-t-2">
+            <Button type="submit" icon="pi pi-check" label="Save"/>
+        </div>
+    </form>
+</template>
+<script lang="ts">
+    import {defineComponent} from "vue";
+
+    export default defineComponent({
+        name: "SchematicsCreate",
+    })
+</script>
+<script setup lang="ts">
+    import Button from "primevue/button";
+    import Dialog from "primevue/dialog";
+    import {useForm, usePage} from "@inertiajs/inertia-vue3";
+    import {computed, nextTick, ref} from "vue";
+    import axios from "axios";
+    import route from "ziggy-js";
+    import Label from "@/Components/Label.vue";
+    import {useToast} from "primevue/usetoast";
+    import {Inertia} from "@inertiajs/inertia";
+    $CREATE_COMPONENT_IMPORTS$
+    const flash = computed(() => usePage().props?.value?.flash) as any;
+    const existingTables = ref([]);
+    const showModal = ref(false);
+    const toast = useToast();
+    const form = useForm($CREATE_FORM_OBJECT$)
+    const createModel = async () => {
+        form.post(route('acacia.backend.$LOWER_NAME$.store'),{
+            onSuccess: (res) => {
+                const fl = res.props.flash as any;
+                toast.add({severity: 'success', summary: 'Success', detail: fl?.success, life: 3000});
+                showModal.value = false;
+            },
+            onError: (errors) => {
+                toast.add({severity: 'error', summary: 'Error', detail: errors?.message, life: 3000});
+            },
+            onFinish: (res) => {
+                const payload = flash.value?.payload;
+                // emit event here
+            }
+        })
+    }
+</script>
+
+<style scoped>
+
+</style>

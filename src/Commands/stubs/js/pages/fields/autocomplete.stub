@@ -1,0 +1,10 @@
+<div class="my-2">
+    <label>$LABEL$</label>
+    <AutoComplete class="block w-full"
+                  :autoHighlight="true" v-model="$V_MODEL$"
+                  :suggestions="$SUGGESTIONS_VARIABLE$"
+                  @complete="$SEARCH_FUNCTION$($event)"
+                  :dropdown="true"
+                  field="$DISPLAY_FIELD$" forceSelection
+    />
+</div>

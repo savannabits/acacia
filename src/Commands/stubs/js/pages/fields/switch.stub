@@ -1,0 +1,4 @@
+<div class="my-2 flex items-center flex-wrap gap-x-2">
+    <label>$LABEL$</label>
+    <InputSwitch class="block" v-model="$V_MODEL$"/>
+</div>

@@ -1,0 +1,1 @@
+<Column field="$FIELD_NAME$" header="$FIELD_TITLE$" :sortable="$SORTABLE$"/>

@@ -1,0 +1,4 @@
+    public function $METHOD$(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo();
+    }
