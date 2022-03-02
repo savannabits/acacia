@@ -7,6 +7,7 @@ use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class RequestMakeCommand extends GeneratorCommand
 {
@@ -45,7 +46,7 @@ class RequestMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the form request class.'],
@@ -53,10 +54,17 @@ class RequestMakeCommand extends GeneratorCommand
         ];
     }
 
+    protected function getOptions(): array
+    {
+        return [
+            ['schematic',null, InputOption::VALUE_OPTIONAL,'The schematic model to use for generation', null],
+            ['table',null,InputOption::VALUE_OPTIONAL,'Optional table name to use for generation', null],
+        ];
+    }
     /**
-     * @return mixed
+     * @return string
      */
-    protected function getTemplateContents()
+    protected function getTemplateContents(): string
     {
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 

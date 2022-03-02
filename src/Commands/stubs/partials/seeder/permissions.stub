@@ -1,0 +1,17 @@
+// Permissions Seeder
+$perms = [
+    '$LOWER_NAME$.view-any',
+    '$LOWER_NAME$.create',
+    '$LOWER_NAME$.view',
+    '$LOWER_NAME$.update',
+    '$LOWER_NAME$.delete',
+    '$LOWER_NAME$.restore',
+    '$LOWER_NAME$.force-delete',
+    '$LOWER_NAME$.review',
+];
+try {
+    \Savannabits\Acacia\Helpers\Permissions::seedPermissions($perms);
+} catch (\Throwable $e) {
+    \Log::info($e);
+    abort($e->getMessage());
+}

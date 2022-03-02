@@ -396,13 +396,15 @@ class ModuleGenerator extends Generator
      */
     public function generateResources()
     {
-        // Seeder
+        // Permissions Seeder
 
         if (GenerateConfigReader::read('seeder')->generate() === true) {
             $this->console->call('acacia:make-seed', [
                 'name' => $this->getPluralName(),
                 'module' => $this->getPluralName(),
                 '--master' => true,
+                '--permissions' => true,
+                '--schematic' => $this->schematic,
             ]);
         }
 
@@ -427,6 +429,7 @@ class ModuleGenerator extends Generator
                     'module' => $this->getPluralName(),
                 ]+$options);
         }
+
         // Model
         if (GenerateConfigReader::read('model')->generate() === true) {
             $options = ['--schematic'=> $this->schematic];
@@ -436,6 +439,14 @@ class ModuleGenerator extends Generator
                 ]+$options);
         }
 
+        // Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/IndexRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
         // Controller
         if (GenerateConfigReader::read('controller')->generate() === true) {
             $options = ['--api' => $this->type ==='api','--schematic' => $this->schematic];
@@ -451,6 +462,12 @@ class ModuleGenerator extends Generator
                     'controller' => "Api/".$this->getName() . 'Controller',
                     'module' => $this->getPluralName(),
                 ]+$options);
+        }
+
+        // Choose to call the seeder now or later
+        $yes = $this->console->confirm("Do you want to run the permissions seeder right now? (You can run them later)",true);
+        if ($yes) {
+            $this->console->call('acacia:seed',['module' => $this->getPluralName()]);
         }
     }
 

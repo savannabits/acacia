@@ -3,6 +3,7 @@
 namespace Savannabits\AcaciaGenerator\Commands;
 
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\CanClearModulesCache;
@@ -29,6 +30,26 @@ class SeedMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Generate new seeder for the specified module.';
+    private Schematic|null $schematic;
+    private ?string $table_name;
+
+    public function handle(): int
+    {
+        $this->schematic = $this->option('schematic');
+        $this->table_name = $this->option('table');
+        if (!$this->schematic && !$this->table_name) {
+            $this->comment("Either --schematic or --table option has to be specified");
+            return 1;
+        }
+        if (!$this->schematic) {
+            $this->schematic = Schematic::query()->where("table_name","=", $this->table_name)->first();
+        }
+        if (!$this->schematic) {
+            $this->comment("No existing schematic could be found for $this->table_name. Please create one first.");
+            return 1;
+        }
+        return parent::handle();
+    }
 
     /**
      * Get the console command arguments.
@@ -57,6 +78,25 @@ class SeedMakeCommand extends GeneratorCommand
                 InputOption::VALUE_NONE,
                 'Indicates the seeder will created is a master database seeder.',
             ],
+            [
+                'permissions',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicate that this is a permissions seeder.',
+            ],
+            [
+                'schematic',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Schematic to be used for seeder generation',
+            ],
+            [
+                'table',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Schematic to be used for seeder generation',
+            ],
+
         ];
     }
 
@@ -71,6 +111,7 @@ class SeedMakeCommand extends GeneratorCommand
             'NAME' => $this->getSeederName(),
             'MODULE' => $this->getModuleName(),
             'NAMESPACE' => $this->getClassNamespace($module),
+            'PERMISSIONS_CONTENT' => $this->getPermissionsSeederContent(),
 
         ]))->render();
     }
@@ -111,5 +152,17 @@ class SeedMakeCommand extends GeneratorCommand
         $module = $this->laravel['modules'];
 
         return $module->config('paths.generator.seeder.namespace') ?: $module->config('paths.generator.seeder.path', 'Database/Seeders');
+    }
+    private function getPermissionsSeederContent(): string
+    {
+        $content = "// TODO: Implement Seeding Logic";
+        if (!$this->hasOption('permissions')) {
+            return $content;
+        } else {
+            $content = (new Stub("/partials/seeder/permissions.stub",[
+                "LOWER_NAME" => \Module::find($this->getModuleName())->getLowerName()
+            ]))->render();
+        }
+        return $content;
     }
 }

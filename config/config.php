@@ -291,6 +291,7 @@ return [
         'key' => 'acacia-generator',
         'lifetime' => 60,
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Choose what acacia-generator will register as custom namespaces.

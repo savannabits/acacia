@@ -14,8 +14,7 @@ class $NAME$ extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
+        $PERMISSIONS_CONTENT$
         // $this->call("OthersTableSeeder");
     }
 }
