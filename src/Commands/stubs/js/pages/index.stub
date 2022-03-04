@@ -12,14 +12,15 @@
                     <Button @click="createModal = true" aria-label="New Comment" label="New $STUDLY_SINGULAR_NAME$" icon="pi pi-plus"/>
                 </div>
                 <PrimeDatatables
-                    :api-url="apiUrl"
-                    :column-filters="{}"
-                    :searchable-columns="searchableCols"
-                    :state-key="stateKey"
+                    :apiUrl="apiUrl"
+                    :columnFilters="{}"
+                    :searchableColumns="searchableCols"
+                    :stateKey="stateKey"
+                    defaultSortField="id"
                     contextMenu
                     v-model:contextMenuSelection="selectedRow"
                     @row-contextmenu="showContextMenu"
-                    :row-hover="true"
+                    :rowHover="true"
                     :refresh="refreshTime"
                 >
                     $JS_INDEX_COLUMNS$
@@ -49,7 +50,7 @@
                     New $STUDLY_SINGULAR_NAME$
                 </h4>
             </template>
-            <CreateForm v-if="createModal"/>
+            <CreateForm @created="onCreated" v-if="createModal"/>
             <template #footer>
                 <Button label="Open in a Page" icon="pi pi-window" @click="$inertia.visit(route('acacia.backend.$LOWER_NAME$.create'))" class="p-button-text"/>
                 <Button label="Close" icon="pi pi-times" @click="createModal=false" class="p-button-text"/>
@@ -73,6 +74,7 @@
     import Button from "primevue/button";
     import ContextMenu from "primevue/contextmenu";
     import Badge from "primevue/badge";
+    import dayjs from "dayjs";
     import route from "ziggy-js"
     import {nextTick, Ref, ref} from "vue";
     import {useConfirm} from "primevue/useconfirm";
@@ -136,6 +138,11 @@
             const msg = e?.response?.data?.message || e?.data?.message || e?.message || e || "Server error";
             toast.add({severity: 'error', detail: msg, summary: 'Server Error'});
         }
+    }
+    const onCreated = (e) => {
+        // console.log(e.payload);
+        createModal.value = false;
+        refresh();
     }
 </script>
 

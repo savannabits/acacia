@@ -3,7 +3,9 @@
 namespace $CLASS_NAMESPACE$;
 
 use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
+use $MODULE_NAMESPACE$\$MODULE$\$REPO_NAMESPACE$\$REPO_NAME$;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
@@ -11,6 +13,9 @@ use Inertia\Response;
 
 class $CLASS$ extends Controller
 {
+    public function __construct(private $REPO_NAME$ $repo)
+    {
+    }
     /**
      * Display a listing of the resource.
      * @return Response
@@ -32,11 +37,18 @@ class $CLASS$ extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Renderable
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        try {
+            $payload = $this->repo->store(json_decode($request->collect()->toJson()));
+            $success = "Record created successfully";
+            return back()->with(compact('success','payload'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 
     /**
@@ -46,7 +58,8 @@ class $CLASS$ extends Controller
      */
     public function show($MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Show',['model' => $$MODEL_CAMEL_NAME$]);
+        $model = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Show',compact('model'));
     }
 
     /**
@@ -56,27 +69,42 @@ class $CLASS$ extends Controller
      */
     public function edit($MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Edit',['model' => $$MODEL_CAMEL_NAME$]);
+        $model = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Edit',compact('model'));
     }
 
     /**
      * Update the specified resource in storage.
      * @param Request $request
-     * @param int $id
-     * @return Renderable
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $MODEL_NAME$ $$MODEL_CAMEL_NAME$): RedirectResponse
     {
-        //
+        try {
+            $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)->update(json_decode($request->collect()->toJson()));
+            $success = "Record update successfully";
+            return back()->with(compact('success','payload'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($MODEL_NAME$ $$MODEL_CAMEL_NAME$): RedirectResponse
     {
-        //
+        try {
+            $res = $this->repo->setModel($$MODEL_CAMEL_NAME$)->destroy();
+            $success = "Record deleted successfully";
+            return back()->with(compact('success'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 }

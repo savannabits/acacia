@@ -1,0 +1,6 @@
+<Column
+    field="$FIELD_NAME$" header="$FIELD_TITLE$" :sortable="$SORTABLE$">
+    <template #body="{data}">
+        <span>{{data.$FIELD_NAME$ ? dayjs(data.$FIELD_NAME$).format('MMM DD, YYYY hh:mm a') : '-'}}</span>
+    </template>
+</Column>

@@ -31,6 +31,7 @@ use Savannabits\AcaciaGenerator\Commands\PublishCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
+use Savannabits\AcaciaGenerator\Commands\RepositoryMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
@@ -173,13 +174,13 @@ return [
             'lang'      => ['path' => 'resources/lang', 'generate' => true],
             'views'     => ['path' => 'resources/views', 'generate' => true],
             'test'      => ['path' => 'tests/Unit', 'generate' => true],
-            'test-feature' => ['path' => 'tests/Feature', 'generate' => true],
-            'repository'        => ['path' => 'Repositories', 'generate' => false],
+            'test-feature'      => ['path' => 'tests/Feature', 'generate' => true],
+            'repository'        => ['path' => 'Repositories', 'generate' => true],
             'event'             => ['path' => 'Events', 'generate' => false],
             'listener'          => ['path' => 'Listeners', 'generate' => false],
-            'policies'          => ['path' => 'Policies', 'generate' => false],
+            'policies'          => ['path' => 'Policies', 'generate' => true],
             'rules'             => ['path' => 'Rules', 'generate' => false],
-            'jobs'              => ['path' => 'Jobs', 'generate' => false],
+            'jobs'              => ['path' => 'Jobs', 'generate' => true],
             'emails'            => ['path' => 'Emails', 'generate' => false],
             'notifications'     => ['path' => 'Notifications', 'generate' => false],
             'resource'          => ['path' => 'Transformers', 'generate' => false],
@@ -232,6 +233,7 @@ return [
         PublishConfigurationCommand::class,
         PublishMigrationCommand::class,
         PublishTranslationCommand::class,
+        RepositoryMakeCommand::class,
         SeedCommand::class,
         SeedMakeCommand::class,
         SetupCommand::class,

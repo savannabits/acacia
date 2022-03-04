@@ -79,6 +79,10 @@ class ControllerMakeCommand extends GeneratorCommand
 
         return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
     }
+    public function getRepoNamespace() {
+        $module = $this->laravel['modules'];
+        return $module->config('paths.generator.repository.namespace') ?: $module->config('paths.generator.repository.path', 'Repositories');
+    }
     /**
      * @return string
      */
@@ -97,9 +101,11 @@ class ControllerMakeCommand extends GeneratorCommand
             'NAME'              => $this->getModuleName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
             'MODEL_NAME'        => $this->getModelName(),
+            'REPO_NAME'        => $this->getRepositoryName(),
             'MODEL_CAMEL_NAME'  => Str::camel($this->getModelName()),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
             'MODEL_NAMESPACE'  => $this->getModelNamespace(),
+            'REPO_NAMESPACE'  => $this->getRepoNamespace(),
         ]))->render();
     }
 
@@ -145,6 +151,10 @@ class ControllerMakeCommand extends GeneratorCommand
 
     public function getModelName(){
         return $this->schematic?->model_class;
+    }
+    public function getRepositoryName(): string
+    {
+        return $this->getModuleName();
     }
 
     /**

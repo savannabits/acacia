@@ -36,6 +36,7 @@ use Savannabits\AcaciaGenerator\Commands\PublishCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
 use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
+use Savannabits\AcaciaGenerator\Commands\RepositoryMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
 use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
@@ -80,6 +81,7 @@ class ConsoleServiceProvider extends ServiceProvider
         ModuleMakeCommand::class,
         FactoryMakeCommand::class,
         PolicyMakeCommand::class,
+        RepositoryMakeCommand::class,
         RequestMakeCommand::class,
         RuleMakeCommand::class,
         MigrateCommand::class,

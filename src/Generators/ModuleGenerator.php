@@ -82,14 +82,17 @@ class ModuleGenerator extends Generator
      */
     protected $isActive = false;
     private ?Schematic $schematic;
+    private ?string $runMigrations = 'prompt';
 
     /**
      * The constructor.
      * @param $name
-     * @param FileRepository $module
-     * @param Config     $config
-     * @param Filesystem $filesystem
-     * @param Console    $console
+     * @param Schematic|null $schematic
+     * @param FileRepository|null $module
+     * @param Config|null $config
+     * @param Filesystem|null $filesystem
+     * @param Console|null $console
+     * @param ActivatorInterface|null $activator
      */
     public function __construct(
         $name,
@@ -134,6 +137,11 @@ class ModuleGenerator extends Generator
     {
         $this->isActive = $active;
 
+        return $this;
+    }
+    public function setRunMigrations(?string $type ='prompt'): static
+    {
+        $this->runMigrations = $type;
         return $this;
     }
 
@@ -336,7 +344,7 @@ class ModuleGenerator extends Generator
         $this->activator->setActiveByName($name, $this->isActive);
 
         $this->console->info("Module [{$name}] created successfully.");
-        $this->console->alert("Making the code look prettier");
+        $this->console->warn("Making the code look prettier");
         shell_exec("cd acacia && npx prettier --write $name/");
         $this->console->alert('DONE');
         return 0;
@@ -439,6 +447,25 @@ class ModuleGenerator extends Generator
                 ]+$options);
         }
 
+        // Policy
+        if (GenerateConfigReader::read('policies')->generate() === true) {
+            $this->console->call('acacia:make-policy', [
+                'name' => $this->getName()."Policy",
+                'module' => $this->getPluralName(),
+                '--schematic' => $this->schematic,
+            ]);
+        }
+
+        // Repository
+        if (GenerateConfigReader::read('repository')->generate() === true) {
+            $this->console->call('acacia:make-repository', [
+                'name' => $this->getPluralName(),
+                'module' => $this->getPluralName(),
+                '--schematic' => $this->schematic,
+            ]);
+        }
+
+
         // Requests
         if (GenerateConfigReader::read('request')->generate() === true) {
             $options = ['--schematic' => $this->schematic];
@@ -465,7 +492,11 @@ class ModuleGenerator extends Generator
         }
 
         // Choose to call the seeder now or later
-        $yes = $this->console->confirm("Do you want to run the permissions seeder right now? (You can run them later)",true);
+        if ($this->runMigrations ==='prompt') {
+            $yes = $this->console->confirm("Do you want to run the permissions seeder right now? (You can run them later)",true);
+        } else {
+            $yes = $this->runMigrations === 'yes';
+        }
         if ($yes) {
             $this->console->call('acacia:seed',['module' => $this->getPluralName()]);
         }
@@ -656,8 +687,15 @@ class ModuleGenerator extends Generator
     {
         $fields = $this->schematic->fields()->where("in_list","=", true)->get();
         $content = "";
-        $stub = "partials/pages/dt-column";
+        $stubBase = "partials/pages/";
         foreach ($fields as $field) {
+            $stubName = match ($field->db_type) {
+                'boolean' =>'dt-column.boolean',
+                'date' =>'dt-column.date',
+                'datetime','timestamp' =>'dt-column.datetime',
+                default => "dt-column"
+            };
+            $stub = "$stubBase$stubName";
             $content .= (new Stub(
                 '/' . $stub . '.stub',
                 [

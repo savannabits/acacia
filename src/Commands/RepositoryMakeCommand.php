@@ -11,7 +11,7 @@ use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class PolicyMakeCommand extends GeneratorCommand
+class RepositoryMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
@@ -27,14 +27,14 @@ class PolicyMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'acacia:make-policy';
+    protected $name = 'acacia:make-repository';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new policy class for the specified module.';
+    protected $description = 'Create a new repository class for the specified module.';
     private Schematic|null $schematic;
     private string|null $table_name;
 
@@ -59,7 +59,7 @@ class PolicyMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.policies.namespace') ?: $module->config('paths.generator.policies.path', 'Policies');
+        return $module->config('paths.generator.repository.namespace') ?: $module->config('paths.generator.repository.path', 'Repositories');
     }
 
     /**
@@ -103,12 +103,14 @@ class PolicyMakeCommand extends GeneratorCommand
          * @var Module $modelModule
          */
         $modelModule = $this->laravel['modules']->findOrFail($this->schematic->module_name);
-        return (new Stub('/policy.stub', [
+        return (new Stub('/repository.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),
             'MODEL_NAMESPACE' => '\Acacia\\'.$modelModule->getStudlyName()."\Entities\\".$this->schematic->model_class,
             'MODEL_NAME' => $this->schematic->model_class,
             'BASE_PERMISSION' => $modelModule->getLowerName(),
             'CLASS'     => $this->getClass(),
+            'METHODS'  => $this->buildMethods(),
+            'BELONGS_TO_ARRAY' => $this->getBelongsTos(),
         ]))->render();
     }
 
@@ -119,9 +121,9 @@ class PolicyMakeCommand extends GeneratorCommand
     {
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
 
-        $policyPath = GenerateConfigReader::read('policies');
+        $classPath = GenerateConfigReader::read('repository');
 
-        return $path . $policyPath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path . $classPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**
@@ -130,5 +132,16 @@ class PolicyMakeCommand extends GeneratorCommand
     private function getFileName()
     {
         return Str::studly($this->argument('name'));
+    }
+    private function buildMethods(): string
+    {
+        return (new Stub('/partials/repository/methods.stub',[
+            'MODEL_NAME' => $this->schematic->model_class,
+        ]))->render();
+    }
+    private function getBelongsTos(): string
+    {
+        return $this->schematic->relationships()->where("type","=","BelongsTo")
+            ->get()->pluck("method")->values()->toJson();
     }
 }

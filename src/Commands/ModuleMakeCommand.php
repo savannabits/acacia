@@ -27,6 +27,7 @@ class ModuleMakeCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
      */
     public function handle() : int
     {
@@ -40,6 +41,7 @@ class ModuleMakeCommand extends Command
                 $this->warn("Schematic for $name not found.");
                 continue;
             }
+            $runMigrations = $this->hasOption('yes') ? "yes": ($this->hasOption("no") ? "no": 'prompt');
             $code = with(new ModuleGenerator($schematic->model_class))
                 ->setSchematic($schematic)
                 ->setFilesystem($this->laravel['files'])
@@ -50,6 +52,7 @@ class ModuleMakeCommand extends Command
                 ->setForce($this->option('force'))
                 ->setType($this->getModuleType())
                 ->setActive(!$this->option('disabled'))
+                ->setRunMigrations($runMigrations)
                 ->generate();
 
             if ($code === E_ERROR) {
@@ -80,6 +83,8 @@ class ModuleMakeCommand extends Command
             ['web', null, InputOption::VALUE_NONE, 'Generate a web module.'],
             ['disabled', 'd', InputOption::VALUE_NONE, 'Do not enable the module at creation.'],
             ['force', 'F', InputOption::VALUE_NONE, 'Force the operation to run when the module already exists.'],
+            ['yes', 'y', InputOption::VALUE_NONE, 'Automatically run migrations for permissions NOW instead of prompting'],
+            ['no', null, InputOption::VALUE_NONE, 'Automatically run migrations for permissions LATER instead of prompting'],
         ];
     }
 
