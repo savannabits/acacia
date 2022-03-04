@@ -157,27 +157,35 @@ class RequestMakeCommand extends GeneratorCommand
 
     public function makeRules(): string
     {
-        return (match ($this->type) {
+        $content = "";
+        $rules = (match ($this->type) {
             "index" => $this->makeIndexRules(),
             "store" => $this->makeStoreRules(),
             "update" => $this->makeUpdateRules(),
             "destroy" => $this->makeDestroyRules(),
             default => collect([])
-        })->toJson();
+        });
+        foreach ($rules as $field => $rule) {
+            $content.="'$field' => ".json_encode($rule).",";
+        }
+        return "[$content]";
     }
     private function makeIndexRules(): Collection
     {
-        $rules = collect([]);
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
+        $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]',true))->get('index'));
         return $rules;
     }
     private function makeStoreRules(): Collection
     {
-        $rules = collect([]);
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
+        $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))->get('store'));
         return $rules;
     }
     private function makeUpdateRules(): Collection
     {
-        $rules = collect([]);
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
+        $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))->get('update'));
         return $rules;
     }
     private function makeDestroyRules(): Collection
