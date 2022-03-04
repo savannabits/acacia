@@ -1,5 +1,8 @@
 public function index(): LengthAwarePaginator
 {
+    if ($search = request()->input('search')) {
+        return $data = $MODEL_NAME$::search($search)->query(fn($query) => $query)->paginate();
+    }
     return $data = $MODEL_NAME$::query()->paginate();
 }
 public function store(object $data): ?$MODEL_NAME$
@@ -34,4 +37,9 @@ public function update(object $data): $MODEL_NAME$
 public function destroy(): bool
 {
     return !!$this->model->delete();
+}
+public function dt(): LengthAwarePaginator
+{
+    $q = $MODEL_NAME$::query();
+    return \PrimevueDatatables::of($q)->make();
 }

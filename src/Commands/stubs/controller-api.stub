@@ -3,14 +3,23 @@
 namespace $CLASS_NAMESPACE$;
 
 use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
+use $MODULE_NAMESPACE$\$MODULE$\$REPO_NAMESPACE$\$REPO_NAME$;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\IndexRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\StoreRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\UpdateRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DestroyRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Savannabits\Acacia\Helpers\ApiResponse;
 
 class $CLASS$ extends Controller
 {
+    public function __construct(private ApiResponse $api, private $REPO_NAME$ $repo)
+    {
+    }
     /**
      * Display a listing of the resource.
      * @param Request $request
@@ -18,12 +27,8 @@ class $CLASS$ extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $data = $MODEL_NAME$::query()->paginate();
-        return \response()->json([
-            "success" => true,
-            "message" => 'Get all $MODULE_NAME$',
-            "payload" => $data,
-        ]);
+        $data = $this->repo->index();
+        return $this->api->success()->message("List of $MODULE_NAME$")->payload($data)->send();
     }
 
     /**
@@ -32,8 +37,7 @@ class $CLASS$ extends Controller
      */
     public function dt(Request $request): LengthAwarePaginator
     {
-        $q = $MODEL_NAME$::query();
-        return \PrimevueDatatables::of($q)->make();
+        return $this->repo->dt();
     }
 
     /**

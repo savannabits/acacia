@@ -3,7 +3,7 @@
 namespace Savannabits\AcaciaGenerator\Generators;
 
 use Acacia\Core\Constants\FormFields;
-use Acacia\Core\Entities\AcaciaMenu;
+use Acacia\Core\Models\AcaciaMenu;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
@@ -428,6 +428,15 @@ class ModuleGenerator extends Generator
             ]);
         }
 
+        // Auth Provider
+        if (GenerateConfigReader::read('provider')->generate() === true) {
+            $this->console->call('acacia:make-provider', [
+                'name' => 'AuthServiceProvider',
+                'module' => $this->getPluralName(),
+                '--auth' => true,
+            ]);
+        }
+
         // Factory
         if (GenerateConfigReader::read('model')->generate() === true) {
 //            $options = ['--schematic'=> $this->schematic];
@@ -466,11 +475,35 @@ class ModuleGenerator extends Generator
         }
 
 
-        // Requests
+        // Index Requests
         if (GenerateConfigReader::read('request')->generate() === true) {
-            $options = ['--schematic' => $this->schematic];
+            $options = ['--schematic' => $this->schematic,'--type' =>'index'];
             $this->console->call('acacia:make-request', [
                 'name' =>$this->getName() . '/IndexRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // Store Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'store'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/StoreRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // Update Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'update'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/UpdateRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // Destroy Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'destroy'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/DestroyRequest',
                 'module' => $this->getPluralName(),
             ]+$options);
         }

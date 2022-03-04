@@ -31,7 +31,7 @@
                                     icon-pos="right"
                                     :class="'p-button-text'"
                                     :icon="'pi pi-ellipsis-v'"
-                                    :label="'Actions'"
+                                    :label="'Options'"
                             />
                         </template>
                     </Column>

@@ -3,7 +3,7 @@
 namespace $NAMESPACE$;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use $MODULE_NAMESPACE$\$MODULE_NAME$\$MODEL_NAMESPACE$\$MODEL_NAME$;
 class $CLASS$ extends FormRequest
 {
     /**
@@ -11,11 +11,9 @@ class $CLASS$ extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return [
-            //
-        ];
+        return $RULES$;
     }
 
     /**
@@ -23,8 +21,22 @@ class $CLASS$ extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return $this->user()->can("$REQUEST_PERMISSION$",$MODEL_NAME$::class);
+    }
+
+    public function sanitizedArray(): array
+    {
+        $sanitized = $this->validated();
+        //Add your code for manipulation with request data here
+        return $sanitized;
+    }
+    /**
+     * Return modified (sanitized data) as a php object
+     * @return  object
+     */
+    public function sanitizedObject(): object {
+        return json_decode(collect($this->sanitizedArray()));
     }
 }

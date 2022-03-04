@@ -198,7 +198,7 @@ class ModelMakeCommand extends GeneratorCommand
                     $relatedModel = $related->model_class;
                     $content .= (new Stub('/partials/belongs-to.stub', [
                         "METHOD" => $relation->method,
-                        "MODEL"     => "\Acacia\\$studlyName\Entities\\$relatedModel",
+                        "MODEL"     => "\Acacia\\$studlyName\Models\\$relatedModel",
                         "FK" => $relation->local_key,
                         "RELATED_KEY" => $relation->related_key,
                     ]))->render();
@@ -230,6 +230,6 @@ class ModelMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
+        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Models');
     }
 }

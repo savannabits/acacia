@@ -105,7 +105,7 @@ class PolicyMakeCommand extends GeneratorCommand
         $modelModule = $this->laravel['modules']->findOrFail($this->schematic->module_name);
         return (new Stub('/policy.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),
-            'MODEL_NAMESPACE' => '\Acacia\\'.$modelModule->getStudlyName()."\Entities\\".$this->schematic->model_class,
+            'MODEL_NAMESPACE' => '\Acacia\\'.$modelModule->getStudlyName()."\Models\\".$this->schematic->model_class,
             'MODEL_NAME' => $this->schematic->model_class,
             'BASE_PERMISSION' => $modelModule->getLowerName(),
             'CLASS'     => $this->getClass(),

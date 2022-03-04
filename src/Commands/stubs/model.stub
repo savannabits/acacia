@@ -5,11 +5,12 @@ namespace $NAMESPACE$;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use $MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory;
+use Laravel\Scout\Searchable;
 $IMPORTS$
 
 class $CLASS$ extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = $FILLABLE$;
     protected $hidden = $HIDDEN$;
@@ -20,4 +21,8 @@ class $CLASS$ extends Model
     }
     $BELONGS_TO$
     $MORPH_TO$
+    public function toSearchableArray(): array
+    {
+        return $this->only($this->getFillable());
+    }
 }

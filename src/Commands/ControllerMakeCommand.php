@@ -77,11 +77,15 @@ class ControllerMakeCommand extends GeneratorCommand
     public function getModelNamespace() {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
+        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Models');
     }
     public function getRepoNamespace() {
         $module = $this->laravel['modules'];
         return $module->config('paths.generator.repository.namespace') ?: $module->config('paths.generator.repository.path', 'Repositories');
+    }
+    public function getRequestsNamespace() {
+        $module = $this->laravel['modules'];
+        return $module->config('paths.generator.request.namespace') ?: $module->config('paths.generator.request.path', 'Http/Requests');
     }
     /**
      * @return string
@@ -106,6 +110,8 @@ class ControllerMakeCommand extends GeneratorCommand
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
             'MODEL_NAMESPACE'  => $this->getModelNamespace(),
             'REPO_NAMESPACE'  => $this->getRepoNamespace(),
+            'REQUESTS_NAME'  => $this->getModelName(),
+            'REQUESTS_NAMESPACE'  => $this->getRequestsNamespace(),
         ]))->render();
     }
 
@@ -167,8 +173,10 @@ class ControllerMakeCommand extends GeneratorCommand
 
     public function getDefaultNamespace() : string
     {
+        /**
+         * @var \Module $module
+         */
         $module = $this->laravel['modules'];
-
         return $module->config('paths.generator.controller.namespace') ?: $module->config('paths.generator.controller.path', 'Http/Controllers');
     }
 
