@@ -23,7 +23,7 @@ class $CLASS$ extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can("$REQUEST_PERMISSION$",$MODEL_NAME$::class);
+        return $this->user()->can("$REQUEST_PERMISSION$",$POLICY_ARGUMENT$);
     }
 
     public function sanitizedArray(): array

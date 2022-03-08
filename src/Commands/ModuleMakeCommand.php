@@ -2,8 +2,8 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Console\Command;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 use Savannabits\AcaciaGenerator\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;

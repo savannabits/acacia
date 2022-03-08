@@ -2,9 +2,9 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;

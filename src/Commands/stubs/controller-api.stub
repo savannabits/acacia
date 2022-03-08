@@ -5,13 +5,14 @@ namespace $CLASS_NAMESPACE$;
 use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
 use $MODULE_NAMESPACE$\$MODULE$\$REPO_NAMESPACE$\$REPO_NAME$;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\IndexRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DtRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\ViewRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\StoreRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\UpdateRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DestroyRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Savannabits\Acacia\Helpers\ApiResponse;
 
@@ -22,62 +23,103 @@ class $CLASS$ extends Controller
     }
     /**
      * Display a listing of the resource.
-     * @param Request $request
+     * @param IndexRequest $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(IndexRequest $request): JsonResponse
     {
-        $data = $this->repo->index();
-        return $this->api->success()->message("List of $MODULE_NAME$")->payload($data)->send();
+        try {
+            $data = $this->repo->index();
+            return $this->api->success()->message("List of $MODULE_NAME$")->payload($data)->send();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 
     /**
-     * @param Request $request
-     * @return LengthAwarePaginator
+     * @param DtRequest $request
+     * @return LengthAwarePaginator|JsonResponse
      */
-    public function dt(Request $request): LengthAwarePaginator
+    public function dt(DtRequest $request): LengthAwarePaginator|JsonResponse
     {
-        return $this->repo->dt();
+        try {
+            return $this->repo->dt();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
+     * @param StoreRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(StoreRequest $request): JsonResponse
+{
+        try {
+            $payload = $this->repo->store($request->sanitizedObject());
+            $success = "Record created successfully";
+            return $this->api->success()->message($success)->payload($payload)->send();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 
     /**
      * Show the specified resource.
-     * @param int $id
-     * @return Response
+     * @param ViewRequest $request
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(ViewRequest $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): JsonResponse
     {
-        //
+        try {
+            $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
+            $success = "Single record fetched";
+            return $this->api->success()->message($success)->payload($payload)->send();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param UpdateRequest $request
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $MODEL_NAME$ $$MODEL_CAMEL_NAME$): JsonResponse
     {
-        //
+        try {
+            $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)
+                    ->update($request->sanitizedObject());
+            $success = "Record updated successfully";
+            return $this->api->success()->message($success)->payload($payload)->send();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
+     * @param DestroyRequest $request
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): JsonResponse
     {
-        //
+        try {
+            $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)->destroy();
+            $success = "Record deleted successfully";
+            return $this->api->success()->message($success)->payload($payload)->send();
+        } catch (\Throwable $e) {
+            \Log::error($e);
+            return $this->api->failed()->code(500)->message($e->getMessage())->send();
+        }
     }
 }

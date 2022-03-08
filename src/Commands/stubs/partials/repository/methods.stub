@@ -10,7 +10,9 @@ public function store(object $data): ?$MODEL_NAME$
     $relationships = $this->relationships;
     $model = new $MODEL_NAME$((array) $data);
     foreach ($relationships as $relationship) {
-        $model->$relationship()->associate($data->$relationship?->id);
+        if (isset($data->$relationship)) {
+            $model->$relationship()->associate($data->$relationship?->id);
+        }
     }
     // Extend the saving logic here if need be.
     $model->saveOrFail();
@@ -26,7 +28,9 @@ public function update(object $data): $MODEL_NAME$
 {
     $relationships = $this->relationships;
     foreach ($relationships as $relationship) {
-        $this->model->$relationship()->associate($data->$relationship?->id);
+        if (isset($data->$relationship)) {
+            $this->model->$relationship()->associate($data->$relationship?->id);
+        }
     }
     $this->model->update((array) $data);
 

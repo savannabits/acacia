@@ -3,7 +3,7 @@
 namespace Savannabits\AcaciaGenerator\Generators;
 
 use Acacia\Core\Constants\FormFields;
-use Savannabits\Acacia\Models\Field;
+use Acacia\Core\Models\Field;
 use Savannabits\AcaciaGenerator\Support\Stub;
 
 class FieldMaker

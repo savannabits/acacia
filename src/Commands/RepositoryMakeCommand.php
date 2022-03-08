@@ -2,8 +2,8 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Module;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
@@ -144,4 +144,10 @@ class RepositoryMakeCommand extends GeneratorCommand
         return $this->schematic->relationships()->where("type","=","BelongsTo")
             ->get()->pluck("method")->values()->toJson();
     }
+    private function getMorphTos(): string
+    {
+        return $this->schematic->relationships()->where("type","=","MorphTo")
+            ->get()->pluck("method")->values()->toJson();
+    }
+
 }

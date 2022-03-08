@@ -131,12 +131,12 @@
     const deleteModel = async function (row) {
         try {
             const res = await axios.delete(route('api.v1.$LOWER_NAME$.destroy', row as any));
-            toast.add({severity: 'success', detail: res.data.message});
+            toast.add({severity: 'success', detail: res.data.message, life: 3000});
             refresh();
         } catch (e: any) {
             console.log(e);
             const msg = e?.response?.data?.message || e?.data?.message || e?.message || e || "Server error";
-            toast.add({severity: 'error', detail: msg, summary: 'Server Error'});
+            toast.add({severity: 'error', detail: msg, summary: 'Server Error',life: 10000});
         }
     }
     const onCreated = (e) => {

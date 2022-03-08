@@ -2,10 +2,10 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;
 use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
@@ -56,8 +56,8 @@ class RequestMakeCommand extends GeneratorCommand
             abort(400,$err);
         }
         $this->type = strtolower($this->option('type'));
-        if (!in_array($this->type,['index','store','update','destroy'])) {
-            $err = "type must be one of index, store, update or destroy.";
+        if (!in_array($this->type,['index','view','dt','store','update','destroy'])) {
+            $err = "type must be one of index,dt, view, store, update or destroy.";
             $this->comment($err);
             abort(400, $err);
         }
@@ -111,6 +111,7 @@ class RequestMakeCommand extends GeneratorCommand
             'MODULE_NAME'  => $this->getModuleName(),
             'MODEL_NAMESPACE'  => $this->getModelNamespace(),
             'RULES' => $this->makeRules(),
+            'POLICY_ARGUMENT' => $this->getPolicyArgument(),
             'REQUEST_PERMISSION' => $this->getRequestPermission(),
         ]))->render();
     }
@@ -138,10 +139,19 @@ class RequestMakeCommand extends GeneratorCommand
     public function getRequestPermission(): string
     {
         return match($this->type) {
-            "store" => "store",
+            "view" => "view",
+            "store" => "create",
             "update" => "update",
             "destroy" => "delete",
-            "index","default" => "viewAny"
+            default => "viewAny"
+        };
+    }
+
+    public function getPolicyArgument(): string
+    {
+        return match($this->type) {
+            "view","update","destroy" => '$this->'.Str::camel($this->getModelName()),
+            default => $this->getModelName()."::class",
         };
     }
 
@@ -179,7 +189,10 @@ class RequestMakeCommand extends GeneratorCommand
     private function makeStoreRules(): Collection
     {
         $fields = $this->schematic->fields()->where("in_form","=",true)->get();
-        $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))->get('store'));
+        $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
+            ->get('store'));
+        // Add belongsTo relationships
+        $belongsTos = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
         return $rules;
     }
     private function makeUpdateRules(): Collection

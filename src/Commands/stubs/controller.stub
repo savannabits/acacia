@@ -5,6 +5,7 @@ namespace $CLASS_NAMESPACE$;
 use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
 use $MODULE_NAMESPACE$\$MODULE$\$REPO_NAMESPACE$\$REPO_NAME$;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\IndexRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\ViewRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\StoreRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\UpdateRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DestroyRequest;
@@ -59,11 +60,11 @@ class $CLASS$ extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
      * @return Response
      */
-    public function show(Request $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
+    public function show(ViewRequest $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
     {
         $model = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
         return Inertia::render('$MODULE_NAME$/Js/Pages/Show',compact('model'));
@@ -92,7 +93,7 @@ class $CLASS$ extends Controller
         try {
             $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)
                     ->update($request->sanitizedObject());
-            $success = "Record update successfully";
+            $success = "Record updated successfully";
             return back()->with(compact('success','payload'));
         } catch (\Throwable $exception) {
             \Log::error($exception);

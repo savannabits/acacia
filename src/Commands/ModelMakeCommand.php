@@ -2,8 +2,8 @@
 
 namespace Savannabits\AcaciaGenerator\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Facades\Module;
 use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
 use Savannabits\AcaciaGenerator\Support\Stub;

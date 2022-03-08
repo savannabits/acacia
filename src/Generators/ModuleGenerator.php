@@ -4,13 +4,13 @@ namespace Savannabits\AcaciaGenerator\Generators;
 
 use Acacia\Core\Constants\FormFields;
 use Acacia\Core\Models\AcaciaMenu;
+use Acacia\Core\Models\Field;
+use Acacia\Core\Models\Schematic;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Field;
-use Savannabits\Acacia\Models\Schematic;
 use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
 use Savannabits\AcaciaGenerator\FileRepository;
 use Savannabits\AcaciaGenerator\Module;
@@ -491,6 +491,22 @@ class ModuleGenerator extends Generator
                 'module' => $this->getPluralName(),
             ]+$options);
         }
+        // View Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'view'];
+            $this->console->call('acacia:make-request', [
+                    'name' =>$this->getName() . '/ViewRequest',
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
+        // Datatable Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'dt'];
+            $this->console->call('acacia:make-request', [
+                    'name' =>$this->getName() . '/DtRequest',
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
         // Update Requests
         if (GenerateConfigReader::read('request')->generate() === true) {
             $options = ['--schematic' => $this->schematic,'--type' =>'update'];
@@ -777,7 +793,8 @@ class ModuleGenerator extends Generator
     }
     private function relationshipToField($relationship): Field
     {
-        $labelFieldOpts = $relationship->related->fields()->where("is_guarded","=",false)->get()->pluck('name')->values();
+        $labelFieldOpts = $relationship->related?->fields()->where("is_guarded","=",false)->get()->pluck('name')->values();
+
         if ($labelFieldOpts->has('name')) {
             $labelField = "name";
         } else if ($labelFieldOpts->has('title')) {
