@@ -1,0 +1,11 @@
+{
+    "name": "Users",
+    "alias": "users",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": ["Acacia\\Users\\Providers\\UsersServiceProvider"],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

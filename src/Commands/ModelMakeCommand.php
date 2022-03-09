@@ -1,13 +1,13 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Acacia\Core\Models\Schematic;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Facades\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Facades\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -124,6 +124,7 @@ class ModelMakeCommand extends GeneratorCommand
             'NAME'              => $this->getModelName(),
             'FILLABLE'          => $this->getFillable(),
             'HIDDEN'          => $this->getHidden(),
+            'CASTS'          => $this->getCasts(),
             'NAMESPACE'         => $this->getClassNamespace($module),
             'CLASS'             => $this->getClass(),
             'LOWER_NAME'        => $module->getLowerName(),
@@ -184,6 +185,31 @@ class ModelMakeCommand extends GeneratorCommand
         $arrays = $this->schematic->fields()->where("is_hidden","=",true)->get();
         return $arrays?->pluck('name')->toJson() ?? '[]';
     }
+
+    private function getCasts(): ?string
+    {
+        $bools = $this->schematic->fields()->whereIn("db_type",["boolean","bool","tinyinteger"])->get();
+        $content = "";
+        foreach ($bools as $bool) {
+            $content .= "'$bool->name' => 'boolean',";
+        }
+        $dates = $this->schematic->fields()->whereIn("db_type",["date"])->get();
+        foreach ($dates as $date) {
+            $content .= "'$date->name' => 'date',";
+        }
+        $datetimes = $this->schematic->fields()->whereIn("db_type",["datetime"])->get();
+        foreach ($datetimes as $date) {
+            $content .= "'$date->name' => 'datetime',";
+        }
+        $timestamps = $this->schematic->fields()->whereIn("db_type",["timestamp"])->get();
+        foreach ($timestamps as $date) {
+            $content .= "'$date->name' => 'timestamp',";
+        }
+
+
+        return $content;
+    }
+
 
 
     public function getBelongsTo(): string

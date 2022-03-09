@@ -39,7 +39,7 @@ The package will automatically register a service provider and alias.
 Optionally, publish the package's configuration file by running:
 
 ``` bash
-php artisan vendor:publish --provider="Savannabits\AcaciaGenerator\AcaciaGeneratorServiceProvider"
+php artisan vendor:publish --provider="Savannabits\Acacia\AcaciaServiceProvider"
 ```
 
 ### Autoloading

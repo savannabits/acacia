@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Support;
+namespace Savannabits\Acacia\Support;
 
 class Stub
 {

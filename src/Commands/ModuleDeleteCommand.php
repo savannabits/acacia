@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Acacia\Core\Models\AcaciaMenu;
 use Illuminate\Console\Command;

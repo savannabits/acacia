@@ -1,11 +1,11 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Publishing;
+namespace Savannabits\Acacia\Publishing;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Contracts\PublisherInterface;
-use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Contracts\PublisherInterface;
+use Savannabits\Acacia\Contracts\RepositoryInterface;
+use Savannabits\Acacia\Module;
 
 abstract class Publisher implements PublisherInterface
 {
@@ -87,7 +87,7 @@ abstract class Publisher implements PublisherInterface
     /**
      * Get module instance.
      *
-     * @return \Savannabits\AcaciaGenerator\Module
+     * @return \Savannabits\Acacia\Module
      */
     public function getModule()
     {

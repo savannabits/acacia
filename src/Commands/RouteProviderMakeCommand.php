@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 

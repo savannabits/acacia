@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Generators;
+namespace Savannabits\Acacia\Generators;
 
 use Acacia\Core\Constants\FormFields;
 use Acacia\Core\Models\Field;
-use Savannabits\AcaciaGenerator\Support\Stub;
+use Savannabits\Acacia\Support\Stub;
 
 class FieldMaker
 {

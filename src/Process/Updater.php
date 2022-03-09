@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Process;
+namespace Savannabits\Acacia\Process;
 
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Module;
 
 class Updater extends Runner
 {

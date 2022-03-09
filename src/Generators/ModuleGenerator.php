@@ -1,21 +1,22 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Generators;
+namespace Savannabits\Acacia\Generators;
 
 use Acacia\Core\Constants\FormFields;
 use Acacia\Core\Models\AcaciaMenu;
 use Acacia\Core\Models\Field;
 use Acacia\Core\Models\Schematic;
+use Acacia\Core\Repos\GPanelRepo;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
-use Savannabits\AcaciaGenerator\FileRepository;
-use Savannabits\AcaciaGenerator\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
+use Savannabits\Acacia\Contracts\ActivatorInterface;
+use Savannabits\Acacia\FileRepository;
+use Savannabits\Acacia\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
 
 class ModuleGenerator extends Generator
 {
@@ -309,7 +310,7 @@ class ModuleGenerator extends Generator
 
     /**
      * Generate the module.
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function generate() : int
     {
@@ -766,14 +767,14 @@ class ModuleGenerator extends Generator
     {
         return Str::replace("-", " ", Str::title(Str::slug($this->getPluralName())));
     }
-    protected function getJsEditTitleReplacement(): string
-    {
-        return "Edit ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
-    }
 
     protected function getJsCreateTitleReplacement(): string
     {
         return "New ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+    }
+    protected function getJsEditTitleReplacement(): string
+    {
+        return "Edit ".Str::replace("-", " ", Str::title(Str::slug(Str::singular($this->getName()))));
     }
 
     public function getCreateFormFieldsReplacement(): string
@@ -791,32 +792,13 @@ class ModuleGenerator extends Generator
         }
         return $content;
     }
+    public function getEditFormFieldsReplacement(): string
+    {
+        return $this->getCreateFormFieldsReplacement();
+    }
     private function relationshipToField($relationship): Field
     {
-        $labelFieldOpts = $relationship->related?->fields()->where("is_guarded","=",false)->get()->pluck('name')->values();
-
-        if ($labelFieldOpts->has('name')) {
-            $labelField = "name";
-        } else if ($labelFieldOpts->has('title')) {
-            $labelField = "title";
-        } elseif ($labelFieldOpts->count()) {
-            $labelField = $labelFieldOpts->first();
-        } else {
-            $labelField = "id";
-        }
-        $field = new Field();
-        $field->forceFill([
-            "title" => Str::replace('-'," ", Str::title(Str::slug($relationship->method))),
-            "name" => $relationship->method,
-            "db_type" => "relationship",
-            "html_type" => FormFields::SELECT,
-            "has_options" => true,
-            "is_vue" => true,
-            "in_form" => true,
-            "options_route_name" => "api.v1.".$relationship->related?->route_name.".index",
-            "options_label_field" => $labelField
-        ]);
-        return $field;
+        return GPanelRepo::relationshipToField($relationship);
     }
     public function getCreateComponentImportsReplacement(): string
     {
@@ -836,7 +818,31 @@ class ModuleGenerator extends Generator
         }
         return $content;
     }
+    public function getEditComponentImportsReplacement(): string
+    {
+        return $this->getCreateComponentImportsReplacement();
+    }
     public function getCreateFormObjectReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where("in_form","=",true)
+            ->get();
+        // BelongsTo Relationships
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $fields->push($field);
+        }
+        return $fields
+            ->keyBy('name')->map(function ($field) {
+            return match ($field->html_type) {
+                FormFields::SWITCH, FormFields::CHECKBOX => false,
+                default => null,
+            };
+        })->toJson();
+
+    }
+
+    public function getEditFormObjectReplacement(): string
     {
         $fields = $this->schematic->fields()->where("in_form","=",true)
             ->get();

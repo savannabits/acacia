@@ -1,53 +1,54 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Providers;
+namespace Savannabits\Acacia\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Commands\CommandMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ComponentClassMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ComponentViewMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ControllerMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\DisableCommand;
-use Savannabits\AcaciaGenerator\Commands\DumpCommand;
-use Savannabits\AcaciaGenerator\Commands\EnableCommand;
-use Savannabits\AcaciaGenerator\Commands\EventMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\FactoryMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\InstallCommand;
-use Savannabits\AcaciaGenerator\Commands\JobMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\AcaciaGeneratorV6Migrator;
-use Savannabits\AcaciaGenerator\Commands\ListCommand;
-use Savannabits\AcaciaGenerator\Commands\ListenerMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MailMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MiddlewareMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateRefreshCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateResetCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateRollbackCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateStatusCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrationMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ModelMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ModuleDeleteCommand;
-use Savannabits\AcaciaGenerator\Commands\ModuleMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\NotificationMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\PolicyMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ProviderMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
-use Savannabits\AcaciaGenerator\Commands\RepositoryMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\RuleMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\SeedCommand;
-use Savannabits\AcaciaGenerator\Commands\SeedMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\SetupCommand;
-use Savannabits\AcaciaGenerator\Commands\TestMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\UnUseCommand;
-use Savannabits\AcaciaGenerator\Commands\UpdateCommand;
-use Savannabits\AcaciaGenerator\Commands\UseCommand;
+use Savannabits\Acacia\Commands\AcaciaInstall;
+use Savannabits\Acacia\Commands\CommandMakeCommand;
+use Savannabits\Acacia\Commands\ComponentClassMakeCommand;
+use Savannabits\Acacia\Commands\ComponentViewMakeCommand;
+use Savannabits\Acacia\Commands\ControllerMakeCommand;
+use Savannabits\Acacia\Commands\DisableCommand;
+use Savannabits\Acacia\Commands\DumpCommand;
+use Savannabits\Acacia\Commands\EnableCommand;
+use Savannabits\Acacia\Commands\EventMakeCommand;
+use Savannabits\Acacia\Commands\FactoryMakeCommand;
+use Savannabits\Acacia\Commands\InstallCommand;
+use Savannabits\Acacia\Commands\JobMakeCommand;
+use Savannabits\Acacia\Commands\AcaciaV6Migrator;
+use Savannabits\Acacia\Commands\ListCommand;
+use Savannabits\Acacia\Commands\ListenerMakeCommand;
+use Savannabits\Acacia\Commands\MailMakeCommand;
+use Savannabits\Acacia\Commands\MiddlewareMakeCommand;
+use Savannabits\Acacia\Commands\MigrateCommand;
+use Savannabits\Acacia\Commands\MigrateRefreshCommand;
+use Savannabits\Acacia\Commands\MigrateResetCommand;
+use Savannabits\Acacia\Commands\MigrateRollbackCommand;
+use Savannabits\Acacia\Commands\MigrateStatusCommand;
+use Savannabits\Acacia\Commands\MigrationMakeCommand;
+use Savannabits\Acacia\Commands\ModelMakeCommand;
+use Savannabits\Acacia\Commands\ModuleDeleteCommand;
+use Savannabits\Acacia\Commands\ModuleMakeCommand;
+use Savannabits\Acacia\Commands\NotificationMakeCommand;
+use Savannabits\Acacia\Commands\PolicyMakeCommand;
+use Savannabits\Acacia\Commands\ProviderMakeCommand;
+use Savannabits\Acacia\Commands\PublishCommand;
+use Savannabits\Acacia\Commands\PublishConfigurationCommand;
+use Savannabits\Acacia\Commands\PublishMigrationCommand;
+use Savannabits\Acacia\Commands\PublishTranslationCommand;
+use Savannabits\Acacia\Commands\RepositoryMakeCommand;
+use Savannabits\Acacia\Commands\RequestMakeCommand;
+use Savannabits\Acacia\Commands\ResourceMakeCommand;
+use Savannabits\Acacia\Commands\RouteProviderMakeCommand;
+use Savannabits\Acacia\Commands\RuleMakeCommand;
+use Savannabits\Acacia\Commands\SeedCommand;
+use Savannabits\Acacia\Commands\SeedMakeCommand;
+use Savannabits\Acacia\Commands\SetupCommand;
+use Savannabits\Acacia\Commands\TestMakeCommand;
+use Savannabits\Acacia\Commands\UnUseCommand;
+use Savannabits\Acacia\Commands\UpdateCommand;
+use Savannabits\Acacia\Commands\UseCommand;
 
 class ConsoleServiceProvider extends ServiceProvider
 {
@@ -55,13 +56,14 @@ class ConsoleServiceProvider extends ServiceProvider
      * Namespace of the console commands
      * @var string
      */
-    protected $consoleNamespace = "Savannabits\\AcaciaGenerator\\Commands";
+    protected $consoleNamespace = "Savannabits\\Acacia\\Commands";
 
     /**
      * The available commands
      * @var array
      */
     protected $commands = [
+        AcaciaInstall::class,
         CommandMakeCommand::class,
         ControllerMakeCommand::class,
         DisableCommand::class,
@@ -103,7 +105,7 @@ class ConsoleServiceProvider extends ServiceProvider
         UseCommand::class,
         ResourceMakeCommand::class,
         TestMakeCommand::class,
-        AcaciaGeneratorV6Migrator::class,
+        AcaciaV6Migrator::class,
         ComponentClassMakeCommand::class,
         ComponentViewMakeCommand::class,
     ];

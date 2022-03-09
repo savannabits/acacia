@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Json;
-use Savannabits\AcaciaGenerator\Process\Installer;
+use Savannabits\Acacia\Json;
+use Savannabits\Acacia\Process\Installer;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -15,7 +15,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $name = 'acacia:install';
+    protected $name = 'acacia:module:install';
 
     /**
      * The console command description.

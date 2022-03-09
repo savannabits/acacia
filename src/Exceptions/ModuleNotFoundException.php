@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Exceptions;
+namespace Savannabits\Acacia\Exceptions;
 
 class ModuleNotFoundException extends \Exception
 {

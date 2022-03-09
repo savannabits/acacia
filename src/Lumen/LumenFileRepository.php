@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Lumen;
+namespace Savannabits\Acacia\Lumen;
 
-use Savannabits\AcaciaGenerator\FileRepository;
+use Savannabits\Acacia\FileRepository;
 
 class LumenFileRepository extends FileRepository
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Support\Migrations;
+namespace Savannabits\Acacia\Support\Migrations;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;

@@ -1,0 +1,23 @@
+{
+    "name": "acacia/core",
+    "description": "",
+    "authors": [
+        {
+            "name": "Sam Maosa",
+            "email": "maosa.sam@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Acacia\\Core\\": ""
+        }
+    }
+}

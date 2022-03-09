@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Traits;
+namespace Savannabits\Acacia\Traits;
 
 trait MigrationLoaderTrait
 {

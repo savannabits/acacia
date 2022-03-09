@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Lumen;
+namespace Savannabits\Acacia\Lumen;
 
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Module as BaseModule;
+use Savannabits\Acacia\Module as BaseModule;
 
 class Module extends BaseModule
 {

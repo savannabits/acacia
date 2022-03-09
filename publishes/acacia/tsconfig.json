@@ -1,0 +1,28 @@
+{
+
+    "compilerOptions": {
+
+        "target": "esnext",
+
+        "module": "es2022",
+
+        "moduleResolution": "node",
+
+        "baseUrl": "./",
+
+        "strict": true,                 // Enable strict type-checking options
+
+        "skipLibCheck": true,           // Skip type checking of declaration files
+
+        "noImplicitAny": false,       // Bypass raising errors on `any` type
+        "paths": {
+            "@/*": ["./Core/Js/*"],
+            "~/*": ["./Core/Resources/*"],
+            "@Acacia/*": ["./*"]
+        },
+        "allowSyntheticDefaultImports": true,
+    },
+    "exclude": ["node_modules"],
+    "include": ["/**/*"]  // Frontend paths pattern
+
+}

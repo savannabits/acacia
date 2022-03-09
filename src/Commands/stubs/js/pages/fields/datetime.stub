@@ -1,4 +1,4 @@
 <div class="my-2">
     <label>$LABEL$</label>
-    <AcaciaDatepicker v-model="$V_MODEL$" class="block w-full" data-date-format="Y-m-d H:i:s" :data-enable-time="true"></AcaciaDatepicker>
+    <AcaciaDatepicker v-model="$V_MODEL$" class="block w-full" :data-disable-mobile="true" data-date-format="Y-m-d H:i" :data-enable-time="true"></AcaciaDatepicker>
 </div>

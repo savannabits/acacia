@@ -14,6 +14,7 @@ class $CLASS$ extends Model
 
     protected $fillable = $FILLABLE$;
     protected $hidden = $HIDDEN$;
+    protected $casts = [$CASTS$];
 
     protected static function newFactory(): $NAME$Factory
     {

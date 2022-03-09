@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Module;
 use Symfony\Component\Console\Input\InputArgument;
 
 class EnableCommand extends Command

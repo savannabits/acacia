@@ -1,0 +1,17 @@
+{
+    "author": "Sam Maosa <smaosa@savannabits.com>",
+    "title": "Core",
+    "name": "Core",
+    "alias": "core",
+    "description": "Acacia's core module",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Acacia\\Core\\Providers\\AcaciaServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "Utilities/helpers.php"
+    ],
+    "requires": []
+}

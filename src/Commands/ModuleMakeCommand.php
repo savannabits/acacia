@@ -1,11 +1,11 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Acacia\Core\Models\Schematic;
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
-use Savannabits\AcaciaGenerator\Generators\ModuleGenerator;
+use Savannabits\Acacia\Contracts\ActivatorInterface;
+use Savannabits\Acacia\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -27,7 +27,7 @@ class ModuleMakeCommand extends Command
 
     /**
      * Execute the console command.
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function handle() : int
     {
@@ -38,7 +38,13 @@ class ModuleMakeCommand extends Command
             $schematic = Schematic::query()->where("table_name","=", $name)->first();
             if (!$schematic) {
                 \Log::info("Not Found");
-                $this->warn("Schematic for $name not found.");
+                $this->warn("Schematic for $name not found. Attempting to create it....");
+                //TODO: Create schematic automatically.
+                continue;
+            }
+            if ($schematic->generated_at && !$this->option('force')) {
+                \Log::info("Schema already generated");
+                $this->warn("$name is marked as already generated.Skipping. To still re-generated it, pass --force option");
                 continue;
             }
             $runMigrations = $this->hasOption('yes') ? "yes": ($this->hasOption("no") ? "no": 'prompt');
@@ -58,6 +64,8 @@ class ModuleMakeCommand extends Command
             if ($code === E_ERROR) {
                 $success = false;
             }
+            $schematic->generated_at = now();
+            $schematic->save();
         }
 
         return $success ? 0 : E_ERROR;

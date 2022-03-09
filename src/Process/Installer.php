@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Process;
+namespace Savannabits\Acacia\Process;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
+use Savannabits\Acacia\Contracts\RepositoryInterface;
 use Symfony\Component\Process\Process;
 
 class Installer
@@ -25,7 +25,7 @@ class Installer
 
     /**
      * The module repository instance.
-     * @var \Savannabits\AcaciaGenerator\Contracts\RepositoryInterface
+     * @var \Savannabits\Acacia\Contracts\RepositoryInterface
      */
     protected $repository;
 
@@ -90,7 +90,7 @@ class Installer
 
     /**
      * Set the module repository instance.
-     * @param \Savannabits\AcaciaGenerator\Contracts\RepositoryInterface $repository
+     * @param \Savannabits\Acacia\Contracts\RepositoryInterface $repository
      * @return $this
      */
     public function setRepository(RepositoryInterface $repository)

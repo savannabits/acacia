@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Providers;
+namespace Savannabits\Acacia\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
-use Savannabits\AcaciaGenerator\Laravel\LaravelFileRepository;
+use Savannabits\Acacia\Contracts\RepositoryInterface;
+use Savannabits\Acacia\Laravel\LaravelFileRepository;
 
 class ContractsServiceProvider extends ServiceProvider
 {

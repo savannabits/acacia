@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Publishing;
+namespace Savannabits\Acacia\Publishing;
 
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
 
 class AssetPublisher extends Publisher
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Acacia\Core\Models\Schematic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -193,13 +193,24 @@ class RequestMakeCommand extends GeneratorCommand
             ->get('store'));
         // Add belongsTo relationships
         $belongsTos = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
-        return $rules;
+        $bRules = $belongsTos->map(function ($item) {
+            $item->snake_method = Str::snake($item->method);
+            return $item;
+        })->keyBy("snake_method")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
+            ->get('store') ?? []);
+        return $rules->merge($bRules);
     }
     private function makeUpdateRules(): Collection
     {
         $fields = $this->schematic->fields()->where("in_form","=",true)->get();
         $rules = $fields->keyBy("name")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))->get('update'));
-        return $rules;
+        $belongsTos = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        $bRules = $belongsTos->map(function ($item) {
+            $item->snake_method = Str::snake($item->method);
+            return $item;
+        })->keyBy("snake_method")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
+            ->get('store') ?? []);
+        return $rules->merge($bRules);
     }
     private function makeDestroyRules(): Collection
     {

@@ -1,0 +1,11 @@
+{
+    "name": "Permissions",
+    "alias": "permissions",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": ["Acacia\\Permissions\\Providers\\PermissionsServiceProvider"],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

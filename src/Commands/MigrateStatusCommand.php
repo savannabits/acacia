@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Migrations\Migrator;
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Migrations\Migrator;
+use Savannabits\Acacia\Module;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -25,7 +25,7 @@ class MigrateStatusCommand extends Command
     protected $description = 'Status for all module migrations';
 
     /**
-     * @var \Savannabits\AcaciaGenerator\Contracts\RepositoryInterface
+     * @var \Savannabits\Acacia\Contracts\RepositoryInterface
      */
     protected $module;
 

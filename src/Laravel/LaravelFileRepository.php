@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Laravel;
+namespace Savannabits\Acacia\Laravel;
 
-use Savannabits\AcaciaGenerator\FileRepository;
+use Savannabits\Acacia\FileRepository;
 
 class LaravelFileRepository extends FileRepository
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Activators;
+namespace Savannabits\Acacia\Activators;
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Contracts\ActivatorInterface;
+use Savannabits\Acacia\Module;
 
 class FileActivator implements ActivatorInterface
 {

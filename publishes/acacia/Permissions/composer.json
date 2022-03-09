@@ -1,0 +1,21 @@
+{
+    "name": "savannabits/permissions",
+    "description": "",
+    "authors": [
+        {
+            "name": "Samson Maosa",
+            "email": "maosa.sam@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Acacia\\Permissions\\": ""
+        }
+    }
+}

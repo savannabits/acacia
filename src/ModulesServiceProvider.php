@@ -1,11 +1,11 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator;
+namespace Savannabits\Acacia;
 
 use Illuminate\Support\ServiceProvider;
-use Savannabits\AcaciaGenerator\Providers\BootstrapServiceProvider;
-use Savannabits\AcaciaGenerator\Providers\ConsoleServiceProvider;
-use Savannabits\AcaciaGenerator\Providers\ContractsServiceProvider;
+use Savannabits\Acacia\Providers\BootstrapServiceProvider;
+use Savannabits\Acacia\Providers\ConsoleServiceProvider;
+use Savannabits\Acacia\Providers\ContractsServiceProvider;
 
 abstract class ModulesServiceProvider extends ServiceProvider
 {
@@ -39,9 +39,17 @@ abstract class ModulesServiceProvider extends ServiceProvider
         $configPath = __DIR__ . '/../config/config.php';
 
         $this->mergeConfigFrom($configPath, 'modules');
+        $this->mergeConfigFrom(__DIR__.'/../publishes/config/config.php', 'acacia');
         $this->publishes([
+            __DIR__.'/../publishes/config/config.php' => config_path('acacia.php'),
             $configPath => config_path('modules.php'),
-        ], 'acacia-generator-config');
+        ], 'acacia-config');
+        $this->publishes([
+            __DIR__.'/../publishes/config/scout.php' => config_path('scout.php'),
+        ], 'acacia-scout');
+        $this->publishes([
+            __DIR__.'/../publishes/acacia' => base_path('acacia'),
+        ], 'acacia-modules');
     }
 
     /**

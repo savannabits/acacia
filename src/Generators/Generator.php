@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Generators;
+namespace Savannabits\Acacia\Generators;
 
 abstract class Generator
 {
