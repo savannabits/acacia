@@ -18,6 +18,11 @@ class User extends \App\Models\User
         "remember_token",
     ];
     protected $hidden = [];
+    protected $casts = [
+        "email_verified_at" => "datetime",
+        "created_at" => "datetime",
+        "updated_at" => "datetime",
+    ];
 
     protected static function newFactory(): UserFactory
     {

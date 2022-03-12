@@ -5,6 +5,8 @@ namespace Acacia\Roles\Http\Controllers\Api;
 use Acacia\Roles\Models\Role;
 use Acacia\Roles\Repositories\Roles;
 use Acacia\Roles\Http\Requests\Role\IndexRequest;
+use Acacia\Roles\Http\Requests\Role\DtRequest;
+use Acacia\Roles\Http\Requests\Role\ViewRequest;
 use Acacia\Roles\Http\Requests\Role\StoreRequest;
 use Acacia\Roles\Http\Requests\Role\UpdateRequest;
 use Acacia\Roles\Http\Requests\Role\DestroyRequest;
@@ -44,10 +46,10 @@ class RoleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param DtRequest $request
      * @return LengthAwarePaginator|JsonResponse
      */
-    public function dt(Request $request): LengthAwarePaginator|JsonResponse
+    public function dt(DtRequest $request): LengthAwarePaginator|JsonResponse
     {
         try {
             return $this->repo->dt();
@@ -88,11 +90,11 @@ class RoleController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param Role $role
      * @return JsonResponse
      */
-    public function show(Request $request, Role $role): JsonResponse
+    public function show(ViewRequest $request, Role $role): JsonResponse
     {
         try {
             $payload = $this->repo->setModel($role)->show();

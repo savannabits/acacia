@@ -19,7 +19,7 @@ class AcaciaInstall extends Command
      *
      * @var string
      */
-    protected $description = 'Acacia Admin generator installer';
+    protected $description = 'Install Acacia and prepare the app for code generation';
 
     /**
      * Create a new command instance.
@@ -50,8 +50,12 @@ class AcaciaInstall extends Command
         $this->call("vendor:publish",$moduleOpts);
         $this->info("   c. Publishing laravel permission config and migration");
         $this->call("vendor:publish",$permissions);
-        $this->info("2. Running Migrate Command");
-        $this->call('migrate');
+        $this->info("   d. Publishing laravel scout config");
+        $this->call("vendor:publish",$scout);
+        $this->info("2. Running GPanel Migrations");
+        $this->call('migrate:fresh',['--path' => module_path('Core','Database/SqliteMigrations'),'--database' =>'acacia']);
+        $this->info("2. Running Core Seeder");
+        $this->call('acacia:seed Core');
         $this->alert('Installation Complete');
         return 0;
     }

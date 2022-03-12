@@ -2,6 +2,8 @@
 
 namespace Acacia\Core\Providers;
 
+use Acacia\Core\Console\Commands\AssignRoleCommand;
+use Acacia\Core\Console\Commands\GPanelBlueprintCommand;
 use App\Http\Kernel;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Routing\Router;
@@ -37,6 +39,8 @@ class AcaciaServiceProvider extends ServiceProvider
             AcaciaAssetsInstall::class,
             AcaciaAssetsDev::class,
             AcaciaAssetsBuild::class,
+            GPanelBlueprintCommand::class,
+            AssignRoleCommand::class,
         ]);
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $kernel->appendMiddlewareToGroup("web",\Acacia\Core\Http\Middleware\HandleInertiaRequests::class);

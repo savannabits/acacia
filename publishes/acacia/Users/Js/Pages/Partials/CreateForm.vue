@@ -14,7 +14,8 @@
                 <AcaciaDatepicker
                     v-model="form.email_verified_at"
                     class="block w-full"
-                    data-date-format="Y-m-d H:i:s"
+                    :data-disable-mobile="true"
+                    data-date-format="Y-m-d H:i"
                     :data-enable-time="true"
                 ></AcaciaDatepicker>
             </div>
@@ -37,7 +38,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "SchematicsCreate",
+    name: "UserCreate",
 });
 </script>
 <script setup lang="ts">

@@ -115,6 +115,46 @@
                 />
             </template>
         </Dialog>
+
+        <Dialog
+            position="top"
+            :maximizable="true"
+            v-model:visible="editModal"
+            :modal="true"
+            :breakpoints="{
+                '1600px': '50vw',
+                '960px': '75vw',
+                '540px': '100vw',
+            }"
+            :style="{ width: '35vw' }"
+        >
+            <template #header>
+                <h4 class="font-black text-xl">Edit Single Role</h4>
+            </template>
+            <EditForm
+                :model="currentModel"
+                @updated="onUpdated"
+                v-if="editModal && currentModel"
+            />
+            <template #footer>
+                <Button
+                    label="Open in a Page"
+                    icon="pi pi-window"
+                    @click="
+                        $inertia.visit(
+                            route('acacia.backend.roles.edit', currentModel)
+                        )
+                    "
+                    class="p-button-text"
+                />
+                <Button
+                    label="Close"
+                    icon="pi pi-times"
+                    @click="(editModal = false), (currentModel = null)"
+                    class="p-button-text"
+                />
+            </template>
+        </Dialog>
     </Backend>
 </template>
 
@@ -142,6 +182,7 @@ import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 import Dialog from "primevue/dialog";
 import CreateForm from "./Partials/CreateForm.vue";
+import EditForm from "./Partials/EditForm.vue";
 
 const apiUrl = route("api.v1.roles.dt");
 const stateKey = "roles-dt";
@@ -159,11 +200,17 @@ const confirm = useConfirm();
 const toast = useToast();
 const refreshTime = ref(null) as Ref<string | null>;
 const createModal = ref(false);
+const editModal = ref(false);
+const currentModel = ref(null) as Ref<any>;
 const makeOptionsMenu = (row) => [
     {
-        label: "Manage",
+        label: "Edit",
         icon: "pi pi-pencil",
-        command: () => Inertia.get(route("acacia.backend.roles.edit", row)),
+        command: async () => {
+            currentModel.value = null;
+            await fetchModel(row);
+            editModal.value = true;
+        },
         visible: () => true,
     },
     {
@@ -179,6 +226,17 @@ const makeOptionsMenu = (row) => [
         visible: () => true,
     },
 ];
+const fetchModel = async (row) => {
+    axios
+        .get(route("api.v1.roles.show", row))
+        .then((res) => {
+            currentModel.value = res.data?.payload;
+        })
+        .catch((err) => {
+            console.error(err);
+            currentModel.value = null;
+        });
+};
 const refresh = () => {
     refreshTime.value = new Date().toUTCString();
 };
@@ -222,6 +280,11 @@ const deleteModel = async function (row) {
 const onCreated = (e) => {
     // console.log(e.payload);
     createModal.value = false;
+    refresh();
+};
+const onUpdated = (e) => {
+    // console.log(e.payload);
+    editModal.value = false;
     refresh();
 };
 </script>

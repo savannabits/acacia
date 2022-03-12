@@ -43,7 +43,9 @@ class Permissions
         $relationships = $this->relationships;
         $model = new Permission((array) $data);
         foreach ($relationships as $relationship) {
-            $model->$relationship()->associate($data->$relationship?->id);
+            if (isset($data->$relationship)) {
+                $model->$relationship()->associate($data->$relationship?->id);
+            }
         }
         // Extend the saving logic here if need be.
         $model->saveOrFail();
@@ -60,7 +62,11 @@ class Permissions
     {
         $relationships = $this->relationships;
         foreach ($relationships as $relationship) {
-            $this->model->$relationship()->associate($data->$relationship?->id);
+            if (isset($data->$relationship)) {
+                $this->model
+                    ->$relationship()
+                    ->associate($data->$relationship?->id);
+            }
         }
         $this->model->update((array) $data);
 

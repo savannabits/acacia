@@ -1,10 +1,10 @@
 <?php
 
-namespace Acacia\Permissions\Http\Requests\Permission;
+namespace Acacia\Users\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Acacia\Permissions\Models\Permission;
-class StoreRequest extends FormRequest
+use Acacia\Users\Models\User;
+class DtRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,10 +13,7 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            "name" => ["required", "string"],
-            "guard_name" => ["required", "string"],
-        ];
+        return [];
     }
 
     /**
@@ -26,7 +23,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can("create", Permission::class);
+        return $this->user()->can("viewAny", User::class);
     }
 
     public function sanitizedArray(): array

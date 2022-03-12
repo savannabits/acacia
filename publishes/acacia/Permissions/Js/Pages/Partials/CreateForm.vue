@@ -20,7 +20,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "SchematicsCreate",
+    name: "PermissionCreate",
 });
 </script>
 <script setup lang="ts">

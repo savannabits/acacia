@@ -5,6 +5,8 @@ namespace Acacia\Permissions\Http\Controllers\Api;
 use Acacia\Permissions\Models\Permission;
 use Acacia\Permissions\Repositories\Permissions;
 use Acacia\Permissions\Http\Requests\Permission\IndexRequest;
+use Acacia\Permissions\Http\Requests\Permission\DtRequest;
+use Acacia\Permissions\Http\Requests\Permission\ViewRequest;
 use Acacia\Permissions\Http\Requests\Permission\StoreRequest;
 use Acacia\Permissions\Http\Requests\Permission\UpdateRequest;
 use Acacia\Permissions\Http\Requests\Permission\DestroyRequest;
@@ -46,10 +48,10 @@ class PermissionController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param DtRequest $request
      * @return LengthAwarePaginator|JsonResponse
      */
-    public function dt(Request $request): LengthAwarePaginator|JsonResponse
+    public function dt(DtRequest $request): LengthAwarePaginator|JsonResponse
     {
         try {
             return $this->repo->dt();
@@ -90,12 +92,14 @@ class PermissionController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param Permission $permission
      * @return JsonResponse
      */
-    public function show(Request $request, Permission $permission): JsonResponse
-    {
+    public function show(
+        ViewRequest $request,
+        Permission $permission
+    ): JsonResponse {
         try {
             $payload = $this->repo->setModel($permission)->show();
             $success = "Single record fetched";

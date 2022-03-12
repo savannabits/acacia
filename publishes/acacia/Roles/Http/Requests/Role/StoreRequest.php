@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can("store", Role::class);
+        return $this->user()->can("create", Role::class);
     }
 
     public function sanitizedArray(): array

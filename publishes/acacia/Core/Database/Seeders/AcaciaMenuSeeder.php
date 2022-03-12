@@ -27,7 +27,7 @@ class AcaciaMenuSeeder extends Seeder
                 'guard_name' => 'web'
             ]);
             $this->command->call('permission:cache-reset');
-            $admin = Role::query()->where("name","=","administrator")->first();
+            $admin = Role::query()->firstOrCreate(["name" => "administrator"],["name" => "administrator","guard_name" => "web"]);
             $admin?->givePermissionTo([$backendPerm, $genPerm]);
 
             AcaciaMenu::query()->truncate();

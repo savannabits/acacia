@@ -5,6 +5,7 @@ namespace Acacia\Permissions\Http\Controllers;
 use Acacia\Permissions\Models\Permission;
 use Acacia\Permissions\Repositories\Permissions;
 use Acacia\Permissions\Http\Requests\Permission\IndexRequest;
+use Acacia\Permissions\Http\Requests\Permission\ViewRequest;
 use Acacia\Permissions\Http\Requests\Permission\StoreRequest;
 use Acacia\Permissions\Http\Requests\Permission\UpdateRequest;
 use Acacia\Permissions\Http\Requests\Permission\DestroyRequest;
@@ -59,11 +60,11 @@ class PermissionController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param Permission $permission
      * @return Response
      */
-    public function show(Request $request, Permission $permission): Response
+    public function show(ViewRequest $request, Permission $permission): Response
     {
         $model = $this->repo->setModel($permission)->show();
         return Inertia::render("Permissions/Js/Pages/Show", compact("model"));

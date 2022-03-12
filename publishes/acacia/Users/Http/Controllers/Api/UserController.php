@@ -5,6 +5,8 @@ namespace Acacia\Users\Http\Controllers\Api;
 use Acacia\Users\Models\User;
 use Acacia\Users\Repositories\Users;
 use Acacia\Users\Http\Requests\User\IndexRequest;
+use Acacia\Users\Http\Requests\User\DtRequest;
+use Acacia\Users\Http\Requests\User\ViewRequest;
 use Acacia\Users\Http\Requests\User\StoreRequest;
 use Acacia\Users\Http\Requests\User\UpdateRequest;
 use Acacia\Users\Http\Requests\User\DestroyRequest;
@@ -44,10 +46,10 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param DtRequest $request
      * @return LengthAwarePaginator|JsonResponse
      */
-    public function dt(Request $request): LengthAwarePaginator|JsonResponse
+    public function dt(DtRequest $request): LengthAwarePaginator|JsonResponse
     {
         try {
             return $this->repo->dt();
@@ -88,11 +90,11 @@ class UserController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function show(Request $request, User $user): JsonResponse
+    public function show(ViewRequest $request, User $user): JsonResponse
     {
         try {
             $payload = $this->repo->setModel($user)->show();

@@ -5,6 +5,7 @@ namespace Acacia\Users\Http\Controllers;
 use Acacia\Users\Models\User;
 use Acacia\Users\Repositories\Users;
 use Acacia\Users\Http\Requests\User\IndexRequest;
+use Acacia\Users\Http\Requests\User\ViewRequest;
 use Acacia\Users\Http\Requests\User\StoreRequest;
 use Acacia\Users\Http\Requests\User\UpdateRequest;
 use Acacia\Users\Http\Requests\User\DestroyRequest;
@@ -59,11 +60,11 @@ class UserController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param User $user
      * @return Response
      */
-    public function show(Request $request, User $user): Response
+    public function show(ViewRequest $request, User $user): Response
     {
         $model = $this->repo->setModel($user)->show();
         return Inertia::render("Users/Js/Pages/Show", compact("model"));

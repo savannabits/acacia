@@ -20,7 +20,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: "SchematicsCreate",
+    name: "RoleCreate",
 });
 </script>
 <script setup lang="ts">

@@ -5,6 +5,7 @@ namespace Acacia\Roles\Http\Controllers;
 use Acacia\Roles\Models\Role;
 use Acacia\Roles\Repositories\Roles;
 use Acacia\Roles\Http\Requests\Role\IndexRequest;
+use Acacia\Roles\Http\Requests\Role\ViewRequest;
 use Acacia\Roles\Http\Requests\Role\StoreRequest;
 use Acacia\Roles\Http\Requests\Role\UpdateRequest;
 use Acacia\Roles\Http\Requests\Role\DestroyRequest;
@@ -59,11 +60,11 @@ class RoleController extends Controller
 
     /**
      * Show the specified resource.
-     * @param Request $request
+     * @param ViewRequest $request
      * @param Role $role
      * @return Response
      */
-    public function show(Request $request, Role $role): Response
+    public function show(ViewRequest $request, Role $role): Response
     {
         $model = $this->repo->setModel($role)->show();
         return Inertia::render("Roles/Js/Pages/Show", compact("model"));
