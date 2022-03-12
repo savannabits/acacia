@@ -873,6 +873,9 @@ class ModuleGenerator extends Generator
                 "active_pattern" => "$baseRoute.*",
                 "position" => 0,
                 "parent_id" => 1,
+                "permission_name" =>$this->getLowerNameReplacement().".view-any",
+                "module_name" =>$this->getStudlyNameReplacement(),
+                "description" =>$this->getJsIndexTitleReplacement(),
             ]);
             $menu->save();
         }

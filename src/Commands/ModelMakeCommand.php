@@ -45,6 +45,9 @@ class ModelMakeCommand extends GeneratorCommand
         if (!$this->schematic) {
             $this->schematic = Schematic::query()->where("model_class", "=", $this->argument('model'))->first();
         }
+        if ($this->isSpecial()) {
+            $this->comment("This is a special module");
+        }
         if (parent::handle() === E_ERROR) {
             return E_ERROR;
         }
@@ -135,7 +138,8 @@ class ModelMakeCommand extends GeneratorCommand
             'MORPH_TO'        => $this->getMorphTo() ?? "",
             'IMPORTS'       => ''
         ];
-        return (new Stub('/model.stub', $replace))->render();
+        $stub = $this->deriveSpecialStub("model");
+        return (new Stub($stub, $replace))->render();
     }
 
     /**

@@ -36,7 +36,7 @@ class AcaciaInstall extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $configOpts =  ['--tag' => 'acacia-config'];
         $moduleOpts =  ['--tag' => 'acacia-modules'];

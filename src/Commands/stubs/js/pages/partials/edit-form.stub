@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="updateModel">
+    <form v-if="model?.can?.updated" @submit.prevent="updateModel">
         <div class="">
             $EDIT_FORM_FIELDS$
         </div>
@@ -8,6 +8,7 @@
             <Button type="submit" icon="pi pi-check" label="Save"/>
         </div>
     </form>
+    <Message v-else severity="error">You are not authorized to perform this action</Message>
 </template>
 <script lang="ts">
     import {defineComponent} from "vue";
@@ -25,6 +26,7 @@
     import Label from "@/Components/Label.vue";
     import {useToast} from "primevue/usetoast";
     import {Inertia} from "@inertiajs/inertia";
+    import Message from "primevue/message";
     $EDIT_COMPONENT_IMPORTS$
     const emit = defineEmits(["updated","error"]);
     const props = defineProps({"model": {}})

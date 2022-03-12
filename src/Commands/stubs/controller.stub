@@ -28,7 +28,12 @@ class $CLASS$ extends Controller
      */
     public function index(IndexRequest $request): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Index');
+        $model = $MODEL_NAME$::class;
+        $can = [
+            "viewAny" => \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model)
+        ];
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Index', compact('can'));
     }
 
     /**
@@ -38,7 +43,12 @@ class $CLASS$ extends Controller
      */
     public function create(Request $request): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Create');
+        $model = $MODEL_NAME$::class;
+            $can = [
+                "viewAny" => \Auth::check() && \Auth::user()->can("viewAny", $model),
+                "create" => \Auth::check() && \Auth::user()->can("create", $model)
+            ];
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Create',compact('can'));
     }
 
     /**
