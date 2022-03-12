@@ -4,6 +4,7 @@ namespace Acacia\Users\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Throwable;
+use Illuminate\Support\Str;
 use Acacia\Users\Models\User;
 class Users
 {
@@ -43,8 +44,9 @@ class Users
         $relationships = $this->relationships;
         $model = new User((array) $data);
         foreach ($relationships as $relationship) {
-            if (isset($data->$relationship)) {
-                $model->$relationship()->associate($data->$relationship?->id);
+            $method = Str::snake($relationship);
+            if (isset($data->$method) && $data->$method?->id) {
+                $model->$relationship()->associate($data->$method?->id);
             }
         }
         // Extend the saving logic here if need be.
@@ -62,10 +64,11 @@ class Users
     {
         $relationships = $this->relationships;
         foreach ($relationships as $relationship) {
-            if (isset($data->$relationship)) {
-                $this->model
-                    ->$relationship()
-                    ->associate($data->$relationship?->id);
+            $method = Str::snake($relationship);
+            if (isset($data->$method) && $data->$method?->id) {
+                $this->model->$relationship()->associate($data->$method?->id);
+            } else {
+                $this->model->$relationship()->dissociate();
             }
         }
         $this->model->update((array) $data);

@@ -1,32 +1,52 @@
 <template>
-    <div v-if="model?.can?.view">
-        <div class="my-2">
-            <label>Name</label>
-            <InputText class="block w-full" v-model="form.name" />
-        </div>
-        <div class="my-2">
-            <label>Email</label>
-            <InputText class="block w-full" v-model="form.email" />
-        </div>
-        <div class="my-2">
-            <label>Email Verified At</label>
-            <AcaciaDatepicker
-                v-model="form.email_verified_at"
-                class="block w-full"
-                :data-disable-mobile="true"
-                data-date-format="Y-m-d H:i"
-                :data-enable-time="true"
-            ></AcaciaDatepicker>
-        </div>
-        <div class="my-2">
-            <label>Password</label>
-            <InputText class="block w-full" v-model="form.password" />
-        </div>
-        <div class="my-2">
-            <label>Remember Token</label>
-            <InputText class="block w-full" v-model="form.remember_token" />
-        </div>
-    </div>
+    <dl class="gap-4" v-if="model?.can?.view">
+        <AcaciaDd class="my-1">
+            <template #dt>Id</template>
+            {{ model?.id || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Name</template>
+            {{ model?.name || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Email</template>
+            {{ model?.email || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Email Verified At</template>
+            <strong>{{
+                model?.email_verified_at
+                    ? dayjs(model?.email_verified_at).format(
+                          "MMM DD, YYYY hh:mm A"
+                      )
+                    : "-"
+            }}</strong>
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Password</template>
+            {{ model?.password || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Remember Token</template>
+            {{ model?.remember_token || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Created At</template>
+            <strong>{{
+                model?.created_at
+                    ? dayjs(model?.created_at).format("MMM DD, YYYY hh:mm A")
+                    : "-"
+            }}</strong>
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
+            <template #dt>Updated At</template>
+            <strong>{{
+                model?.updated_at
+                    ? dayjs(model?.updated_at).format("MMM DD, YYYY hh:mm A")
+                    : "-"
+            }}</strong>
+        </AcaciaDd>
+    </dl>
     <Message v-else severity="error"
         >You are not authorized to view this record</Message
     >
@@ -39,17 +59,13 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
-import Button from "primevue/button";
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/inertia-vue3";
 import { computed, defineEmits, nextTick, ref } from "vue";
-import axios from "axios";
-import route from "ziggy-js";
-import Label from "@/Components/Label.vue";
+import dayjs from "dayjs";
+import Tag from "primevue/tag";
 import { useToast } from "primevue/usetoast";
-import { Inertia } from "@inertiajs/inertia";
 import Message from "primevue/message";
-import InputText from "primevue/inputtext";
-import AcaciaDatepicker from "@/Components/AcaciaDatepicker.vue";
+import AcaciaDd from "@/Components/AcaciaDd.vue";
 const emit = defineEmits(["updated", "error"]);
 const props = defineProps({ model: {} });
 const flash = computed(() => usePage().props?.value?.flash) as any;
@@ -57,7 +73,8 @@ const existingTables = ref([]);
 const showModal = ref(false);
 const toast = useToast();
 const model = props.model;
-const form = useForm({ ...model });
+import InputText from "primevue/inputtext";
+import AcaciaDatepicker from "@/Components/AcaciaDatepicker.vue";
 </script>
 
 <style scoped></style>

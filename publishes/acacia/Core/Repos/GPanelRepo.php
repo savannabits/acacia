@@ -50,7 +50,7 @@ class GPanelRepo
                     $console?->comment("Delete relationships");
                     $existing->relationships()->delete();
                     \Log::info("Delete fields");
-                    $console?->comment("Delete Fields");
+                    $console?->comment("Delete AcaciaFields");
                     $existing->fields()->delete();
                     \Log::info("Delete existing schema");
                     $console?->comment('Delete existing schema');
@@ -78,7 +78,7 @@ class GPanelRepo
             $schematic->route_name = \Str::slug($tableName);
             $schematic->saveOrFail();
             $filteredCols = collect($columnListing)->only($colNames->toArray());
-            $console?->comment("Creating Fields for $schematic->table_name");
+            $console?->comment("Creating AcaciaFields for $schematic->table_name");
             foreach ($filteredCols as $key => $column) {
                 \Log::info($key);
                 /**
@@ -103,8 +103,8 @@ class GPanelRepo
 
             }
 
-            // BelongsTo Relationships
-            $console?->comment("Creating BelongsTo Relationships for $schematic->table_name");
+            // BelongsTo AcaciaRelationships
+            $console?->comment("Creating BelongsTo AcaciaRelationships for $schematic->table_name");
             foreach ($fks as $key => $fk) {
                 $rel = new Relationship();
                 $rel->type = "BelongsTo";
@@ -129,7 +129,7 @@ class GPanelRepo
                 $rel->saveOrFail();
             }
             // Add Morph relationships
-            $console?->comment("Creating MorphTo Relationships for $schematic->table_name");
+            $console?->comment("Creating MorphTo AcaciaRelationships for $schematic->table_name");
             foreach ($morphs as $key => $index) {
                 /**
                  * @var Index $index

@@ -1,0 +1,11 @@
+{
+    "name": "AcaciaFields",
+    "alias": "acacia-fields",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": ["Acacia\\AcaciaFields\\Providers\\FieldsServiceProvider"],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

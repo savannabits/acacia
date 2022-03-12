@@ -3,6 +3,7 @@
 namespace Savannabits\Acacia\Commands;
 
 use Acacia\Core\Models\Schematic;
+use Acacia\Core\Repos\GPanelRepo;
 use Illuminate\Console\Command;
 use Savannabits\Acacia\Contracts\ActivatorInterface;
 use Savannabits\Acacia\Generators\ModuleGenerator;
@@ -40,7 +41,7 @@ class ModuleMakeCommand extends Command
                 \Log::info("Not Found");
                 $this->warn("Schematic for $name not found. Attempting to create it....");
                 //TODO: Create schematic automatically.
-                continue;
+                $schematic = GPanelRepo::generateBlueprintFromTable($name,true,$this);
             }
             if ($schematic->generated_at && !$this->option('force')) {
                 \Log::info("Schema already generated");

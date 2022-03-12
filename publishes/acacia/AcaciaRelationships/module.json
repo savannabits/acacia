@@ -1,0 +1,13 @@
+{
+    "name": "AcaciaRelationships",
+    "alias": "acacia-relationships",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Acacia\\AcaciaRelationships\\Providers\\RelationshipsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

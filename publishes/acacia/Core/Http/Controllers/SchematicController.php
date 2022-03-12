@@ -64,7 +64,7 @@ class SchematicController extends Controller
      */
     public function edit(Schematic $schematic)
     {
-        return Inertia::render('Core/Js/Pages/GPanel/Schematics/Manage',["model" => $schematic]);
+        return Inertia::render('Core/Js/Pages/GPanel/AcaciaSchematics/Manage',["model" => $schematic]);
     }
 
     /**
