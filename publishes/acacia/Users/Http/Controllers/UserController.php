@@ -28,7 +28,13 @@ class UserController extends Controller
      */
     public function index(IndexRequest $request): Response
     {
-        return Inertia::render("Users/Js/Pages/Index");
+        $model = User::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Users/Js/Pages/Index", compact("can"));
     }
 
     /**
@@ -38,7 +44,13 @@ class UserController extends Controller
      */
     public function create(Request $request): Response
     {
-        return Inertia::render("Users/Js/Pages/Create");
+        $model = User::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Users/Js/Pages/Create", compact("can"));
     }
 
     /**

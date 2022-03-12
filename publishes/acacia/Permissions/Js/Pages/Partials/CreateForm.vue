@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="createModel">
+    <form v-if="$page.props.can?.create" @submit.prevent="createModel">
         <div class="">
             <div class="my-2">
                 <label>Name</label>
@@ -15,6 +15,9 @@
             <Button type="submit" icon="pi pi-check" label="Save" />
         </div>
     </form>
+    <Message v-else severity="error"
+        >You are not authorized to perform this action</Message
+    >
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -33,6 +36,7 @@ import route from "ziggy-js";
 import Label from "@/Components/Label.vue";
 import { useToast } from "primevue/usetoast";
 import { Inertia } from "@inertiajs/inertia";
+import Message from "primevue/message";
 import InputText from "primevue/inputtext";
 const emit = defineEmits(["created", "error"]);
 const flash = computed(() => usePage().props?.value?.flash) as any;

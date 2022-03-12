@@ -10,6 +10,7 @@
             <div class="rounded w-full p-2 bg-white">
                 <div class="flex flex-wrap items-center justify-end gap-2">
                     <Button
+                        v-if="$page.props.can?.create"
                         @click="createModal = true"
                         aria-label="New Comment"
                         label="New Permission"
@@ -17,6 +18,7 @@
                     />
                 </div>
                 <PrimeDatatables
+                    v-if="$page.props.can?.viewAny"
                     :apiUrl="apiUrl"
                     :columnFilters="{}"
                     :searchableColumns="searchableCols"
@@ -79,6 +81,9 @@
                         </template>
                     </Column>
                 </PrimeDatatables>
+                <Message v-else severity="error"
+                    >You are not authorized to access this content</Message
+                >
             </div>
         </div>
         <ContextMenu ref="contextMenu" :model="options" />
@@ -117,7 +122,44 @@
                 />
             </template>
         </Dialog>
-
+        <Dialog
+            position="top"
+            :maximizable="true"
+            v-model:visible="showModal"
+            :modal="true"
+            :breakpoints="{
+                '1600px': '50vw',
+                '960px': '75vw',
+                '540px': '100vw',
+            }"
+            :style="{ width: '35vw' }"
+        >
+            <template #header>
+                <h4 class="font-black text-xl">Permission Details</h4>
+            </template>
+            <ShowForm :model="currentModel" v-if="showModal && currentModel" />
+            <template #footer>
+                <Button
+                    label="Open in a Page"
+                    icon="pi pi-window"
+                    @click="
+                        $inertia.visit(
+                            route(
+                                'acacia.backend.permissions.show',
+                                currentModel
+                            )
+                        )
+                    "
+                    class="p-button-text"
+                />
+                <Button
+                    label="Close"
+                    icon="pi pi-times"
+                    @click="(showModal = false), (currentModel = null)"
+                    class="p-button-text"
+                />
+            </template>
+        </Dialog>
         <Dialog
             position="top"
             :maximizable="true"
@@ -188,6 +230,8 @@ import axios from "axios";
 import Dialog from "primevue/dialog";
 import CreateForm from "./Partials/CreateForm.vue";
 import EditForm from "./Partials/EditForm.vue";
+import ShowForm from "./Partials/ShowForm.vue";
+import Message from "primevue/message";
 
 const apiUrl = route("api.v1.permissions.dt");
 const stateKey = "permissions-dt";
@@ -206,8 +250,22 @@ const toast = useToast();
 const refreshTime = ref(null) as Ref<string | null>;
 const createModal = ref(false);
 const editModal = ref(false);
+const showModal = ref(false);
 const currentModel = ref(null) as Ref<any>;
 const makeOptionsMenu = (row) => [
+    {
+        label: "Details",
+        icon: "pi pi-eye",
+        command: async () => {
+            currentModel.value = null;
+            await fetchModel(row);
+            showModal.value = true;
+        },
+        visible: () => row?.can?.view,
+    },
+    {
+        separator: true,
+    },
     {
         label: "Edit",
         icon: "pi pi-pencil",
@@ -216,7 +274,7 @@ const makeOptionsMenu = (row) => [
             await fetchModel(row);
             editModal.value = true;
         },
-        visible: () => true,
+        visible: () => row?.can?.update,
     },
     {
         label: "Delete",
@@ -228,7 +286,7 @@ const makeOptionsMenu = (row) => [
                 accept: () => deleteModel(row),
             });
         },
-        visible: () => true,
+        visible: () => row?.can?.delete,
     },
 ];
 const fetchModel = async (row) => {

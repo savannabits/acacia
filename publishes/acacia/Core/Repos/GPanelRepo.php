@@ -120,6 +120,9 @@ class GPanelRepo
                 }
                 $rel->schematic()->associate($schematic);
                 $rel->method = \Str::camel(\Str::singular(trim(\Str::replace("_id","",$rel->local_key))));
+                if (Str::snake($rel->method) ===$rel->local_key) {
+                    $rel->method = "{$rel->method}Model";
+                }
                 $rel->saveOrFail();
                 $column = collect($columnListing)->get($rel->local_key);
                 $rel->server_validation = self::makeServerValidation(self::relationshipToField($rel),$column);

@@ -28,7 +28,13 @@ class RoleController extends Controller
      */
     public function index(IndexRequest $request): Response
     {
-        return Inertia::render("Roles/Js/Pages/Index");
+        $model = Role::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Roles/Js/Pages/Index", compact("can"));
     }
 
     /**
@@ -38,7 +44,13 @@ class RoleController extends Controller
      */
     public function create(Request $request): Response
     {
-        return Inertia::render("Roles/Js/Pages/Create");
+        $model = Role::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Roles/Js/Pages/Create", compact("can"));
     }
 
     /**

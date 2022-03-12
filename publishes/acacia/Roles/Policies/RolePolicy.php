@@ -53,7 +53,8 @@ class RolePolicy
      */
     public function update(AuthUser $user, Role $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.update");
+        return $user->hasPermissionTo("$this->basePerm.update") &&
+            \Str::slug($model->name) !== "administrator";
     }
 
     /**
@@ -65,7 +66,8 @@ class RolePolicy
      */
     public function delete(AuthUser $user, Role $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.delete");
+        return $user->hasPermissionTo("$this->basePerm.delete") &&
+            \Str::slug($model->name) !== "administrator";
     }
 
     /**
@@ -77,7 +79,8 @@ class RolePolicy
      */
     public function restore(AuthUser $user, Role $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.restore");
+        return $user->hasPermissionTo("$this->basePerm.restore") &&
+            \Str::slug($model->name) !== "administrator";
     }
 
     /**
@@ -89,6 +92,7 @@ class RolePolicy
      */
     public function forceDelete(AuthUser $user, Role $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.force-delete");
+        return $user->hasPermissionTo("$this->basePerm.force-delete") &&
+            \Str::slug($model->name) !== "administrator";
     }
 }

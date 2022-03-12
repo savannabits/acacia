@@ -41,7 +41,7 @@ class PermissionPolicy
      */
     public function create(AuthUser $user): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.create");
+        return false;
     }
 
     /**
@@ -53,7 +53,7 @@ class PermissionPolicy
      */
     public function update(AuthUser $user, Permission $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.update");
+        return false;
     }
 
     /**
@@ -65,7 +65,7 @@ class PermissionPolicy
      */
     public function delete(AuthUser $user, Permission $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.delete");
+        return false;
     }
 
     /**
@@ -77,7 +77,7 @@ class PermissionPolicy
      */
     public function restore(AuthUser $user, Permission $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.restore");
+        return false;
     }
 
     /**
@@ -91,6 +91,6 @@ class PermissionPolicy
         AuthUser $user,
         Permission $model
     ): Response|bool {
-        return $user->hasPermissionTo("$this->basePerm.force-delete");
+        return false;
     }
 }

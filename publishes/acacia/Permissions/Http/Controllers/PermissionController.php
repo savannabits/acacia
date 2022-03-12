@@ -28,7 +28,13 @@ class PermissionController extends Controller
      */
     public function index(IndexRequest $request): Response
     {
-        return Inertia::render("Permissions/Js/Pages/Index");
+        $model = Permission::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Permissions/Js/Pages/Index", compact("can"));
     }
 
     /**
@@ -38,7 +44,13 @@ class PermissionController extends Controller
      */
     public function create(Request $request): Response
     {
-        return Inertia::render("Permissions/Js/Pages/Create");
+        $model = Permission::class;
+        $can = [
+            "viewAny" =>
+                \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model),
+        ];
+        return Inertia::render("Permissions/Js/Pages/Create", compact("can"));
     }
 
     /**
