@@ -183,8 +183,9 @@ class GPanelRepo
             $labelField = "id";
         }
         $field = new Field();
+        $title = implode(" ", Str::ucsplit(Str::studly($relationship->method)));
         $field->forceFill([
-            "title" => Str::replace('-'," ", Str::title(Str::slug($relationship->method))),
+            "title" => $title,
             "name" => Str::snake($relationship->method),
             "db_type" => "relationship",
             "html_type" => FormFields::SELECT,

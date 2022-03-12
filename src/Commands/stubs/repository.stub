@@ -4,6 +4,7 @@ namespace $NAMESPACE$;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Throwable;
+use Illuminate\Support\Str;
 use $MODEL_NAMESPACE$;
 class $CLASS$
 {

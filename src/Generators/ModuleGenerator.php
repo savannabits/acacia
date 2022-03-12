@@ -765,16 +765,21 @@ class ModuleGenerator extends Generator
     }
     protected function getJsIndexTitleReplacement(): string
     {
-        return Str::replace("-", " ", Str::title(Str::slug($this->getPluralName())));
+        return implode(" ", Str::ucsplit(Str::studly($this->getPluralName())));
     }
 
     protected function getJsCreateTitleReplacement(): string
     {
-        return "New ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+        return "New ".implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));
     }
     protected function getJsEditTitleReplacement(): string
     {
-        return "Edit ".Str::replace("-", " ", Str::title(Str::slug(Str::singular($this->getName()))));
+        return "Edit ".implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));
+    }
+
+    protected function getJsShowTitleReplacement(): string
+    {
+        return implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))))." Details";
     }
 
     public function getCreateFormFieldsReplacement(): string
@@ -796,6 +801,26 @@ class ModuleGenerator extends Generator
     {
         return $this->getCreateFormFieldsReplacement();
     }
+    public function getShowFormFieldsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where(function ($q) {
+            $q->where("name","=","id")
+                ->orWhereIn("db_type",["timestamp","datetime"])
+                ->orWhere("in_form","=",true);
+        })->get();
+        $content = "";
+        foreach ($fields as $field) {
+            $content .= (new FieldMaker($field))->renderForShow();
+        }
+        // Add belongsTo relationships as selects
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $content .= (new FieldMaker($field))->renderForShow();
+        }
+        return $content;
+    }
+
     private function relationshipToField($relationship): Field
     {
         return GPanelRepo::relationshipToField($relationship);
@@ -822,27 +847,11 @@ class ModuleGenerator extends Generator
     {
         return $this->getCreateComponentImportsReplacement();
     }
-    public function getCreateFormObjectReplacement(): string
+    public function getShowComponentImportsReplacement(): string
     {
-        $fields = $this->schematic->fields()->where("in_form","=",true)
-            ->get();
-        // BelongsTo Relationships
-        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
-        foreach ($belongs as $relationship) {
-            $field = $this->relationshipToField($relationship);
-            $fields->push($field);
-        }
-        return $fields
-            ->keyBy('name')->map(function ($field) {
-            return match ($field->html_type) {
-                FormFields::SWITCH, FormFields::CHECKBOX => false,
-                default => null,
-            };
-        })->toJson();
-
+        return $this->getCreateComponentImportsReplacement();
     }
-
-    public function getEditFormObjectReplacement(): string
+    public function getCreateFormObjectReplacement(): string
     {
         $fields = $this->schematic->fields()->where("in_form","=",true)
             ->get();

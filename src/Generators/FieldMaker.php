@@ -12,11 +12,31 @@ class FieldMaker
     {
     }
 
+    public function renderForShow(): string
+    {
+        $replacements = [
+            "LABEL" => $this->field->title,
+            "MODEL_FIELD" => "model?.".$this->field->name,
+        ];
+        if ($this->field->html_type === FormFields::SELECT) {
+            $replacements["RELATIONSHIP_METHOD"] =\Str::snake($this->field->name);
+            $replacements["RELATIONSHIP_LABEL"] =$this->field->options_label_field ?? 'id';
+            $replacements["MODEL_FIELD"] = "model?.".$replacements["RELATIONSHIP_METHOD"]."?.".$replacements["RELATIONSHIP_LABEL"];
+        }
+        $stub = match ($this->field->html_type) {
+            FormFields::SWITCH, FormFields::CHECKBOX => "boolean",
+            FormFields::SELECT      => 'relationship',
+            FormFields::DATE        => 'date',
+            FormFields::DATETIME    => 'datetime',
+            default => "default",
+        };
+        return (new Stub("/js/pages/show-fields/$stub.stub",$replacements))->render();
+    }
     public function render(): string
     {
         $replacements = [
             "LABEL" => $this->field->title,
-            "V_MODEL" => "form.".$this->field->name
+            "V_MODEL" => "form.".$this->field->name,
         ];
         if ($this->field->html_type ===FormFields::SELECT) {
             $replacements["OPTIONS_ROUTE"] =$this->field->options_route_name;

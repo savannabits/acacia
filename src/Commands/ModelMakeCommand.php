@@ -45,9 +45,6 @@ class ModelMakeCommand extends GeneratorCommand
         if (!$this->schematic) {
             $this->schematic = Schematic::query()->where("model_class", "=", $this->argument('model'))->first();
         }
-        if ($this->isSpecial()) {
-            $this->comment("This is a special module");
-        }
         if (parent::handle() === E_ERROR) {
             return E_ERROR;
         }
@@ -186,7 +183,7 @@ class ModelMakeCommand extends GeneratorCommand
      */
     private function getHidden(): ?string
     {
-        $arrays = $this->schematic->fields()->where("is_hidden","=",true)->get();
+        $arrays = $this->schematic->fields()->where("is_hidden","=",true)->orWhereIn("name",["password","remember_token","secret"])->get();
         return $arrays?->pluck('name')->toJson() ?? '[]';
     }
 

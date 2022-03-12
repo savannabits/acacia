@@ -1,5 +1,5 @@
 <template>
-    <form v-if="model?.can?.updated" @submit.prevent="updateModel">
+    <form v-if="model?.can?.update" @submit.prevent="updateModel">
         <div class="">
             $EDIT_FORM_FIELDS$
         </div>

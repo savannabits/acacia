@@ -81,8 +81,10 @@ return [
             'js/pages/index' => 'Js/Pages/Index.vue',
             'js/pages/create' => 'Js/Pages/Create.vue',
             'js/pages/edit' => 'Js/Pages/Edit.vue',
+            'js/pages/show' => 'Js/Pages/Show.vue',
             'js/pages/partials/create-form' => 'Js/Pages/Partials/CreateForm.vue',
             'js/pages/partials/edit-form' => 'Js/Pages/Partials/EditForm.vue',
+            'js/pages/partials/show-form' => 'Js/Pages/Partials/ShowForm.vue',
             'webpack' => 'webpack.mix.js',
             'package' => 'package.json',
         ],
@@ -105,13 +107,20 @@ return [
                 'CREATE_FORM_FIELDS'
             ],
             'js/pages/edit' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_EDIT_TITLE'],
+            'js/pages/show' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_SHOW_TITLE'],
             'js/pages/partials/edit-form' => [
                 'LOWER_NAME',
                 'EDIT_COMPONENT_IMPORTS',
                 'STUDLY_NAME',
                 'STUDLY_SINGULAR_NAME',
-                'EDIT_FORM_OBJECT',
                 'EDIT_FORM_FIELDS'
+            ],
+            'js/pages/partials/show-form' => [
+                'LOWER_NAME',
+                'SHOW_COMPONENT_IMPORTS',
+                'STUDLY_NAME',
+                'STUDLY_SINGULAR_NAME',
+                'SHOW_FORM_FIELDS'
             ],
             'composer' => [
                 'LOWER_NAME',
