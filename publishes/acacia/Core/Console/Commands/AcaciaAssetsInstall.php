@@ -39,7 +39,7 @@ class AcaciaAssetsInstall extends Command
     public function handle(): int
     {
         $command = \Str::lower($this->option('using')) ==='npm' ? 'npm install' : 'yarn install';
-        $path = module_path("Acacia");
+        $path ="acacia/";
         $this->alert("Running $command within $path");
         run_shell_command("cd $path && $command install", $this);
         $this->alert("DONE.");
