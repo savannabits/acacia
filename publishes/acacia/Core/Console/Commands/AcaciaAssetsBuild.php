@@ -40,7 +40,7 @@ class AcaciaAssetsBuild extends Command
     public function handle(): int
     {
         $command = \Str::lower($this->option('using')) ==='npm' ? 'npm run build' : 'yarn build';
-        $path = module_path("Acacia");
+        $path = "acacia/";
         $this->info("Running $command in $path");
         run_shell_command("cd $path && $command", $this);
         return 0;

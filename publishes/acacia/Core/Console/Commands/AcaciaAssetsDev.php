@@ -39,7 +39,7 @@ class AcaciaAssetsDev extends Command
     public function handle(): int
     {
         $command = \Str::lower($this->option('using')) ==='npm' ? 'npm run dev' : 'yarn dev';
-        $path = module_path("Acacia");
+        $path = "acacia/";
         $this->alert("Running $command in $path");
         run_shell_command("cd $path && $command", $this);
         $this->alert("DONE.");

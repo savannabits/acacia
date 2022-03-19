@@ -15,7 +15,7 @@ class GPanelBlueprintCommand extends Command
 
     public function handle()
     {
-        $table = $this->argument('table');
+        $table = \Str::lower($this->argument('table'));
         $force = $this->option('force');
         try {
             $schematic = GPanelRepo::generateBlueprintFromTable($table, $force, $this);
