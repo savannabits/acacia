@@ -38,11 +38,15 @@ class AcaciaInstall extends Command
      */
     public function handle(): int
     {
+        $force = $this->option('force');
         $configOpts =  ['--tag' => 'acacia-config'];
         $moduleOpts =  ['--tag' => 'acacia-modules'];
         $permissions =  ['--provider' => 'Spatie\Permission\PermissionServiceProvider'];
         $scout =  ['--provider' => 'Laravel\Scout\ScoutServiceProvider'];
         $this->alert("Begin Installation");
+        if ($force) {
+            shell_exec('rm -rf acacia/');
+        }
         $this->info("1. Publishing files");
         $this->info("   a. Publishing acacia configs");
         $this->call("vendor:publish",$configOpts);
@@ -53,14 +57,21 @@ class AcaciaInstall extends Command
         $this->info("   d. Publishing laravel scout config");
         $this->call("vendor:publish",$scout);
         $this->info("Dump autoload");
+        shell_exec('composer dump-autoload');
         $this->info("3. Enable initial modules");
         $this->call("acacia:enable");
+        $this->call("config:clear");
         $this->info("2. Running GPanel Migrations");
-        $this->call('migrate:fresh',['--path' => module_path('Core','Database/SqliteMigrations'),'--database' =>'acacia']);
+        $this->call('migrate:fresh',['--path' => 'acacia/Core/Database/SqliteMigrations', '--database' =>'acacia']);
         $this->info("2. Running Initial Modules Seeders");
         $this->call('acacia:seed');
-        $this->info("2. Running Menu Seeder");
-        $this->call('acacia:seed Core');
+        $this->call('acacia:blueprint',['table' => 'Permissions']);
+        $this->call('acacia:blueprint',['table' => 'Roles']);
+        $this->call('acacia:blueprint',['table' => 'Users']);
+        $this->info("Attempt to install npm dependencies");
+        $this->call('acacia:assets-install');
+        $this->call('acacia:assets-build');
+        $this->warn("Done. NB: to compile assets, `cd acacia/ && npm run dev` or `cd acacia/ && npm run build`");
         $this->alert('Installation Complete');
         return 0;
     }
