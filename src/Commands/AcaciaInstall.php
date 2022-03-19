@@ -52,9 +52,14 @@ class AcaciaInstall extends Command
         $this->call("vendor:publish",$permissions);
         $this->info("   d. Publishing laravel scout config");
         $this->call("vendor:publish",$scout);
+        $this->info("Dump autoload");
+        $this->info("3. Enable initial modules");
+        $this->call("acacia:enable");
         $this->info("2. Running GPanel Migrations");
         $this->call('migrate:fresh',['--path' => module_path('Core','Database/SqliteMigrations'),'--database' =>'acacia']);
-        $this->info("2. Running Core Seeder");
+        $this->info("2. Running Initial Modules Seeders");
+        $this->call('acacia:seed');
+        $this->info("2. Running Menu Seeder");
         $this->call('acacia:seed Core');
         $this->alert('Installation Complete');
         return 0;
