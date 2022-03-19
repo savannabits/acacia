@@ -83,7 +83,7 @@ class Fields
     }
     public function dt(): LengthAwarePaginator
     {
-        $q = Field::query();
+        $q = Field::query()->with('schematic');
         return \PrimevueDatatables::of($q)->make();
     }
 }

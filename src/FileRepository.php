@@ -338,7 +338,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
     public function find(string $name)
     {
         foreach ($this->all() as $module) {
-            if ($module->getLowerName() === strtolower($name)) {
+            if ($module->getLowerName() === str_replace('_','-',\Str::snake($name))) {
                 return $module;
             }
         }

@@ -15,5 +15,5 @@ Route::prefix(config("acacia.route_prefix", "acacia"))
     ->middleware(["auth:sanctum"])
     ->as("acacia.g-panel.")
     ->group(function () {
-        Route::resource("schematics", "SchematicController");
+        Route::resource("acacia-schematics", "AcaciaSchematicController")->parameters(["acacia-schematics" => "schematic"]);
     });

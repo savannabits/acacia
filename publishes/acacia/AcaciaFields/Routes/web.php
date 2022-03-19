@@ -15,5 +15,5 @@ Route::prefix(config("acacia.route_prefix", "acacia"))
     ->middleware(["auth:sanctum"])
     ->as("acacia.g-panel.")
     ->group(function () {
-        Route::resource("fields", "FieldController");
+        Route::resource("acacia-fields", "AcaciaFieldController")->parameters(["acacia-fields" => "field"]);
     });

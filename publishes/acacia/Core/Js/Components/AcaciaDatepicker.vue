@@ -1,5 +1,5 @@
 <template>
-    <flat-pickr :config="config" class="p-inputtext" id="next_action_scheduled_date" v-model="modelValue" @input="$emit('update:modelValue', $event.target.value)" ref="input"></flat-pickr>
+    <flat-pickr :config="config" class="p-inputtext" id="next_action_scheduled_date" :modelValue="modelValue" @input="$emit('update:modelValue', $event.target.value)" ref="input"></flat-pickr>
 </template>
 
 <script>

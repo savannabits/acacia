@@ -17,8 +17,8 @@ Route::prefix("v1")
     ->middleware(["auth:sanctum"])
     ->as("api.v1.")
     ->group(function () {
-        Route::get("relationships/dt", "Api\RelationshipController@dt")->name(
-            "relationships.dt"
+        Route::get("acacia-relationships/dt", "Api\AcaciaRelationshipController@dt")->name(
+            "acacia-relationships.dt"
         );
-        Route::apiResource("relationships", "Api\RelationshipController");
+        Route::apiResource("acacia-relationships", "Api\AcaciaRelationshipController")->parameters(["acacia-relationships" => "relationship"]);
     });

@@ -114,7 +114,7 @@
                     label="Open in a Page"
                     icon="pi pi-window"
                     @click="
-                        $inertia.visit(route('acacia.g-panel.menus.create'))
+                        $inertia.visit(route('acacia.g-panel.acacia-menus.create'))
                     "
                     class="p-button-text"
                 />
@@ -148,7 +148,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.menus.show', currentModel)
+                            route('acacia.g-panel.acacia-menus.show', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -187,7 +187,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.menus.edit', currentModel)
+                            route('acacia.g-panel.acacia-menus.edit', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -231,7 +231,7 @@ import EditForm from "./Partials/EditForm.vue";
 import ShowForm from "./Partials/ShowForm.vue";
 import Message from "primevue/message";
 
-const apiUrl = route("api.v1.menus.dt");
+const apiUrl = route("api.v1.acacia-menus.dt");
 const stateKey = "menus-dt";
 const searchableCols = ref([
     "id",
@@ -296,7 +296,7 @@ const makeOptionsMenu = (row) => [
 ];
 const fetchModel = async (row) => {
     axios
-        .get(route("api.v1.menus.show", row))
+        .get(route("api.v1.acacia-menus.show", row))
         .then((res) => {
             currentModel.value = res.data?.payload;
         })
@@ -321,7 +321,7 @@ const showContextMenu = async (e) => {
 const deleteModel = async function (row) {
     try {
         const res = await axios.delete(
-            route("api.v1.menus.destroy", row as any)
+            route("api.v1.acacia-menus.destroy", row as any)
         );
         toast.add({
             severity: "success",

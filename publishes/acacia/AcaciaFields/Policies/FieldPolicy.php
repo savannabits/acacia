@@ -9,7 +9,7 @@ use Acacia\AcaciaFields\Models\Field;
 class FieldPolicy
 {
     use HandlesAuthorization;
-    private string $basePerm = "fields";
+    private string $basePerm = "acacia-fields";
     /**
      * Determine whether the user can view any models.
      *

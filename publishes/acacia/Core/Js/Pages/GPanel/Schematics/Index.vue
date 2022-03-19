@@ -66,7 +66,7 @@ const makeOptionsMenu = (row) => [
     {
         label: "Manage",
         icon: "pi pi-pencil",
-        command: () => Inertia.get(route('acacia.g-panel.schematics.edit', row)),
+        command: () => Inertia.get(route('acacia.g-panel.acacia-schematics.edit', row)),
         visible: () => true,
     },
     {

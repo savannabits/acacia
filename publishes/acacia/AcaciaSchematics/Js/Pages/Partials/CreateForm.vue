@@ -73,7 +73,7 @@ const form = useForm({
     generated_at: null,
 });
 const createModel = async () => {
-    form.post(route("acacia.g-panel.schematics.store"), {
+    form.post(route("acacia.g-panel.acacia-schematics.store"), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

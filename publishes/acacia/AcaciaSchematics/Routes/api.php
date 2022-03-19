@@ -17,8 +17,8 @@ Route::prefix("v1")
     ->middleware(["auth:sanctum"])
     ->as("api.v1.")
     ->group(function () {
-        Route::get("schematics/dt", "Api\SchematicController@dt")->name(
-            "schematics.dt"
+        Route::get("acacia-schematics/dt", "Api\AcaciaSchematicController@dt")->name(
+            "acacia-schematics.dt"
         );
-        Route::apiResource("schematics", "Api\SchematicController");
+        Route::apiResource("acacia-schematics", "Api\AcaciaSchematicController")->parameters(["acacia-schematics" => "schematic"]);
     });

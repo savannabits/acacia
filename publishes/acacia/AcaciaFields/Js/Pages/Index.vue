@@ -30,6 +30,7 @@
                     :rowHover="true"
                     :refresh="refreshTime"
                 >
+                    <Column field="schematic.model_class" header="Model" :sortable="true" />
                     <Column field="name" header="DB Column" :sortable="true" />
                     <Column field="title" header="Title" :sortable="true" />
                     <Column field="db_type" header="DB Type" :sortable="true" />
@@ -103,7 +104,7 @@
                     label="Open in a Page"
                     icon="pi pi-window"
                     @click="
-                        $inertia.visit(route('acacia.g-panel.fields.create'))
+                        $inertia.visit(route('acacia.g-panel.acacia-fields.create'))
                     "
                     class="p-button-text"
                 />
@@ -137,7 +138,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.fields.show', currentModel)
+                            route('acacia.g-panel.acacia-fields.show', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -176,7 +177,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.fields.edit', currentModel)
+                            route('acacia.g-panel.acacia-fields.edit', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -220,7 +221,7 @@ import EditForm from "./Partials/EditForm.vue";
 import ShowForm from "./Partials/ShowForm.vue";
 import Message from "primevue/message";
 
-const apiUrl = route("api.v1.fields.dt");
+const apiUrl = route("api.v1.acacia-fields.dt");
 const stateKey = "fields-dt";
 const searchableCols = ref([
     "id",
@@ -289,7 +290,7 @@ const makeOptionsMenu = (row) => [
 ];
 const fetchModel = async (row) => {
     axios
-        .get(route("api.v1.fields.show", row))
+        .get(route("api.v1.acacia-fields.show", row))
         .then((res) => {
             currentModel.value = res.data?.payload;
         })
@@ -314,7 +315,7 @@ const showContextMenu = async (e) => {
 const deleteModel = async function (row) {
     try {
         const res = await axios.delete(
-            route("api.v1.fields.destroy", row as any)
+            route("api.v1.acacia-fields.destroy", row as any)
         );
         toast.add({
             severity: "success",

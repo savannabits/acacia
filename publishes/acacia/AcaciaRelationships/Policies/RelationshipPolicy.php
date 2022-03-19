@@ -9,7 +9,7 @@ use Acacia\AcaciaRelationships\Models\Relationship;
 class RelationshipPolicy
 {
     use HandlesAuthorization;
-    private string $basePerm = "relationships";
+    private string $basePerm = "acacia-relationships";
     /**
      * Determine whether the user can view any models.
      *

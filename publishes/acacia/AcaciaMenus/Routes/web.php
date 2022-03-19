@@ -15,5 +15,5 @@ Route::prefix(config("acacia.route_prefix", "acacia"))
     ->middleware(["auth:sanctum"])
     ->as("acacia.g-panel.")
     ->group(function () {
-        Route::resource("menus", "MenuController");
+        Route::resource("acacia-menus", "AcaciaMenuController")->parameters(["acacia-menus" => "menu"]);
     });

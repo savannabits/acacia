@@ -9,7 +9,7 @@ use Acacia\AcaciaMenus\Models\Menu;
 class MenuPolicy
 {
     use HandlesAuthorization;
-    private string $basePerm = "menus";
+    private string $basePerm = "acacia-menus";
     /**
      * Determine whether the user can view any models.
      *

@@ -138,7 +138,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.schematics.create')
+                            route('acacia.g-panel.acacia-schematics.create')
                         )
                     "
                     class="p-button-text"
@@ -174,7 +174,7 @@
                     @click="
                         $inertia.visit(
                             route(
-                                'acacia.g-panel.schematics.show',
+                                'acacia.g-panel.acacia-schematics.show',
                                 currentModel
                             )
                         )
@@ -216,7 +216,7 @@
                     @click="
                         $inertia.visit(
                             route(
-                                'acacia.g-panel.schematics.edit',
+                                'acacia.g-panel.acacia-schematics.edit',
                                 currentModel
                             )
                         )
@@ -262,7 +262,7 @@ import EditForm from "./Partials/EditForm.vue";
 import ShowForm from "./Partials/ShowForm.vue";
 import Message from "primevue/message";
 
-const apiUrl = route("api.v1.schematics.dt");
+const apiUrl = route("api.v1.acacia-schematics.dt");
 const stateKey = "schematics-dt";
 const searchableCols = ref([
     "id",
@@ -323,7 +323,7 @@ const makeOptionsMenu = (row) => [
 ];
 const fetchModel = async (row) => {
     axios
-        .get(route("api.v1.schematics.show", row))
+        .get(route("api.v1.acacia-schematics.show", row))
         .then((res) => {
             currentModel.value = res.data?.payload;
         })
@@ -348,7 +348,7 @@ const showContextMenu = async (e) => {
 const deleteModel = async function (row) {
     try {
         const res = await axios.delete(
-            route("api.v1.schematics.destroy", row as any)
+            route("api.v1.acacia-schematics.destroy", row as any)
         );
         toast.add({
             severity: "success",

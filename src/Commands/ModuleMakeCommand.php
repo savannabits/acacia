@@ -29,6 +29,7 @@ class ModuleMakeCommand extends Command
     /**
      * Execute the console command.
      * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
+     * @throws \Throwable
      */
     public function handle() : int
     {
@@ -40,15 +41,14 @@ class ModuleMakeCommand extends Command
             if (!$schematic) {
                 \Log::info("Not Found");
                 $this->warn("Schematic for $name not found. Attempting to create it....");
-                //TODO: Create schematic automatically.
-                $schematic = GPanelRepo::generateBlueprintFromTable($name,true,$this);
+                $schematic = GPanelRepo::generateBlueprintFromTable(\Str::snake($name),true,$this);
             }
             if ($schematic->generated_at && !$this->option('force')) {
                 \Log::info("Schema already generated");
                 $this->warn("$name is marked as already generated.Skipping. To still re-generated it, pass --force option");
                 continue;
             }
-            $runMigrations = $this->hasOption('yes') ? "yes": ($this->hasOption("no") ? "no": 'prompt');
+            $runMigrations = $this->option('yes') ? "yes" : ($this->option("no") ? "no": 'prompt');
             $code = with(new ModuleGenerator($schematic->model_class))
                 ->setSchematic($schematic)
                 ->setFilesystem($this->laravel['files'])

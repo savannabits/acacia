@@ -69,7 +69,7 @@ import {Inertia} from "@inertiajs/inertia";
         })
     }
     const createSchematic = async () => {
-        form.post(route('acacia.g-panel.schematics.store'),{
+        form.post(route('acacia.g-panel.acacia-schematics.store'),{
             onSuccess: (res) => {
                 toast.add({severity: 'success', summary: 'Success',detail: res.props.flash?.success, life: 3000});
                 showModal.value = false;
@@ -81,7 +81,7 @@ import {Inertia} from "@inertiajs/inertia";
                 const payload = flash.value?.payload;
                 if (payload) {
                     setTimeout(() => {
-                        Inertia.visit(route('acacia.g-panel.schematics.edit',payload.id));
+                        Inertia.visit(route('acacia.g-panel.acacia-schematics.edit',payload.id));
                     },500)
                 }
             }

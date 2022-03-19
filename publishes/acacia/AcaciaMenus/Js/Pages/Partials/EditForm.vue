@@ -45,7 +45,7 @@
                 <AcaciaRichSelect
                     v-model="form.parent"
                     :class="`block w-full`"
-                    :api-url="route('api.v1.menus.index')"
+                    :api-url="route('api.v1.acacia-menus.index')"
                     label="title"
                 />
             </div>
@@ -87,7 +87,7 @@ const toast = useToast();
 const model = props.model;
 const form = useForm({ ...model });
 const updateModel = async () => {
-    form.put(route("acacia.g-panel.menus.update", model), {
+    form.put(route("acacia.g-panel.acacia-menus.update", model), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

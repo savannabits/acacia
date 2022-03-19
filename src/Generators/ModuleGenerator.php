@@ -164,6 +164,10 @@ class ModuleGenerator extends Generator
         return Str::plural($this->getName());
     }
 
+    public function getSlugName(): string
+    {
+        return str_replace('_','-',\Str::snake(Str::plural($this->name)));
+    }
     /**
      * Get the laravel config instance.
      *
@@ -669,9 +673,9 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    protected function getLowerNameReplacement()
+    protected function getLowerNameReplacement(): string
     {
-        return strtolower($this->getPluralName());
+        return $this->getSlugName();
     }
 
     /**
@@ -679,7 +683,7 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    protected function getStudlyNameReplacement()
+    protected function getStudlyNameReplacement(): string
     {
         return $this->getPluralName();
     }

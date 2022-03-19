@@ -9,7 +9,7 @@ use Acacia\AcaciaSchematics\Models\Schematic;
 class SchematicPolicy
 {
     use HandlesAuthorization;
-    private string $basePerm = "schematics";
+    private string $basePerm = "acacia-schematics";
     /**
      * Determine whether the user can view any models.
      *

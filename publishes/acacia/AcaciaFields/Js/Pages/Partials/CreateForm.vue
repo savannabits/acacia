@@ -84,7 +84,7 @@
                 <AcaciaRichSelect
                     v-model="form.schematic"
                     :class="`block w-full`"
-                    :api-url="route('api.v1.schematics.index')"
+                    :api-url="route('api.v1.acacia-schematics.index')"
                     label="table_name"
                 />
             </div>
@@ -144,7 +144,7 @@ const form = useForm({
     schematic: null,
 });
 const createModel = async () => {
-    form.post(route("acacia.g-panel.fields.store"), {
+    form.post(route("acacia.g-panel.acacia-fields.store"), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

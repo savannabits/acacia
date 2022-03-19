@@ -3,7 +3,7 @@
     <Backend>
         <template #header>
             <div class="flex items-center flex-wrap gap-x-2">
-                <BackLink :href="route('acacia.g-panel.relationships.index')" />
+                <BackLink :href="route('acacia.g-panel.acacia-relationships.index')" />
                 <h4 class="font-bold text-xl">New Relationship</h4>
             </div>
         </template>
@@ -40,7 +40,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const onCreated = (e) => {
     // console.log(e.payload);
-    Inertia.visit(route("acacia.g-panel.relationships.index"));
+    Inertia.visit(route("acacia.g-panel.acacia-relationships.index"));
 };
 </script>
 <style scoped></style>

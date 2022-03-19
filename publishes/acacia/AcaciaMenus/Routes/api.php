@@ -17,6 +17,6 @@ Route::prefix("v1")
     ->middleware(["auth:sanctum"])
     ->as("api.v1.")
     ->group(function () {
-        Route::get("menus/dt", "Api\MenuController@dt")->name("menus.dt");
-        Route::apiResource("menus", "Api\MenuController");
+        Route::get("acacia-menus/dt", "Api\AcaciaMenuController@dt")->name("acacia-menus.dt");
+        Route::apiResource("acacia-menus", "Api\AcaciaMenuController")->parameters(["acacia-menus" => "menu"]);
     });

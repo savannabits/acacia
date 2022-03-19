@@ -20,7 +20,7 @@ Route::prefix(config('acacia.route_prefix','acacia'))
         Route::get('/', 'AcaciaController@index')->name('backend.index');
         Route::prefix('/g-panel')->as('g-panel.')->group(function (){
             Route::get('', [\Acacia\Core\Http\Controllers\GPanelController::class,'index'])->name('index');
-//            Route::resource('schematics',"SchematicController");
+//            Route::resource('schematics',"AcaciaSchematicController");
         });
         Route::resource("acacia-menu","AcaciaMenuController");
     });

@@ -67,12 +67,23 @@ if (!function_exists("runShellCommand")) {
 if (!function_exists("prepare_menu")) {
     function prepare_menu(EloquentCollection $menu): EloquentCollection
     {
-        return $menu->map(function (AcaciaMenu $item) {
+        $devModules = config('acacia.dev_modules',[]);
+        return $menu->reject(function (AcaciaMenu $item) use ($devModules) {
+            $mod = $item->module_name;
+            $module = null;
+            if ($mod) {
+                $module = Module::find($mod);
+            }
+            return app()->environment('production')
+                && $mod
+                && in_array($mod, $devModules)
+                && $module;
+        })->map(function (AcaciaMenu $item) {
             $item->has_children = !!$item->children()->count();
             if ($item->has_children) {
                 $item->children = prepare_menu($item->children);
             } else {
-                $item->href = $item->route ? route($item->route) : $item->url;
+                $item->href = $item->route ? (Route::has($item->route) ? route($item->route) : '') : $item->url;
             }
             $item->active = $item->active_pattern && Route::is($item->active_pattern);
             $item->shown = Auth::check() && (!$item->permission_name || Auth::user()->hasPermissionTo($item->permission_name));

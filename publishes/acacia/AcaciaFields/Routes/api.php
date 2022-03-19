@@ -17,6 +17,6 @@ Route::prefix("v1")
     ->middleware(["auth:sanctum"])
     ->as("api.v1.")
     ->group(function () {
-        Route::get("fields/dt", "Api\FieldController@dt")->name("fields.dt");
-        Route::apiResource("fields", "Api\FieldController");
+        Route::get("acacia-fields/dt", "Api\AcaciaFieldController@dt")->name("acacia-fields.dt");
+        Route::apiResource("acacia-fields", "Api\AcaciaFieldController")->parameters(["acacia-fields" => "field"]);
     });

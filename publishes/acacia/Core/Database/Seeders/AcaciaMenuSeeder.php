@@ -44,7 +44,7 @@ class AcaciaMenuSeeder extends Seeder
 
             $gen = new AcaciaMenu();
             $gen->id = 2;
-            $gen->title = "Code Generator";
+            $gen->title = "G-Panel";
             $gen->icon = "pi pi-prime";
             $gen->route = 'acacia.g-panel.index';
             $gen->active_pattern = "acacia.g-panel.*";
@@ -52,6 +52,21 @@ class AcaciaMenuSeeder extends Seeder
             $gen->description = "Responsible for generation of modular code during development";
             $gen->position = 0;
             $gen->saveOrFail();
+
+            $gen = new AcaciaMenu();
+            $gen->id = 3;
+            $gen->parent_id = 2;
+            $gen->title = "Generate Code";
+            $gen->icon = "pi pi-code";
+            $gen->route = 'acacia.g-panel.index';
+            $gen->active_pattern = "acacia.g-panel.index";
+            $gen->permission_name = $genPerm?->name;
+            $gen->description = "Responsible for generation of modular code during development";
+            $gen->position = 0;
+            $gen->saveOrFail();
+
+
+            $gpanelModules = ["AcaciaMenus","AcaciaFields","AcaciaRelationships","AcaciaSchematics"];
 
             $modules = \Module::toCollection();
             $i = 0;
@@ -74,6 +89,13 @@ class AcaciaMenuSeeder extends Seeder
                 $menu->permission_name = $perm;
                 $menu->module_name = $module->getName();
                 $menu->description = "Browse the ".$title." Module";
+                if (in_array($name, $gpanelModules)) {
+                    $menu->parent_id = 2;
+                    $menu->route = "acacia.g-panel.".$module->getLowerName().".index";
+                    $title = \Str::replace("-"," ", \Str::title(str_replace("acacia-","",$module->getLowerName())));
+                    $menu->title = $title;
+                    $menu->active_pattern = "acacia.g-panel.".$module->getLowerName().".*";
+                }
                 $menu->saveOrFail();
                 $i++;
             }

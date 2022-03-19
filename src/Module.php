@@ -91,7 +91,8 @@ abstract class Module
      */
     public function getLowerName(): string
     {
-        return strtolower($this->name);
+//        return strtolower($this->name);
+        return str_replace('_','-',\Str::snake($this->name));
     }
 
     /**

@@ -119,7 +119,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.g-panel.relationships.create')
+                            route('acacia.g-panel.acacia-relationships.create')
                         )
                     "
                     class="p-button-text"
@@ -155,7 +155,7 @@
                     @click="
                         $inertia.visit(
                             route(
-                                'acacia.g-panel.relationships.show',
+                                'acacia.g-panel.acacia-relationships.show',
                                 currentModel
                             )
                         )
@@ -197,7 +197,7 @@
                     @click="
                         $inertia.visit(
                             route(
-                                'acacia.g-panel.relationships.edit',
+                                'acacia.g-panel.acacia-relationships.edit',
                                 currentModel
                             )
                         )
@@ -243,7 +243,7 @@ import EditForm from "./Partials/EditForm.vue";
 import ShowForm from "./Partials/ShowForm.vue";
 import Message from "primevue/message";
 
-const apiUrl = route("api.v1.relationships.dt");
+const apiUrl = route("api.v1.acacia-relationships.dt");
 const stateKey = "relationships-dt";
 const searchableCols = ref([
     "id",
@@ -310,7 +310,7 @@ const makeOptionsMenu = (row) => [
 ];
 const fetchModel = async (row) => {
     axios
-        .get(route("api.v1.relationships.show", row))
+        .get(route("api.v1.acacia-relationships.show", row))
         .then((res) => {
             currentModel.value = res.data?.payload;
         })
@@ -335,7 +335,7 @@ const showContextMenu = async (e) => {
 const deleteModel = async function (row) {
     try {
         const res = await axios.delete(
-            route("api.v1.relationships.destroy", row as any)
+            route("api.v1.acacia-relationships.destroy", row as any)
         );
         toast.add({
             severity: "success",

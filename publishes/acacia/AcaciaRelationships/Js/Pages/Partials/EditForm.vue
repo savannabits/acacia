@@ -66,7 +66,7 @@
                 <AcaciaRichSelect
                     v-model="form.related"
                     :class="`block w-full`"
-                    :api-url="route('api.v1.schematics.index')"
+                    :api-url="route('api.v1.acacia-schematics.index')"
                     label="table_name"
                 />
             </div>
@@ -75,7 +75,7 @@
                 <AcaciaRichSelect
                     v-model="form.schematic"
                     :class="`block w-full`"
-                    :api-url="route('api.v1.schematics.index')"
+                    :api-url="route('api.v1.acacia-schematics.index')"
                     label="table_name"
                 />
             </div>
@@ -119,7 +119,7 @@ const toast = useToast();
 const model = props.model;
 const form = useForm({ ...model });
 const updateModel = async () => {
-    form.put(route("acacia.g-panel.relationships.update", model), {
+    form.put(route("acacia.g-panel.acacia-relationships.update", model), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

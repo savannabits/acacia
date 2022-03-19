@@ -15,5 +15,5 @@ Route::prefix(config("acacia.route_prefix", "acacia"))
     ->middleware(["auth:sanctum"])
     ->as("acacia.g-panel.")
     ->group(function () {
-        Route::resource("relationships", "RelationshipController");
+        Route::resource("acacia-relationships", "AcaciaRelationshipController")->parameters(["acacia-relationships" => "relationship"]);
     });
