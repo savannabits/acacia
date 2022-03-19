@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Publishing;
+namespace Savannabits\Acacia\Publishing;
 
-use Savannabits\AcaciaGenerator\Migrations\Migrator;
+use Savannabits\Acacia\Migrations\Migrator;
 
 class MigrationPublisher extends AssetPublisher
 {

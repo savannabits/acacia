@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Contracts;
+namespace Savannabits\Acacia\Contracts;
 
-use Savannabits\AcaciaGenerator\Module;
+use Savannabits\Acacia\Module;
 
 interface ActivatorInterface
 {

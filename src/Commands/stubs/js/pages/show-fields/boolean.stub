@@ -1,0 +1,5 @@
+<AcaciaDd class="my-1">
+    <template #dt>$LABEL$</template>
+    <Tag v-if="$MODEL_FIELD$" icon="pi pi-check" severity="success" value="Yes"/>
+    <Tag v-else icon="pi pi-times" severity="danger" value="No"/>
+</AcaciaDd>

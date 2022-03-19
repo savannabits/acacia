@@ -1,0 +1,35 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Throwable;
+use Illuminate\Support\Str;
+use $MODEL_NAMESPACE$;
+class $CLASS$
+{
+
+    private ?$MODEL_NAME$ $model = null;
+    private array $relationships = [];
+    /**
+     * Create a new policy instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->relationships = $BELONGS_TO_ARRAY$;
+    }
+    public static function init($MODEL_NAME$ $model): static
+    {
+        $instance = new static();
+        $instance->model = $model;
+        return $instance;
+    }
+    public function setModel($MODEL_NAME$ $model): static
+    {
+        $this->model = $model;
+        return $this;
+    }
+    $METHODS$
+}

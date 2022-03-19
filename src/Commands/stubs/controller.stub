@@ -3,7 +3,14 @@
 namespace $CLASS_NAMESPACE$;
 
 use $MODULE_NAMESPACE$\$MODULE$\$MODEL_NAMESPACE$\$MODEL_NAME$;
+use $MODULE_NAMESPACE$\$MODULE$\$REPO_NAMESPACE$\$REPO_NAME$;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\IndexRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\ViewRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\StoreRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\UpdateRequest;
+use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DestroyRequest;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Inertia\Inertia;
@@ -11,72 +18,114 @@ use Inertia\Response;
 
 class $CLASS$ extends Controller
 {
+    public function __construct(private $REPO_NAME$ $repo)
+    {
+    }
     /**
      * Display a listing of the resource.
+     * @param IndexRequest $request
      * @return Response
      */
-    public function index(): Response
+    public function index(IndexRequest $request): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Index');
+        $model = $MODEL_NAME$::class;
+        $can = [
+            "viewAny" => \Auth::check() && \Auth::user()->can("viewAny", $model),
+            "create" => \Auth::check() && \Auth::user()->can("create", $model)
+        ];
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Index', compact('can'));
     }
 
     /**
      * Show the form for creating a new resource.
+     * @param Request $request
      * @return Response
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Create');
+        $model = $MODEL_NAME$::class;
+            $can = [
+                "viewAny" => \Auth::check() && \Auth::user()->can("viewAny", $model),
+                "create" => \Auth::check() && \Auth::user()->can("create", $model)
+            ];
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Create',compact('can'));
     }
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        //
+        try {
+            $payload = $this->repo->store($request->sanitizedObject());
+            $success = "Record created successfully";
+            return back()->with(compact('success','payload'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 
     /**
      * Show the specified resource.
+     * @param ViewRequest $request
      * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
      * @return Response
      */
-    public function show($MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
+    public function show(ViewRequest $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Show',['model' => $$MODEL_CAMEL_NAME$]);
+        $model = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Show',compact('model'));
     }
 
     /**
      * Edit the specified resource.
+     * @param Request $request
      * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
      * @return Response
      */
-    public function edit($MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
+    public function edit(Request $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): Response
     {
-        return Inertia::render('$MODULE_NAME$/Js/Pages/Edit',['model' => $$MODEL_CAMEL_NAME$]);
+        $model = $this->repo->setModel($$MODEL_CAMEL_NAME$)->show();
+        return Inertia::render('$MODULE_NAME$/Js/Pages/Edit',compact('model'));
     }
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
+     * @param UpdateRequest $request
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $MODEL_NAME$ $$MODEL_CAMEL_NAME$): RedirectResponse
     {
-        //
+        try {
+            $payload = $this->repo->setModel($$MODEL_CAMEL_NAME$)
+                    ->update($request->sanitizedObject());
+            $success = "Record updated successfully";
+            return back()->with(compact('success','payload'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
+     * @param DestroyRequest $request
+     * @param $MODEL_NAME$ $$MODEL_CAMEL_NAME$
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request,$MODEL_NAME$ $$MODEL_CAMEL_NAME$): RedirectResponse
     {
-        //
+        try {
+            $res = $this->repo->setModel($$MODEL_CAMEL_NAME$)->destroy();
+            $success = "Record deleted successfully";
+            return back()->with(compact('success'));
+        } catch (\Throwable $exception) {
+            \Log::error($exception);
+            return back()->withErrors(['error'=> $exception->getMessage()]);
+        }
     }
 }

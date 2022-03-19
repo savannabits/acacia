@@ -10,7 +10,7 @@
         </template>
         <div class="mx-auto container max-w-4xl flex items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
-                <CreateForm/>
+                <CreateForm @created="onCreated"/>
             </div>
         </div>
     </Backend>
@@ -37,6 +37,10 @@
 
     const confirm = useConfirm();
     const toast = useToast();
+    const onCreated = (e) => {
+        // console.log(e.payload);
+        Inertia.visit(route('acacia.backend.$LOWER_NAME$.index'))
+    }
 </script>
 <style scoped>
 </style>

@@ -1,12 +1,12 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -42,6 +42,19 @@ class ProviderMakeCommand extends GeneratorCommand
         return $module->config('paths.generator.provider.namespace') ?: $module->config('paths.generator.provider.path', 'Providers');
     }
 
+    public function getModelsNamespace(): string
+    {
+        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $ns = $this->getClassNamespace($module);
+        return Str::beforeLast($ns,"Providers")."Models";
+    }
+    public function getPoliciesNamespace(): string
+    {
+        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $ns = $this->getClassNamespace($module);
+        return Str::beforeLast($ns,"Providers")."Policies";
+    }
+
     /**
      * Get the console command arguments.
      *
@@ -60,10 +73,11 @@ class ProviderMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
             ['master', null, InputOption::VALUE_NONE, 'Indicates the master service provider', null],
+            ['auth', null, InputOption::VALUE_NONE, 'Generate an Auth Service Provider', null],
         ];
     }
 
@@ -72,7 +86,7 @@ class ProviderMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents()
     {
-        $stub = $this->option('master') ? 'scaffold/provider' : 'provider';
+        $stub = $this->option('master') ? 'scaffold/provider' : ($this->option('auth') ? 'auth-provider':'provider');
 
         /** @var Module $module */
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
@@ -83,6 +97,9 @@ class ProviderMakeCommand extends GeneratorCommand
             'LOWER_NAME'        => $module->getLowerName(),
             'MODULE'            => $this->getModuleName(),
             'NAME'              => $this->getFileName(),
+            'MODEL'             => Str::singular($module->getStudlyName()),
+            'MODELS_NAMESPACE'   => $this->getModelsNamespace(),
+            'POLICIES_NAMESPACE'   => $this->getPoliciesNamespace(),
             'STUDLY_NAME'       => $module->getStudlyName(),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
             'PATH_VIEWS'        => GenerateConfigReader::read('views')->getPath(),

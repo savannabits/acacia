@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Support\Config;
+namespace Savannabits\Acacia\Support\Config;
 
 class GeneratorPath
 {

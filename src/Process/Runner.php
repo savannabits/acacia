@@ -1,9 +1,9 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Process;
+namespace Savannabits\Acacia\Process;
 
-use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
-use Savannabits\AcaciaGenerator\Contracts\RunableInterface;
+use Savannabits\Acacia\Contracts\RepositoryInterface;
+use Savannabits\Acacia\Contracts\RunableInterface;
 
 class Runner implements RunableInterface
 {

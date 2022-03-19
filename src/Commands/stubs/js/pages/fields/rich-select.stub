@@ -1,0 +1,4 @@
+<div class="my-2">
+    <label>$LABEL$</label>
+    <AcaciaRichSelect v-model="$V_MODEL$" :class="`block w-full`" :api-url="route('$OPTIONS_ROUTE$')" label="$OPTIONS_LABEL$"/>
+</div>

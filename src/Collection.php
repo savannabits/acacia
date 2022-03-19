@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator;
+namespace Savannabits\Acacia;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection as BaseCollection;

@@ -1,0 +1,39 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use $MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory;
+use Laravel\Scout\Searchable;
+$IMPORTS$
+
+class $CLASS$ extends \App\Models\User
+{
+    use HasFactory, Searchable;
+
+    protected $fillable = $FILLABLE$;
+    protected $hidden = $HIDDEN$;
+    protected $casts = [$CASTS$];
+    protected $appends = ['can'];
+
+    protected function getCanAttribute(): array
+    {
+        $policies = collect(["viewAny","view","create", "update","delete","restore","forceDelete","review"]);
+        return $policies->map(
+            fn (string $policy)  => [
+                'policy' => $policy,
+                'can' =>\Auth::check() && \Auth::user()->can($policy, $this)
+            ])->pluck('can','policy')->toArray();
+    }
+
+    protected static function newFactory(): $NAME$Factory
+    {
+        return $NAME$Factory::new();
+    }
+    $BELONGS_TO$
+    $MORPH_TO$
+    public function toSearchableArray(): array
+    {
+        return $this->only($this->getFillable());
+    }
+}

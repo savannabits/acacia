@@ -1,0 +1,4 @@
+<AcaciaDd class="my-1">
+    <template #dt>$LABEL$</template>
+    {{ $MODEL_FIELD$ || '-'}}
+</AcaciaDd>

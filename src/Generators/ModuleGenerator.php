@@ -1,20 +1,22 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Generators;
+namespace Savannabits\Acacia\Generators;
 
 use Acacia\Core\Constants\FormFields;
-use Acacia\Core\Entities\AcaciaMenu;
+use Acacia\Core\Models\AcaciaMenu;
+use Acacia\Core\Models\Field;
+use Acacia\Core\Models\Schematic;
+use Acacia\Core\Repos\GPanelRepo;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
-use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
-use Savannabits\AcaciaGenerator\FileRepository;
-use Savannabits\AcaciaGenerator\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
+use Savannabits\Acacia\Contracts\ActivatorInterface;
+use Savannabits\Acacia\FileRepository;
+use Savannabits\Acacia\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
 
 class ModuleGenerator extends Generator
 {
@@ -81,14 +83,17 @@ class ModuleGenerator extends Generator
      */
     protected $isActive = false;
     private ?Schematic $schematic;
+    private ?string $runMigrations = 'prompt';
 
     /**
      * The constructor.
      * @param $name
-     * @param FileRepository $module
-     * @param Config     $config
-     * @param Filesystem $filesystem
-     * @param Console    $console
+     * @param Schematic|null $schematic
+     * @param FileRepository|null $module
+     * @param Config|null $config
+     * @param Filesystem|null $filesystem
+     * @param Console|null $console
+     * @param ActivatorInterface|null $activator
      */
     public function __construct(
         $name,
@@ -135,6 +140,11 @@ class ModuleGenerator extends Generator
 
         return $this;
     }
+    public function setRunMigrations(?string $type ='prompt'): static
+    {
+        $this->runMigrations = $type;
+        return $this;
+    }
 
     /**
      * Get the name of module will created. By default in studly case.
@@ -154,6 +164,10 @@ class ModuleGenerator extends Generator
         return Str::plural($this->getName());
     }
 
+    public function getSlugName(): string
+    {
+        return str_replace('_','-',\Str::snake(Str::plural($this->name)));
+    }
     /**
      * Get the laravel config instance.
      *
@@ -300,7 +314,7 @@ class ModuleGenerator extends Generator
 
     /**
      * Generate the module.
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function generate() : int
     {
@@ -335,7 +349,7 @@ class ModuleGenerator extends Generator
         $this->activator->setActiveByName($name, $this->isActive);
 
         $this->console->info("Module [{$name}] created successfully.");
-        $this->console->alert("Making the code look prettier");
+        $this->console->warn("Making the code look prettier");
         shell_exec("cd acacia && npx prettier --write $name/");
         $this->console->alert('DONE');
         return 0;
@@ -395,13 +409,15 @@ class ModuleGenerator extends Generator
      */
     public function generateResources()
     {
-        // Seeder
+        // Permissions Seeder
 
         if (GenerateConfigReader::read('seeder')->generate() === true) {
             $this->console->call('acacia:make-seed', [
                 'name' => $this->getPluralName(),
                 'module' => $this->getPluralName(),
                 '--master' => true,
+                '--permissions' => true,
+                '--schematic' => $this->schematic,
             ]);
         }
 
@@ -417,6 +433,15 @@ class ModuleGenerator extends Generator
             ]);
         }
 
+        // Auth Provider
+        if (GenerateConfigReader::read('provider')->generate() === true) {
+            $this->console->call('acacia:make-provider', [
+                'name' => 'AuthServiceProvider',
+                'module' => $this->getPluralName(),
+                '--auth' => true,
+            ]);
+        }
+
         // Factory
         if (GenerateConfigReader::read('model')->generate() === true) {
 //            $options = ['--schematic'=> $this->schematic];
@@ -426,6 +451,7 @@ class ModuleGenerator extends Generator
                     'module' => $this->getPluralName(),
                 ]+$options);
         }
+
         // Model
         if (GenerateConfigReader::read('model')->generate() === true) {
             $options = ['--schematic'=> $this->schematic];
@@ -435,6 +461,73 @@ class ModuleGenerator extends Generator
                 ]+$options);
         }
 
+        // Policy
+        if (GenerateConfigReader::read('policies')->generate() === true) {
+            $this->console->call('acacia:make-policy', [
+                'name' => $this->getName()."Policy",
+                'module' => $this->getPluralName(),
+                '--schematic' => $this->schematic,
+            ]);
+        }
+
+        // Repository
+        if (GenerateConfigReader::read('repository')->generate() === true) {
+            $this->console->call('acacia:make-repository', [
+                'name' => $this->getPluralName(),
+                'module' => $this->getPluralName(),
+                '--schematic' => $this->schematic,
+            ]);
+        }
+
+
+        // Index Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'index'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/IndexRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // Store Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'store'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/StoreRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // View Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'view'];
+            $this->console->call('acacia:make-request', [
+                    'name' =>$this->getName() . '/ViewRequest',
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
+        // Datatable Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'dt'];
+            $this->console->call('acacia:make-request', [
+                    'name' =>$this->getName() . '/DtRequest',
+                    'module' => $this->getPluralName(),
+                ]+$options);
+        }
+        // Update Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'update'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/UpdateRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
+        // Destroy Requests
+        if (GenerateConfigReader::read('request')->generate() === true) {
+            $options = ['--schematic' => $this->schematic,'--type' =>'destroy'];
+            $this->console->call('acacia:make-request', [
+                'name' =>$this->getName() . '/DestroyRequest',
+                'module' => $this->getPluralName(),
+            ]+$options);
+        }
         // Controller
         if (GenerateConfigReader::read('controller')->generate() === true) {
             $options = ['--api' => $this->type ==='api','--schematic' => $this->schematic];
@@ -450,6 +543,16 @@ class ModuleGenerator extends Generator
                     'controller' => "Api/".$this->getName() . 'Controller',
                     'module' => $this->getPluralName(),
                 ]+$options);
+        }
+
+        // Choose to call the seeder now or later
+        if ($this->runMigrations ==='prompt') {
+            $yes = $this->console->confirm("Do you want to run the permissions seeder right now? (You can run them later)",true);
+        } else {
+            $yes = $this->runMigrations === 'yes';
+        }
+        if ($yes) {
+            $this->console->call('acacia:seed',['module' => $this->getPluralName()]);
         }
     }
 
@@ -570,9 +673,9 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    protected function getLowerNameReplacement()
+    protected function getLowerNameReplacement(): string
     {
-        return strtolower($this->getPluralName());
+        return $this->getSlugName();
     }
 
     /**
@@ -580,7 +683,7 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    protected function getStudlyNameReplacement()
+    protected function getStudlyNameReplacement(): string
     {
         return $this->getPluralName();
     }
@@ -638,8 +741,15 @@ class ModuleGenerator extends Generator
     {
         $fields = $this->schematic->fields()->where("in_list","=", true)->get();
         $content = "";
-        $stub = "partials/pages/dt-column";
+        $stubBase = "partials/pages/";
         foreach ($fields as $field) {
+            $stubName = match ($field->db_type) {
+                'boolean' =>'dt-column.boolean',
+                'date' =>'dt-column.date',
+                'datetime','timestamp' =>'dt-column.datetime',
+                default => "dt-column"
+            };
+            $stub = "$stubBase$stubName";
             $content .= (new Stub(
                 '/' . $stub . '.stub',
                 [
@@ -659,31 +769,76 @@ class ModuleGenerator extends Generator
     }
     protected function getJsIndexTitleReplacement(): string
     {
-        return Str::replace("-", " ", Str::title(Str::slug($this->getPluralName())));
-    }
-    protected function getJsEditTitleReplacement(): string
-    {
-        return "Edit ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+        return implode(" ", Str::ucsplit(Str::studly($this->getPluralName())));
     }
 
     protected function getJsCreateTitleReplacement(): string
     {
-        return "New ".Str::replace("-", " ", Str::title(Str::slug($this->getName())));
+        return "New ".implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));
+    }
+    protected function getJsEditTitleReplacement(): string
+    {
+        return "Edit ".implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));
+    }
+
+    protected function getJsShowTitleReplacement(): string
+    {
+        return implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))))." Details";
     }
 
     public function getCreateFormFieldsReplacement(): string
     {
-        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
         $content = "";
         foreach ($fields as $field) {
             $content .= (new FieldMaker($field))->render();
         }
+        // Add belongsTo relationships as selects
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $content .= (new FieldMaker($field))->render();
+        }
         return $content;
+    }
+    public function getEditFormFieldsReplacement(): string
+    {
+        return $this->getCreateFormFieldsReplacement();
+    }
+    public function getShowFormFieldsReplacement(): string
+    {
+        $fields = $this->schematic->fields()->where(function ($q) {
+            $q->where("name","=","id")
+                ->orWhereIn("db_type",["timestamp","datetime"])
+                ->orWhere("in_form","=",true);
+        })->get();
+        $content = "";
+        foreach ($fields as $field) {
+            $content .= (new FieldMaker($field))->renderForShow();
+        }
+        // Add belongsTo relationships as selects
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $content .= (new FieldMaker($field))->renderForShow();
+        }
+        return $content;
+    }
+
+    private function relationshipToField($relationship): Field
+    {
+        return GPanelRepo::relationshipToField($relationship);
     }
     public function getCreateComponentImportsReplacement(): string
     {
-        $fields = $this->schematic->fields()->where("is_vue","=",true)->get();
+        $fields = $this->schematic->fields()->where("in_form","=",true)->get();
         $content = "";
+        // BelongsTo Relationships
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $fields->push($field);
+        }
         foreach ($fields as $field) {
             $import = (new FieldMaker($field))->getComponentImport();
             if (!Str::contains($content,$import)) {
@@ -692,10 +847,25 @@ class ModuleGenerator extends Generator
         }
         return $content;
     }
+    public function getEditComponentImportsReplacement(): string
+    {
+        return $this->getCreateComponentImportsReplacement();
+    }
+    public function getShowComponentImportsReplacement(): string
+    {
+        return $this->getCreateComponentImportsReplacement();
+    }
     public function getCreateFormObjectReplacement(): string
     {
-        return $this->schematic->fields()->where("is_vue","=",true)
-            ->get()
+        $fields = $this->schematic->fields()->where("in_form","=",true)
+            ->get();
+        // BelongsTo Relationships
+        $belongs = $this->schematic->relationships()->where("type","=","BelongsTo")->get();
+        foreach ($belongs as $relationship) {
+            $field = $this->relationshipToField($relationship);
+            $fields->push($field);
+        }
+        return $fields
             ->keyBy('name')->map(function ($field) {
             return match ($field->html_type) {
                 FormFields::SWITCH, FormFields::CHECKBOX => false,
@@ -716,6 +886,9 @@ class ModuleGenerator extends Generator
                 "active_pattern" => "$baseRoute.*",
                 "position" => 0,
                 "parent_id" => 1,
+                "permission_name" =>$this->getLowerNameReplacement().".view-any",
+                "module_name" =>$this->getStudlyNameReplacement(),
+                "description" =>$this->getJsIndexTitleReplacement(),
             ]);
             $menu->save();
         }

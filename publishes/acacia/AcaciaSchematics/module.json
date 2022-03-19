@@ -1,0 +1,11 @@
+{
+    "name": "AcaciaSchematics",
+    "alias": "acacia-schematics",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": ["Acacia\\AcaciaSchematics\\Providers\\SchematicsServiceProvider"],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

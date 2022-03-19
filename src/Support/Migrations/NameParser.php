@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Support\Migrations;
+namespace Savannabits\Acacia\Support\Migrations;
 
 class NameParser
 {

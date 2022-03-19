@@ -1,0 +1,11 @@
+{
+    "name": "AcaciaMenus",
+    "alias": "acacia-menus",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": ["Acacia\\AcaciaMenus\\Providers\\MenusServiceProvider"],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

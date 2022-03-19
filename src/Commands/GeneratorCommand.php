@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Exceptions\FileAlreadyExistException;
-use Savannabits\AcaciaGenerator\Generators\FileGenerator;
+use Savannabits\Acacia\Exceptions\FileAlreadyExistException;
+use Savannabits\Acacia\Generators\FileGenerator;
 
 abstract class GeneratorCommand extends Command
 {
@@ -79,7 +79,7 @@ abstract class GeneratorCommand extends Command
     /**
      * Get class namespace.
      *
-     * @param \Savannabits\AcaciaGenerator\Module $module
+     * @param \Savannabits\Acacia\Module $module
      *
      * @return string
      */

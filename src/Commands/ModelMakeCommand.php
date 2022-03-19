@@ -1,13 +1,13 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
-use Savannabits\AcaciaGenerator\Facades\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Facades\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -123,6 +123,8 @@ class ModelMakeCommand extends GeneratorCommand
         $replace = [
             'NAME'              => $this->getModelName(),
             'FILLABLE'          => $this->getFillable(),
+            'HIDDEN'          => $this->getHidden(),
+            'CASTS'          => $this->getCasts(),
             'NAMESPACE'         => $this->getClassNamespace($module),
             'CLASS'             => $this->getClass(),
             'LOWER_NAME'        => $module->getLowerName(),
@@ -133,7 +135,8 @@ class ModelMakeCommand extends GeneratorCommand
             'MORPH_TO'        => $this->getMorphTo() ?? "",
             'IMPORTS'       => ''
         ];
-        return (new Stub('/model.stub', $replace))->render();
+        $stub = $this->deriveSpecialStub("model");
+        return (new Stub($stub, $replace))->render();
     }
 
     /**
@@ -175,12 +178,46 @@ class ModelMakeCommand extends GeneratorCommand
         return '[]';
     }
 
+    /**
+     * @return string|null
+     */
+    private function getHidden(): ?string
+    {
+        $arrays = $this->schematic->fields()->where("is_hidden","=",true)->orWhereIn("name",["password","remember_token","secret"])->get();
+        return $arrays?->pluck('name')->toJson() ?? '[]';
+    }
+
+    private function getCasts(): ?string
+    {
+        $bools = $this->schematic->fields()->whereIn("db_type",["boolean","bool","tinyinteger"])->get();
+        $content = "";
+        foreach ($bools as $bool) {
+            $content .= "'$bool->name' => 'boolean',";
+        }
+        $dates = $this->schematic->fields()->whereIn("db_type",["date"])->get();
+        foreach ($dates as $date) {
+            $content .= "'$date->name' => 'date',";
+        }
+        $datetimes = $this->schematic->fields()->whereIn("db_type",["datetime"])->get();
+        foreach ($datetimes as $date) {
+            $content .= "'$date->name' => 'datetime',";
+        }
+        $timestamps = $this->schematic->fields()->whereIn("db_type",["timestamp"])->get();
+        foreach ($timestamps as $date) {
+            $content .= "'$date->name' => 'timestamp',";
+        }
+
+
+        return $content;
+    }
+
+
+
     public function getBelongsTo(): string
     {
         $content = "/********* BELONGS TO **********/\n";
         if ($this->schematic) {
             foreach ($this->schematic->relationships()->where("type","BelongsTo")->get() as $relation) {
-                $this->comment($relation->related_id);
                 $related = $relation->related;
                 if ($related) {
                     $module = Module::find($related?->module_name);
@@ -188,7 +225,7 @@ class ModelMakeCommand extends GeneratorCommand
                     $relatedModel = $related->model_class;
                     $content .= (new Stub('/partials/belongs-to.stub', [
                         "METHOD" => $relation->method,
-                        "MODEL"     => "\Acacia\\$studlyName\Entities\\$relatedModel",
+                        "MODEL"     => "\Acacia\\$studlyName\Models\\$relatedModel",
                         "FK" => $relation->local_key,
                         "RELATED_KEY" => $relation->related_key,
                     ]))->render();
@@ -220,6 +257,6 @@ class ModelMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
+        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Models');
     }
 }

@@ -9,17 +9,19 @@
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
                 <div class="flex flex-wrap items-center justify-end gap-2">
-                    <Button @click="createModal = true" aria-label="New Comment" label="New $STUDLY_SINGULAR_NAME$" icon="pi pi-plus"/>
+                    <Button v-if="$page.props.can?.create" @click="createModal = true" aria-label="New Comment" label="New $STUDLY_SINGULAR_NAME$" icon="pi pi-plus"/>
                 </div>
                 <PrimeDatatables
-                    :api-url="apiUrl"
-                    :column-filters="{}"
-                    :searchable-columns="searchableCols"
-                    :state-key="stateKey"
+                    v-if="$page.props.can?.viewAny"
+                    :apiUrl="apiUrl"
+                    :columnFilters="{}"
+                    :searchableColumns="searchableCols"
+                    :stateKey="stateKey"
+                    defaultSortField="id"
                     contextMenu
                     v-model:contextMenuSelection="selectedRow"
                     @row-contextmenu="showContextMenu"
-                    :row-hover="true"
+                    :rowHover="true"
                     :refresh="refreshTime"
                 >
                     $JS_INDEX_COLUMNS$
@@ -30,11 +32,12 @@
                                     icon-pos="right"
                                     :class="'p-button-text'"
                                     :icon="'pi pi-ellipsis-v'"
-                                    :label="'Actions'"
+                                    :label="'Options'"
                             />
                         </template>
                     </Column>
                 </PrimeDatatables>
+                <Message v-else severity="error">You are not authorized to access this content</Message>
             </div>
         </div>
         <ContextMenu ref="contextMenu" :model="options"/>
@@ -49,10 +52,44 @@
                     New $STUDLY_SINGULAR_NAME$
                 </h4>
             </template>
-            <CreateForm v-if="createModal"/>
+            <CreateForm @created="onCreated" v-if="createModal"/>
             <template #footer>
                 <Button label="Open in a Page" icon="pi pi-window" @click="$inertia.visit(route('acacia.backend.$LOWER_NAME$.create'))" class="p-button-text"/>
                 <Button label="Close" icon="pi pi-times" @click="createModal=false" class="p-button-text"/>
+            </template>
+        </Dialog>
+        <Dialog position="top"
+                :maximizable="true"
+                v-model:visible="showModal"
+                :modal="true"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+        >
+            <template #header>
+                <h4 class="font-black text-xl">
+                    $STUDLY_SINGULAR_NAME$ Details
+                </h4>
+            </template>
+            <ShowForm :model="currentModel" v-if="showModal && currentModel"/>
+            <template #footer>
+                <Button label="Open in a Page" icon="pi pi-window" @click="$inertia.visit(route('acacia.backend.$LOWER_NAME$.show',currentModel))" class="p-button-text"/>
+                <Button label="Close" icon="pi pi-times" @click="showModal=false, currentModel=null" class="p-button-text"/>
+            </template>
+        </Dialog>
+        <Dialog position="top"
+                :maximizable="true"
+                v-model:visible="editModal"
+                :modal="true"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+        >
+            <template #header>
+                <h4 class="font-black text-xl">
+                    Edit Single $STUDLY_SINGULAR_NAME$
+                </h4>
+            </template>
+            <EditForm :model="currentModel" @updated="onUpdated" v-if="editModal && currentModel"/>
+            <template #footer>
+                <Button label="Open in a Page" icon="pi pi-window" @click="$inertia.visit(route('acacia.backend.$LOWER_NAME$.edit',currentModel))" class="p-button-text"/>
+                <Button label="Close" icon="pi pi-times" @click="editModal=false, currentModel=null" class="p-button-text"/>
             </template>
         </Dialog>
     </Backend>
@@ -73,6 +110,7 @@
     import Button from "primevue/button";
     import ContextMenu from "primevue/contextmenu";
     import Badge from "primevue/badge";
+    import dayjs from "dayjs";
     import route from "ziggy-js"
     import {nextTick, Ref, ref} from "vue";
     import {useConfirm} from "primevue/useconfirm";
@@ -81,7 +119,9 @@
     import axios from "axios";
     import Dialog from "primevue/dialog"
     import CreateForm from"./Partials/CreateForm.vue"
-
+    import EditForm from"./Partials/EditForm.vue";
+    import ShowForm from "./Partials/ShowForm.vue";
+    import Message from "primevue/message";
 
     const apiUrl = route('api.v1.$LOWER_NAME$.dt');
     const stateKey = '$LOWER_NAME$-dt'
@@ -93,12 +133,28 @@
     const toast = useToast();
     const refreshTime = ref(null) as Ref<string | null>;
     const createModal = ref(false);
+    const editModal = ref(false);
+    const showModal = ref(false);
+    const currentModel = ref(null) as Ref<any>;
     const makeOptionsMenu = (row) => [
         {
-            label: "Manage",
+            label: "Details",
+            icon: "pi pi-eye",
+            command: async () => {
+                currentModel.value = null;
+                await fetchModel(row);
+                showModal.value = true;
+            },
+            visible: () => row?.can?.view,
+        },
+        {
+            separator: true,
+        },
+        {
+            label: "Edit",
             icon: "pi pi-pencil",
-            command: () => Inertia.get(route('acacia.backend.$LOWER_NAME$.edit', row)),
-            visible: () => true,
+            command: async () => {currentModel.value = null; await fetchModel(row); editModal.value = true},
+            visible: () => row?.can?.update,
         },
         {
             label: "Delete",
@@ -110,9 +166,17 @@
                     accept: () => deleteModel(row)
                 })
             },
-            visible: () => true,
+            visible: () => row?.can?.delete,
         },
     ];
+    const fetchModel = async (row) => {
+        axios.get(route('api.v1.$LOWER_NAME$.show',row)).then(res => {
+            currentModel.value = res.data?.payload;
+        }).catch(err => {
+            console.error(err);
+            currentModel.value = null;
+        })
+    }
     const refresh = () => {
         refreshTime.value = new Date().toUTCString();
     }
@@ -129,13 +193,23 @@
     const deleteModel = async function (row) {
         try {
             const res = await axios.delete(route('api.v1.$LOWER_NAME$.destroy', row as any));
-            toast.add({severity: 'success', detail: res.data.message});
+            toast.add({severity: 'success', detail: res.data.message, life: 3000});
             refresh();
         } catch (e: any) {
             console.log(e);
             const msg = e?.response?.data?.message || e?.data?.message || e?.message || e || "Server error";
-            toast.add({severity: 'error', detail: msg, summary: 'Server Error'});
+            toast.add({severity: 'error', detail: msg, summary: 'Server Error',life: 10000});
         }
+    }
+    const onCreated = (e) => {
+        // console.log(e.payload);
+        createModal.value = false;
+        refresh();
+    }
+    const onUpdated = (e) => {
+        // console.log(e.payload);
+        editModal.value = false;
+        refresh();
     }
 </script>
 

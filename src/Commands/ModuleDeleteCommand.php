@@ -1,8 +1,8 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
-use Acacia\Core\Entities\AcaciaMenu;
+use Acacia\Core\Models\AcaciaMenu;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 

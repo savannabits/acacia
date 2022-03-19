@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Migrations\Migrator;
-use Savannabits\AcaciaGenerator\Traits\MigrationLoaderTrait;
+use Savannabits\Acacia\Migrations\Migrator;
+use Savannabits\Acacia\Traits\MigrationLoaderTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -27,7 +27,7 @@ class MigrateResetCommand extends Command
     protected $description = 'Reset the modules migrations.';
 
     /**
-     * @var \Savannabits\AcaciaGenerator\Contracts\RepositoryInterface
+     * @var \Savannabits\Acacia\Contracts\RepositoryInterface
      */
     protected $module;
 

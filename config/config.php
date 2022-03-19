@@ -1,47 +1,48 @@
 <?php
 
-use Savannabits\AcaciaGenerator\Activators\FileActivator;
-use Savannabits\AcaciaGenerator\Commands\AcaciaGeneratorV6Migrator;
-use Savannabits\AcaciaGenerator\Commands\CommandMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ControllerMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\DisableCommand;
-use Savannabits\AcaciaGenerator\Commands\DumpCommand;
-use Savannabits\AcaciaGenerator\Commands\EnableCommand;
-use Savannabits\AcaciaGenerator\Commands\EventMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\FactoryMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\InstallCommand;
-use Savannabits\AcaciaGenerator\Commands\JobMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ListCommand;
-use Savannabits\AcaciaGenerator\Commands\ListenerMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MailMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MiddlewareMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateRefreshCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateResetCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateRollbackCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrateStatusCommand;
-use Savannabits\AcaciaGenerator\Commands\MigrationMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ModelMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ModuleDeleteCommand;
-use Savannabits\AcaciaGenerator\Commands\ModuleMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\NotificationMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\PolicyMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ProviderMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishConfigurationCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishMigrationCommand;
-use Savannabits\AcaciaGenerator\Commands\PublishTranslationCommand;
-use Savannabits\AcaciaGenerator\Commands\RequestMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\ResourceMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\RouteProviderMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\RuleMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\SeedCommand;
-use Savannabits\AcaciaGenerator\Commands\SeedMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\SetupCommand;
-use Savannabits\AcaciaGenerator\Commands\TestMakeCommand;
-use Savannabits\AcaciaGenerator\Commands\UnUseCommand;
-use Savannabits\AcaciaGenerator\Commands\UpdateCommand;
-use Savannabits\AcaciaGenerator\Commands\UseCommand;
+use Savannabits\Acacia\Activators\FileActivator;
+use Savannabits\Acacia\Commands\AcaciaV6Migrator;
+use Savannabits\Acacia\Commands\CommandMakeCommand;
+use Savannabits\Acacia\Commands\ControllerMakeCommand;
+use Savannabits\Acacia\Commands\DisableCommand;
+use Savannabits\Acacia\Commands\DumpCommand;
+use Savannabits\Acacia\Commands\EnableCommand;
+use Savannabits\Acacia\Commands\EventMakeCommand;
+use Savannabits\Acacia\Commands\FactoryMakeCommand;
+use Savannabits\Acacia\Commands\InstallCommand;
+use Savannabits\Acacia\Commands\JobMakeCommand;
+use Savannabits\Acacia\Commands\ListCommand;
+use Savannabits\Acacia\Commands\ListenerMakeCommand;
+use Savannabits\Acacia\Commands\MailMakeCommand;
+use Savannabits\Acacia\Commands\MiddlewareMakeCommand;
+use Savannabits\Acacia\Commands\MigrateCommand;
+use Savannabits\Acacia\Commands\MigrateRefreshCommand;
+use Savannabits\Acacia\Commands\MigrateResetCommand;
+use Savannabits\Acacia\Commands\MigrateRollbackCommand;
+use Savannabits\Acacia\Commands\MigrateStatusCommand;
+use Savannabits\Acacia\Commands\MigrationMakeCommand;
+use Savannabits\Acacia\Commands\ModelMakeCommand;
+use Savannabits\Acacia\Commands\ModuleDeleteCommand;
+use Savannabits\Acacia\Commands\ModuleMakeCommand;
+use Savannabits\Acacia\Commands\NotificationMakeCommand;
+use Savannabits\Acacia\Commands\PolicyMakeCommand;
+use Savannabits\Acacia\Commands\ProviderMakeCommand;
+use Savannabits\Acacia\Commands\PublishCommand;
+use Savannabits\Acacia\Commands\PublishConfigurationCommand;
+use Savannabits\Acacia\Commands\PublishMigrationCommand;
+use Savannabits\Acacia\Commands\PublishTranslationCommand;
+use Savannabits\Acacia\Commands\RepositoryMakeCommand;
+use Savannabits\Acacia\Commands\RequestMakeCommand;
+use Savannabits\Acacia\Commands\ResourceMakeCommand;
+use Savannabits\Acacia\Commands\RouteProviderMakeCommand;
+use Savannabits\Acacia\Commands\RuleMakeCommand;
+use Savannabits\Acacia\Commands\SeedCommand;
+use Savannabits\Acacia\Commands\SeedMakeCommand;
+use Savannabits\Acacia\Commands\SetupCommand;
+use Savannabits\Acacia\Commands\TestMakeCommand;
+use Savannabits\Acacia\Commands\UnUseCommand;
+use Savannabits\Acacia\Commands\UpdateCommand;
+use Savannabits\Acacia\Commands\UseCommand;
 
 return [
 
@@ -80,8 +81,10 @@ return [
             'js/pages/index' => 'Js/Pages/Index.vue',
             'js/pages/create' => 'Js/Pages/Create.vue',
             'js/pages/edit' => 'Js/Pages/Edit.vue',
+            'js/pages/show' => 'Js/Pages/Show.vue',
             'js/pages/partials/create-form' => 'Js/Pages/Partials/CreateForm.vue',
             'js/pages/partials/edit-form' => 'Js/Pages/Partials/EditForm.vue',
+            'js/pages/partials/show-form' => 'Js/Pages/Partials/ShowForm.vue',
             'webpack' => 'webpack.mix.js',
             'package' => 'package.json',
         ],
@@ -104,6 +107,21 @@ return [
                 'CREATE_FORM_FIELDS'
             ],
             'js/pages/edit' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_EDIT_TITLE'],
+            'js/pages/show' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_SHOW_TITLE'],
+            'js/pages/partials/edit-form' => [
+                'LOWER_NAME',
+                'EDIT_COMPONENT_IMPORTS',
+                'STUDLY_NAME',
+                'STUDLY_SINGULAR_NAME',
+                'EDIT_FORM_FIELDS'
+            ],
+            'js/pages/partials/show-form' => [
+                'LOWER_NAME',
+                'SHOW_COMPONENT_IMPORTS',
+                'STUDLY_NAME',
+                'STUDLY_SINGULAR_NAME',
+                'SHOW_FORM_FIELDS'
+            ],
             'composer' => [
                 'LOWER_NAME',
                 'STUDLY_NAME',
@@ -162,24 +180,24 @@ return [
             'migration' => ['path' => 'Database/Migrations', 'generate' => true],
             'seeder'    => ['path' => 'Database/Seeders', 'generate' => true],
             'factory'   => ['path' => 'Database/Factories', 'generate' => true],
-            'model'     => ['path' => 'Entities', 'generate' => true],
+            'model'     => ['path' => 'Models', 'generate' => true],
             'routes'    => ['path' => 'Routes', 'generate' => true],
-            'controller'=> ['path' => 'Http/Controllers', 'generate' => true],
-            'api-controller' => ['path' => 'Http/Controllers/Api', 'generate' => true],
+            'controller'=> [ 'namespace' =>'Http\Controllers', 'path' => 'Http/Controllers', 'generate' => true],
+            'api-controller' => ['namespace' =>'Http\Controllers\Api', 'path' => 'Http/Controllers/Api', 'generate' => true],
             'filter'    => ['path' => 'Http/Middleware', 'generate' => true],
-            'request'   => ['path' => 'Http/Requests', 'generate' => true],
+            'request'   => ['namespace' =>'Http\Requests','path' => 'Http/Requests', 'generate' => true],
             'provider'  => ['path' => 'Providers', 'generate' => true],
             'assets'    => ['path' => 'resources/assets', 'generate' => true],
             'lang'      => ['path' => 'resources/lang', 'generate' => true],
             'views'     => ['path' => 'resources/views', 'generate' => true],
             'test'      => ['path' => 'tests/Unit', 'generate' => true],
-            'test-feature' => ['path' => 'tests/Feature', 'generate' => true],
-            'repository'        => ['path' => 'Repositories', 'generate' => false],
+            'test-feature'      => ['path' => 'tests/Feature', 'generate' => true],
+            'repository'        => ['path' => 'Repositories', 'generate' => true],
             'event'             => ['path' => 'Events', 'generate' => false],
             'listener'          => ['path' => 'Listeners', 'generate' => false],
-            'policies'          => ['path' => 'Policies', 'generate' => false],
+            'policies'          => ['path' => 'Policies', 'generate' => true],
             'rules'             => ['path' => 'Rules', 'generate' => false],
-            'jobs'              => ['path' => 'Jobs', 'generate' => false],
+            'jobs'              => ['path' => 'Jobs', 'generate' => true],
             'emails'            => ['path' => 'Emails', 'generate' => false],
             'notifications'     => ['path' => 'Notifications', 'generate' => false],
             'resource'          => ['path' => 'Transformers', 'generate' => false],
@@ -232,6 +250,7 @@ return [
         PublishConfigurationCommand::class,
         PublishMigrationCommand::class,
         PublishTranslationCommand::class,
+        RepositoryMakeCommand::class,
         SeedCommand::class,
         SeedMakeCommand::class,
         SetupCommand::class,
@@ -240,7 +259,7 @@ return [
         UseCommand::class,
         ResourceMakeCommand::class,
         TestMakeCommand::class,
-        AcaciaGeneratorV6Migrator::class,
+        AcaciaV6Migrator::class,
     ],
 
     /*
@@ -291,6 +310,7 @@ return [
         'key' => 'acacia-generator',
         'lifetime' => 60,
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Choose what acacia-generator will register as custom namespaces.

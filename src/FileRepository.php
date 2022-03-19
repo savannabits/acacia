@@ -1,6 +1,6 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator;
+namespace Savannabits\Acacia;
 
 use Countable;
 use Illuminate\Cache\CacheManager;
@@ -10,11 +10,11 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
-use Savannabits\AcaciaGenerator\Contracts\RepositoryInterface;
-use Savannabits\AcaciaGenerator\Exceptions\InvalidAssetPath;
-use Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException;
-use Savannabits\AcaciaGenerator\Process\Installer;
-use Savannabits\AcaciaGenerator\Process\Updater;
+use Savannabits\Acacia\Contracts\RepositoryInterface;
+use Savannabits\Acacia\Exceptions\InvalidAssetPath;
+use Savannabits\Acacia\Exceptions\ModuleNotFoundException;
+use Savannabits\Acacia\Process\Installer;
+use Savannabits\Acacia\Process\Updater;
 
 abstract class FileRepository implements RepositoryInterface, Countable
 {
@@ -129,7 +129,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
      * @param Container $app
      * @param string $args
      * @param string $path
-     * @return \Savannabits\AcaciaGenerator\Module
+     * @return \Savannabits\Acacia\Module
      */
     abstract protected function createModule(...$args);
 
@@ -338,7 +338,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
     public function find(string $name)
     {
         foreach ($this->all() as $module) {
-            if ($module->getLowerName() === strtolower($name)) {
+            if ($module->getLowerName() === str_replace('_','-',\Str::snake($name))) {
                 return $module;
             }
         }
@@ -487,7 +487,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
     /**
      * Get module used for cli session.
      * @return string
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function getUsedNow() : string
     {
@@ -554,7 +554,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
      * Enabling a specific module.
      * @param string $name
      * @return void
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function enable($name)
     {
@@ -565,7 +565,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
      * Disabling a specific module.
      * @param string $name
      * @return void
-     * @throws \Savannabits\AcaciaGenerator\Exceptions\ModuleNotFoundException
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
      */
     public function disable($name)
     {

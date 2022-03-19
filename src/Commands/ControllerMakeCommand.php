@@ -1,13 +1,13 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
+use Acacia\Core\Models\Schematic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Savannabits\Acacia\Models\Schematic;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
-use Savannabits\AcaciaGenerator\Support\Stub;
-use Savannabits\AcaciaGenerator\Traits\ModuleCommandTrait;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Support\Stub;
+use Savannabits\Acacia\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -77,7 +77,15 @@ class ControllerMakeCommand extends GeneratorCommand
     public function getModelNamespace() {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Entities');
+        return $module->config('paths.generator.model.namespace') ?: $module->config('paths.generator.model.path', 'Models');
+    }
+    public function getRepoNamespace() {
+        $module = $this->laravel['modules'];
+        return $module->config('paths.generator.repository.namespace') ?: $module->config('paths.generator.repository.path', 'Repositories');
+    }
+    public function getRequestsNamespace() {
+        $module = $this->laravel['modules'];
+        return $module->config('paths.generator.request.namespace') ?: $module->config('paths.generator.request.path', 'Http/Requests');
     }
     /**
      * @return string
@@ -97,9 +105,13 @@ class ControllerMakeCommand extends GeneratorCommand
             'NAME'              => $this->getModuleName(),
             'STUDLY_NAME'       => $module->getStudlyName(),
             'MODEL_NAME'        => $this->getModelName(),
+            'REPO_NAME'        => $this->getRepositoryName(),
             'MODEL_CAMEL_NAME'  => Str::camel($this->getModelName()),
             'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
             'MODEL_NAMESPACE'  => $this->getModelNamespace(),
+            'REPO_NAMESPACE'  => $this->getRepoNamespace(),
+            'REQUESTS_NAME'  => $this->getModelName(),
+            'REQUESTS_NAMESPACE'  => $this->getRequestsNamespace(),
         ]))->render();
     }
 
@@ -146,6 +158,10 @@ class ControllerMakeCommand extends GeneratorCommand
     public function getModelName(){
         return $this->schematic?->model_class;
     }
+    public function getRepositoryName(): string
+    {
+        return $this->getModuleName();
+    }
 
     /**
      * @return array|string
@@ -157,8 +173,10 @@ class ControllerMakeCommand extends GeneratorCommand
 
     public function getDefaultNamespace() : string
     {
+        /**
+         * @var \Module $module
+         */
         $module = $this->laravel['modules'];
-
         return $module->config('paths.generator.controller.namespace') ?: $module->config('paths.generator.controller.path', 'Http/Controllers');
     }
 

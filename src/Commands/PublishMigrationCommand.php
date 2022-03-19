@@ -1,10 +1,10 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
-use Savannabits\AcaciaGenerator\Migrations\Migrator;
-use Savannabits\AcaciaGenerator\Publishing\MigrationPublisher;
+use Savannabits\Acacia\Migrations\Migrator;
+use Savannabits\Acacia\Publishing\MigrationPublisher;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PublishMigrationCommand extends Command
@@ -46,7 +46,7 @@ class PublishMigrationCommand extends Command
     /**
      * Publish migration for the specified module.
      *
-     * @param \Savannabits\AcaciaGenerator\Module $module
+     * @param \Savannabits\Acacia\Module $module
      */
     public function publish($module)
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Migrations;
+namespace Savannabits\Acacia\Migrations;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Savannabits\AcaciaGenerator\Module;
-use Savannabits\AcaciaGenerator\Support\Config\GenerateConfigReader;
+use Savannabits\Acacia\Module;
+use Savannabits\Acacia\Support\Config\GenerateConfigReader;
 
 class Migrator
 {

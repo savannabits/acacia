@@ -1,11 +1,12 @@
 <?php
 
-namespace Savannabits\AcaciaGenerator\Commands;
+namespace Savannabits\Acacia\Commands;
 
+use Acacia\Core\Models\Schematic;
+use Acacia\Core\Repos\GPanelRepo;
 use Illuminate\Console\Command;
-use Savannabits\Acacia\Models\Schematic;
-use Savannabits\AcaciaGenerator\Contracts\ActivatorInterface;
-use Savannabits\AcaciaGenerator\Generators\ModuleGenerator;
+use Savannabits\Acacia\Contracts\ActivatorInterface;
+use Savannabits\Acacia\Generators\ModuleGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -27,6 +28,8 @@ class ModuleMakeCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
+     * @throws \Throwable
      */
     public function handle() : int
     {
@@ -37,9 +40,15 @@ class ModuleMakeCommand extends Command
             $schematic = Schematic::query()->where("table_name","=", $name)->first();
             if (!$schematic) {
                 \Log::info("Not Found");
-                $this->warn("Schematic for $name not found.");
+                $this->warn("Schematic for $name not found. Attempting to create it....");
+                $schematic = GPanelRepo::generateBlueprintFromTable(\Str::snake($name),true,$this);
+            }
+            if ($schematic->generated_at && !$this->option('force')) {
+                \Log::info("Schema already generated");
+                $this->warn("$name is marked as already generated.Skipping. To still re-generated it, pass --force option");
                 continue;
             }
+            $runMigrations = $this->option('yes') ? "yes" : ($this->option("no") ? "no": 'prompt');
             $code = with(new ModuleGenerator($schematic->model_class))
                 ->setSchematic($schematic)
                 ->setFilesystem($this->laravel['files'])
@@ -50,11 +59,14 @@ class ModuleMakeCommand extends Command
                 ->setForce($this->option('force'))
                 ->setType($this->getModuleType())
                 ->setActive(!$this->option('disabled'))
+                ->setRunMigrations($runMigrations)
                 ->generate();
 
             if ($code === E_ERROR) {
                 $success = false;
             }
+            $schematic->generated_at = now();
+            $schematic->save();
         }
 
         return $success ? 0 : E_ERROR;
@@ -80,6 +92,8 @@ class ModuleMakeCommand extends Command
             ['web', null, InputOption::VALUE_NONE, 'Generate a web module.'],
             ['disabled', 'd', InputOption::VALUE_NONE, 'Do not enable the module at creation.'],
             ['force', 'F', InputOption::VALUE_NONE, 'Force the operation to run when the module already exists.'],
+            ['yes', 'y', InputOption::VALUE_NONE, 'Automatically run migrations for permissions NOW instead of prompting'],
+            ['no', null, InputOption::VALUE_NONE, 'Automatically run migrations for permissions LATER instead of prompting'],
         ];
     }
 

@@ -1,0 +1,4 @@
+<AcaciaDd class="my-1">
+    <template #dt>$LABEL$</template>
+    <strong>{{ $MODEL_FIELD$ ? dayjs($MODEL_FIELD$).format("MMM DD, YYYY") : "-" }}</strong>
+</AcaciaDd>

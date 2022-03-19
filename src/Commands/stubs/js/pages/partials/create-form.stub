@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="createModel">
+    <form v-if="$page.props.can?.create" @submit.prevent="createModel">
         <div class="">
             $CREATE_FORM_FIELDS$
         </div>
@@ -8,25 +8,28 @@
             <Button type="submit" icon="pi pi-check" label="Save"/>
         </div>
     </form>
+    <Message v-else severity="error">You are not authorized to perform this action</Message>
 </template>
 <script lang="ts">
     import {defineComponent} from "vue";
 
     export default defineComponent({
-        name: "SchematicsCreate",
+        name: "$STUDLY_SINGULAR_NAME$Create",
     })
 </script>
 <script setup lang="ts">
     import Button from "primevue/button";
     import Dialog from "primevue/dialog";
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
-    import {computed, nextTick, ref} from "vue";
+    import {computed,defineEmits, nextTick, ref} from "vue";
     import axios from "axios";
     import route from "ziggy-js";
     import Label from "@/Components/Label.vue";
     import {useToast} from "primevue/usetoast";
     import {Inertia} from "@inertiajs/inertia";
+    import Message from "primevue/message";
     $CREATE_COMPONENT_IMPORTS$
+    const emit = defineEmits(["created","error"]);
     const flash = computed(() => usePage().props?.value?.flash) as any;
     const existingTables = ref([]);
     const showModal = ref(false);
@@ -36,15 +39,18 @@
         form.post(route('acacia.backend.$LOWER_NAME$.store'),{
             onSuccess: (res) => {
                 const fl = res.props.flash as any;
-                toast.add({severity: 'success', summary: 'Success', detail: fl?.success, life: 3000});
-                showModal.value = false;
+                toast.add({severity: 'success', summary: 'Success', detail: fl?.success, life: 2000});
+                const payload = flash.value?.payload;
+                emit("created",{payload: payload});
             },
             onError: (errors) => {
-                toast.add({severity: 'error', summary: 'Error', detail: errors?.message, life: 3000});
+                let msg = flash.value?.error || errors?.message || errors?.error || errors || "A server error occurred."
+                toast.add({severity: 'error', summary: 'Error', detail: msg, life: 3000});
+                const payload = flash.value?.payload;
+                emit("error",{payload: payload,message: msg});
             },
             onFinish: (res) => {
-                const payload = flash.value?.payload;
-                // emit event here
+
             }
         })
     }

@@ -1,0 +1,7 @@
+<Column
+    field="$FIELD_NAME$" header="$FIELD_TITLE$" :sortable="$SORTABLE$">
+    <template #body="{data}">
+        <Badge severity="success" v-if="data.$FIELD_NAME$" value="YES"/>
+        <Badge severity="danger" v-else value="NO"/>
+    </template>
+</Column>
