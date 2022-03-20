@@ -772,6 +772,11 @@ class ModuleGenerator extends Generator
         return implode(" ", Str::ucsplit(Str::studly($this->getPluralName())));
     }
 
+    protected function getJsSingularTitleReplacement(): string
+    {
+        return implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));
+    }
+
     protected function getJsCreateTitleReplacement(): string
     {
         return "New ".implode(" ", Str::ucsplit(Str::studly(Str::singular($this->getName()))));

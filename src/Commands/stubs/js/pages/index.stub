@@ -9,7 +9,7 @@
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
                 <div class="flex flex-wrap items-center justify-end gap-2">
-                    <Button v-if="$page.props.can?.create" @click="createModal = true" aria-label="New Comment" label="New $STUDLY_SINGULAR_NAME$" icon="pi pi-plus"/>
+                    <Button v-if="$page.props.can?.create" @click="createModal = true" aria-label="New Comment" label="New $JS_SINGULAR_TITLE$" icon="pi pi-plus"/>
                 </div>
                 <PrimeDatatables
                     v-if="$page.props.can?.viewAny"
@@ -49,7 +49,7 @@
         >
             <template #header>
                 <h4 class="font-black text-xl">
-                    New $STUDLY_SINGULAR_NAME$
+                    New $JS_SINGULAR_TITLE$
                 </h4>
             </template>
             <CreateForm @created="onCreated" v-if="createModal"/>
@@ -66,7 +66,7 @@
         >
             <template #header>
                 <h4 class="font-black text-xl">
-                    $STUDLY_SINGULAR_NAME$ Details
+                    $JS_SINGULAR_TITLE$ Details
                 </h4>
             </template>
             <ShowForm :model="currentModel" v-if="showModal && currentModel"/>
@@ -83,7 +83,7 @@
         >
             <template #header>
                 <h4 class="font-black text-xl">
-                    Edit Single $STUDLY_SINGULAR_NAME$
+                    Edit Single $JS_SINGULAR_TITLE$
                 </h4>
             </template>
             <EditForm :model="currentModel" @updated="onUpdated" v-if="editModal && currentModel"/>
