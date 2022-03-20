@@ -18,6 +18,7 @@ class Schematic extends \Acacia\Core\Models\Schematic
         "model_class",
         "controller_class",
         "route_name",
+        "default_label_column",
         "generated_at",
     ];
     protected $hidden = ["password", "remember_token"];

@@ -17,6 +17,10 @@
                 />
             </div>
             <div class="my-2">
+                <label>Default Label Column</label>
+                <InputText class="block w-full" v-model="form.default_label_column" />
+            </div>
+            <div class="my-2">
                 <label>Route Name</label>
                 <InputText class="block w-full" v-model="form.route_name" />
             </div>
@@ -70,6 +74,7 @@ const form = useForm({
     model_class: null,
     controller_class: null,
     route_name: null,
+    default_label_column: null,
     generated_at: null,
 });
 const createModel = async () => {

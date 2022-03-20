@@ -18,6 +18,7 @@ class StoreRequest extends FormRequest
             "model_class" => ["nullable", "string"],
             "controller_class" => ["nullable", "string"],
             "route_name" => ["nullable", "string"],
+            "default_label_column" => ["nullable", "string"],
             "generated_at" => ["nullable", "date"],
         ];
     }

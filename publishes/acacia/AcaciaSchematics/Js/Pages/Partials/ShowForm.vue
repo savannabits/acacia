@@ -17,6 +17,10 @@
             {{ model?.controller_class || "-" }}
         </AcaciaDd>
         <AcaciaDd class="my-1">
+            <template #dt>Default Label Column</template>
+            {{ model?.default_label_column || "-" }}
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
             <template #dt>Route Name</template>
             {{ model?.route_name || "-" }}
         </AcaciaDd>
