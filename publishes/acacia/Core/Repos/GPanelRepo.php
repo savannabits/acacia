@@ -76,6 +76,7 @@ class GPanelRepo
             $schematic->model_class = \Str::singular(\Str::studly(\Str::camel($tableName)));
             $schematic->controller_class = "{$schematic->model_class}Controller";
             $schematic->route_name = \Str::slug($tableName);
+
             $schematic->saveOrFail();
             $filteredCols = collect($columnListing)->only($colNames->toArray());
             $console?->comment("Creating AcaciaFields for $schematic->table_name");
@@ -102,7 +103,18 @@ class GPanelRepo
                 $field->saveOrFail();
 
             }
-
+            $labelFieldOpts = $schematic->fields()->where("is_guarded","=",false)->get()->pluck('name') ?? collect([]);
+            if ($labelFieldOpts->contains('name')) {
+                $labelField = "name";
+            } else if ($labelFieldOpts->contains('title')) {
+                $labelField = "title";
+            } elseif ($labelFieldOpts->count()) {
+                $labelField = $labelFieldOpts->first();
+            } else {
+                $labelField = $schematic->fields()->first()?->name ?? "id";
+            }
+            $schematic->default_label_column = $labelField;
+            $schematic->save();
             // BelongsTo AcaciaRelationships
             $console?->comment("Creating BelongsTo AcaciaRelationships for $schematic->table_name");
             foreach ($fks as $key => $fk) {
@@ -115,9 +127,11 @@ class GPanelRepo
                 if ($rel->is_recursive) {
                     $rel->related()->associate($schematic);
                 } else {
-                    $rel->related()->associate(Schematic::query()
-                        ->where("table_name","=", $rel->related_table)->first());
+                    $relatedSchema =Schematic::query()
+                        ->where("table_name","=", $rel->related_table)->first();
+                    $rel->related()->associate($relatedSchema);
                 }
+                $rel->label_column = $rel->related?->default_label_column;
                 $rel->schematic()->associate($schematic);
                 $rel->method = \Str::camel(\Str::singular(trim(\Str::replace("_id","",$rel->local_key))));
                 if (Str::snake($rel->method) ===$rel->local_key) {
@@ -175,15 +189,17 @@ class GPanelRepo
     public static function relationshipToField($relationship): Field
     {
         $labelFieldOpts = $relationship->related?->fields()->where("is_guarded","=",false)->get()->pluck('name') ?? collect([]);
-
-        if ($labelFieldOpts->has('name')) {
+        $defaultLabel = $relationship->related?->label_column;
+        if ($defaultLabel) {
+            $labelField = $defaultLabel;
+        } else if ($labelFieldOpts->contains('name')) {
             $labelField = "name";
-        } else if ($labelFieldOpts->has('title')) {
+        } else if ($labelFieldOpts->contains('title')) {
             $labelField = "title";
         } elseif ($labelFieldOpts->count()) {
             $labelField = $labelFieldOpts->first();
         } else {
-            $labelField = "id";
+            $labelField = $relationship->related?->fields()->first()?->name ?? "id";
         }
         $field = new Field();
         $title = implode(" ", Str::ucsplit(Str::studly($relationship->method)));

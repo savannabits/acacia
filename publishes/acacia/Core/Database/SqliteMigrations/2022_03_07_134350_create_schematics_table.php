@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('model_class')->nullable();
             $table->string('controller_class')->nullable();
             $table->string('route_name')->nullable();
+            $table->string('default_label_column')->nullable();
             $table->timestamp('generated_at')->nullable();
             $table->timestamps();
         });
