@@ -96,7 +96,7 @@ return [
             'views/index' => ['LOWER_NAME'],
             'views/master' => ['LOWER_NAME', 'STUDLY_NAME'],
             'scaffold/config' => ['STUDLY_NAME'],
-            'js/pages/index' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_INDEX_COLUMNS','JS_INDEX_TITLE','JS_INDEX_SEARCHABLE_COLS'],
+            'js/pages/index' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_INDEX_COLUMNS','JS_INDEX_TITLE','JS_SINGULAR_TITLE','JS_INDEX_SEARCHABLE_COLS'],
             'js/pages/create' => ['LOWER_NAME','STUDLY_NAME','STUDLY_SINGULAR_NAME','JS_CREATE_TITLE'],
             'js/pages/partials/create-form' => [
                 'LOWER_NAME',

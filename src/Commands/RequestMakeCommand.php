@@ -150,7 +150,7 @@ class RequestMakeCommand extends GeneratorCommand
     public function getPolicyArgument(): string
     {
         return match($this->type) {
-            "view","update","destroy" => '$this->'.Str::camel($this->getModelName()),
+            "view","update","destroy" => '$this->'.Str::snake($this->getModelName()),
             default => $this->getModelName()."::class",
         };
     }
