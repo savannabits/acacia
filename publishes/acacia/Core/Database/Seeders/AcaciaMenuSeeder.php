@@ -26,9 +26,13 @@ class AcaciaMenuSeeder extends Seeder
                 'name' => 'code.generate',
                 'guard_name' => 'web'
             ]);
+            $acPerm = Permission::query()->firstOrCreate(['name' =>'access-control'],[
+                'name' => 'access-control',
+                'guard_name' => 'web'
+            ]);
             $this->command->call('permission:cache-reset');
             $admin = Role::query()->firstOrCreate(["name" => "administrator"],["name" => "administrator","guard_name" => "web"]);
-            $admin?->givePermissionTo([$backendPerm, $genPerm]);
+            $admin?->givePermissionTo([$backendPerm, $genPerm, $acPerm]);
 
             AcaciaMenu::query()->truncate();
             $backend = new AcaciaMenu();
@@ -65,8 +69,19 @@ class AcaciaMenuSeeder extends Seeder
             $gen->position = 0;
             $gen->saveOrFail();
 
+            $gen = new AcaciaMenu();
+            $gen->id = 4;
+            $gen->title = "Access Control";
+            $gen->icon = "pi pi-lock";
+            $gen->active_pattern = "acacia.auth.*";
+            $gen->permission_name = $acPerm?->name;
+            $gen->description = "Manage Users, Roles and Permissions";
+            $gen->position = 2;
+            $gen->saveOrFail();
+
 
             $gpanelModules = ["AcaciaMenus","AcaciaFields","AcaciaRelationships","AcaciaSchematics"];
+            $authModules = ["Users","Roles","Permissions"];
 
             $modules = \Module::toCollection();
             $i = 0;
@@ -95,6 +110,11 @@ class AcaciaMenuSeeder extends Seeder
                     $title = \Str::replace("-"," ", \Str::title(str_replace("acacia-","",$module->getLowerName())));
                     $menu->title = $title;
                     $menu->active_pattern = "acacia.g-panel.".$module->getLowerName().".*";
+                } elseif (in_array($name, $authModules)) {
+                    $menu->parent_id = 4;
+                    $menu->route = "acacia.auth.".$module->getLowerName().".index";
+                    $menu->title = $title;
+                    $menu->active_pattern = "acacia.auth.".$module->getLowerName().".*";
                 }
                 $menu->saveOrFail();
                 $i++;

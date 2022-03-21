@@ -103,7 +103,8 @@ class RepositoryMakeCommand extends GeneratorCommand
          * @var Module $modelModule
          */
         $modelModule = $this->laravel['modules']->findOrFail($this->schematic->module_name);
-        return (new Stub('/repository.stub', [
+        $stub = $this->deriveSpecialStub("repository");
+        return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
             'MODEL_NAMESPACE' => '\Acacia\\'.$modelModule->getStudlyName()."\Models\\".$this->schematic->model_class,
             'MODEL_NAME' => $this->schematic->model_class,
@@ -135,7 +136,8 @@ class RepositoryMakeCommand extends GeneratorCommand
     }
     private function buildMethods(): string
     {
-        return (new Stub('/partials/repository/methods.stub',[
+        $stub = $this->deriveSpecialStub("partials/repository/methods");
+        return (new Stub($stub, [
             'MODEL_NAME' => $this->schematic->model_class,
         ]))->render();
     }

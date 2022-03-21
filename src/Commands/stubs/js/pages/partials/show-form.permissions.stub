@@ -19,7 +19,6 @@
     import { useToast } from "primevue/usetoast";
     import Message from "primevue/message";
     import AcaciaDd from "@/Components/AcaciaDd.vue";
-    $SHOW_COMPONENT_IMPORTS$
     const emit = defineEmits(["updated", "error"]);
     const props = defineProps({ model: {} });
     const flash = computed(() => usePage().props?.value?.flash) as any;
@@ -27,6 +26,7 @@
     const showModal = ref(false);
     const toast = useToast();
     const model = props.model;
+    $SHOW_COMPONENT_IMPORTS$
 </script>
 
 <style scoped>

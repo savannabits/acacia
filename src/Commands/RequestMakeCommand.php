@@ -102,7 +102,8 @@ class RequestMakeCommand extends GeneratorCommand
     {
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
-        return (new Stub('/request.stub', [
+        $stub = $this->deriveSpecialStub('request');
+        return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
             'CLASS'     => $this->getClass(),
             'MODEL_NAME'        => $this->getModelName(),
