@@ -58,6 +58,8 @@ class AcaciaInstall extends Command
         $this->call("vendor:publish",$scout);
         $this->info("Dump autoload");
         shell_exec('composer dump-autoload');
+        $this->info("Clear the config cache");
+        $this->call('config:clear');
         $this->info("3. Enable initial modules");
         $this->call("acacia:enable");
         $this->call("config:clear");
@@ -68,7 +70,10 @@ class AcaciaInstall extends Command
         $this->call('acacia:blueprint',['table' => 'Permissions']);
         $this->call('acacia:blueprint',['table' => 'Roles']);
         $this->call('acacia:blueprint',['table' => 'Users']);
+        $this->info("Ensure breeze is installed");
+        $this->call('breeze:install');
         $this->info("Attempt to install npm dependencies");
+        run_shell_command("npm install && npm run dev",$this);
         $this->call('acacia:assets-install');
         $this->call('acacia:assets-build');
         $this->warn("Done. NB: to compile assets, `cd acacia/ && npm run dev` or `cd acacia/ && npm run build`");

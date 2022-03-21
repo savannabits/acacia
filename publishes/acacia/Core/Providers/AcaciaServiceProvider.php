@@ -44,13 +44,6 @@ class AcaciaServiceProvider extends ServiceProvider
         ]);
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
         $kernel->appendMiddlewareToGroup("web",\Acacia\Core\Http\Middleware\HandleInertiaRequests::class);
-        config(['database.connections.acacia' => array(
-            'driver' => 'sqlite',
-            'url' => '',
-            'database' => module_path('Core','Database/acacia.sqlite'),
-            'prefix' => '',
-            'foreign_key_constraints' => true,
-        )]);
     }
 
     /**
@@ -61,6 +54,13 @@ class AcaciaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        config(['database.connections.acacia' => array(
+            'driver' => 'sqlite',
+            'url' => '',
+            'database' => module_path('Core','Database/acacia.sqlite'),
+            'prefix' => '',
+            'foreign_key_constraints' => true,
+        )]);
     }
 
     /**

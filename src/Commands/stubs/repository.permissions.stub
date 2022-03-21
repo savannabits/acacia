@@ -8,11 +8,10 @@ use Illuminate\Support\Str;
 use $MODEL_NAMESPACE$;
 class $CLASS$
 {
-
     private ?$MODEL_NAME$ $model = null;
     private array $relationships = [];
     /**
-     * Create a new repository instance.
+     * Create a new permissions repository instance.
      *
      * @return void
      */

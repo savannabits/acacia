@@ -5,6 +5,7 @@ namespace $NAMESPACE$;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use $MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory;
 use Laravel\Scout\Searchable;
+use Illuminate\Support\Str;
 $IMPORTS$
 
 class $CLASS$ extends \Spatie\Permission\Models\Permission
@@ -14,7 +15,7 @@ class $CLASS$ extends \Spatie\Permission\Models\Permission
     protected $fillable = $FILLABLE$;
     protected $hidden = $HIDDEN$;
     protected $casts = [$CASTS$];
-    protected $appends = ['can'];
+    protected $appends = ['can','title','group'];
 
     protected function getCanAttribute(): array
     {
@@ -29,6 +30,20 @@ class $CLASS$ extends \Spatie\Permission\Models\Permission
     protected static function newFactory(): $NAME$Factory
     {
         return $NAME$Factory::new();
+    }
+    public function getTitleAttribute(): string
+    {
+        return collect(explode('.',$this->name))->map(fn($part) => Str::title(Str::replace('-',' ',$part)))->reverse()->join(" ");
+    }
+    public function getGroupAttribute(): string
+    {
+        $explode = explode('.',$this->name);
+        if (count($explode)) {
+            $group = Str::title(str_replace("-"," ", $explode[0]));
+        } else {
+            $group = "Others";
+        }
+        return $group;
     }
     $BELONGS_TO$
     $MORPH_TO$

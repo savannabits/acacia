@@ -307,7 +307,7 @@ return [
     */
     'cache' => [
         'enabled' => false,
-        'key' => 'acacia-generator',
+        'key' => 'acacia',
         'lifetime' => 60,
     ],
 

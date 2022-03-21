@@ -13,6 +13,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Acacia\Permissions\Models\Permission;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

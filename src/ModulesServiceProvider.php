@@ -42,7 +42,7 @@ abstract class ModulesServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../publishes/config/config.php', 'acacia');
         $this->publishes([
             __DIR__.'/../publishes/config/config.php' => config_path('acacia.php'),
-            $configPath => config_path('modules.php'),
+//            $configPath => config_path('modules.php'),
         ], 'acacia-config');
         $this->publishes([
             __DIR__.'/../publishes/config/scout.php' => config_path('scout.php'),

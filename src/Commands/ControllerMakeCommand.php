@@ -189,9 +189,9 @@ class ControllerMakeCommand extends GeneratorCommand
         if ($this->option('plain') === true) {
             $stub = '/controller-plain.stub';
         } elseif ($this->option('api') === true) {
-            $stub = '/controller-api.stub';
+            $stub = $this->deriveSpecialStub("controller-api");
         } else {
-            $stub = '/controller.stub';
+            $stub = $this->deriveSpecialStub("controller");
         }
 
         return $stub;

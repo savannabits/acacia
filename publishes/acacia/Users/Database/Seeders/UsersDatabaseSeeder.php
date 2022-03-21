@@ -37,7 +37,9 @@ class UsersDatabaseSeeder extends Seeder
 
             // Give admin role
             $admin = Role::query()->where('name','=','administrator')->first();
-            $user->roles()->save($admin);
+            if (!$user->hasRole($admin)) {
+                $user->roles()->save($admin);
+            }
             \Savannabits\Acacia\Helpers\Permissions::seedPermissions($perms);
         } catch (\Throwable $e) {
             \Log::info($e);

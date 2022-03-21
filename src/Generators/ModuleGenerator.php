@@ -399,11 +399,37 @@ class ModuleGenerator extends Generator
             }
 
             $this->filesystem->put($path, $this->getStubContents($stub));
-
+            $this->console->info("Created : {$path}");
+        }
+        // Additional
+        if ($this->getPluralName() ==='Roles') {
+            $stub = "js/pages/partials/assign-perms";
+            $file = 'Js/Pages/Partials/AssignPerms.vue';
+            if (!$this->filesystem->isDirectory($dir = dirname($path))) {
+                $this->filesystem->makeDirectory($dir, 0775, true);
+            }
+            $path = $this->module->getModulePath($this->getPluralName()) . $file;
+            $this->filesystem->put($path, $this->getStubContents($stub));
             $this->console->info("Created : {$path}");
         }
     }
 
+    public function getSpecialModules(): array {
+        return [
+            "Users",
+            "Roles",
+            "Permissions"
+        ];
+    }
+    public function isSpecial(): bool
+    {
+        return in_array($this->getStudlyNameReplacement(),$this->getSpecialModules());
+    }
+    public function deriveSpecialStub($baseStub): string
+    {
+        $specialName = \Str::slug($this->getStudlyNameReplacement());
+        return $this->isSpecial() ? "/$baseStub.$specialName.stub" : "/$baseStub.stub";
+    }
     /**
      * Generate some resources.
      */
@@ -563,10 +589,16 @@ class ModuleGenerator extends Generator
      *
      * @return string
      */
-    protected function getStubContents($stub)
+    protected function getStubContents($stub): string
     {
+        $stubPath = $this->deriveSpecialStub($stub);
+        // Fallback
+        $location = __DIR__.'/../Commands/stubs'.$stubPath;
+        if (!file_exists($location)) {
+            $stubPath = "/$stub.stub";
+        }
         return (new Stub(
-            '/' . $stub . '.stub',
+            $stubPath,
             $this->getReplacement($stub)
         )
         )->render();
@@ -881,7 +913,11 @@ class ModuleGenerator extends Generator
     }
 
     public function makeMenuEntry() {
+        $auth = ['users','roles','permissions'];
         $baseRoute = "acacia.backend.".$this->getLowerNameReplacement();
+        if (in_array($this->getLowerNameReplacement(),$auth)) {
+            $baseRoute = "acacia.auth.".$this->getLowerNameReplacement();
+        }
         $exists = AcaciaMenu::query()->where("route","=","$baseRoute.index")->exists();
         if (!$exists) {
             $menu = new AcaciaMenu([
@@ -900,6 +936,10 @@ class ModuleGenerator extends Generator
     }
     public function deleteMenuEntry() {
         $route = "acacia.backend.".$this->getLowerNameReplacement().".index";
+        $auth = ['users','roles','permissions'];
+        if (in_array($this->getLowerNameReplacement(),$auth)) {
+            "acacia.auth.".$this->getLowerNameReplacement().".index";
+        }
         AcaciaMenu::query()->where("route","=", $route)->forceDelete();
     }
 }
