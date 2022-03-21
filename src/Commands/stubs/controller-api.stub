@@ -11,6 +11,8 @@ use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\StoreReques
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\UpdateRequest;
 use $MODULE_NAMESPACE$\$MODULE$\$REQUESTS_NAMESPACE$\$REQUESTS_NAME$\DestroyRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,6 +20,7 @@ use Savannabits\Acacia\Helpers\ApiResponse;
 
 class $CLASS$ extends Controller
 {
+    use AuthorizesRequests, ValidatesRequests;
     public function __construct(private ApiResponse $api, private $REPO_NAME$ $repo)
     {
     }

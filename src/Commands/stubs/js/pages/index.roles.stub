@@ -79,7 +79,7 @@
                 :maximizable="true"
                 v-model:visible="editModal"
                 :modal="true"
-                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '50vw'}"
         >
             <template #header>
                 <h4 class="font-black text-xl">

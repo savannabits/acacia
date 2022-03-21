@@ -12,7 +12,7 @@
             </form>
         </TabPanel>
         <TabPanel header="Assign Permissions">
-            Assign Permissions
+            <AssignPerms :permissions="model?.perms" :role="model"/>
         </TabPanel>
     </TabView>
 
@@ -32,11 +32,13 @@
     import axios from "axios";
     import route from "ziggy-js";
     import Label from "@/Components/Label.vue";
+    import AssignPerms from "./AssignPerms.vue";
     import {useToast} from "primevue/usetoast";
     import {Inertia} from "@inertiajs/inertia";
     import Message from "primevue/message";
     import TabView from "primevue/tabview";
     import TabPanel from "primevue/tabpanel";
+
     $EDIT_COMPONENT_IMPORTS$
     const emit = defineEmits(["updated","error"]);
     const props = defineProps({"model": {}})

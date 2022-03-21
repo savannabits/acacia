@@ -5,6 +5,7 @@ namespace $NAMESPACE$;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Throwable;
 use Illuminate\Support\Str;
+use Acacia\Permissions\Models\Permission;
 use $MODEL_NAMESPACE$;
 class $CLASS$
 {

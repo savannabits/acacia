@@ -399,7 +399,17 @@ class ModuleGenerator extends Generator
             }
 
             $this->filesystem->put($path, $this->getStubContents($stub));
-
+            $this->console->info("Created : {$path}");
+        }
+        // Additional
+        if ($this->getPluralName() ==='Roles') {
+            $stub = "js/pages/partials/assign-perms";
+            $file = 'Js/Pages/Partials/AssignPerms.vue';
+            if (!$this->filesystem->isDirectory($dir = dirname($path))) {
+                $this->filesystem->makeDirectory($dir, 0775, true);
+            }
+            $path = $this->module->getModulePath($this->getPluralName()) . $file;
+            $this->filesystem->put($path, $this->getStubContents($stub));
             $this->console->info("Created : {$path}");
         }
     }

@@ -13,11 +13,15 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Acacia\Permissions\Models\Permission;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class $CLASS$ extends Controller
 {
+    use AuthorizesRequests, ValidatesRequests;
     public function __construct(private $REPO_NAME$ $repo)
     {
     }

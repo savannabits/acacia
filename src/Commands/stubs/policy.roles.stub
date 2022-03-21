@@ -53,7 +53,8 @@ class $CLASS$
      */
     public function update(AuthUser $user, $MODEL_NAME$ $model): Response|bool
     {
-        return $user->hasPermissionTo("$this->basePerm.update") && \Str::slug($model->name)!=='administrator';
+        return $user->hasPermissionTo("$this->basePerm.update") &&
+         (\Str::slug($model->name)!=='administrator' || $user->hasRole('administrator'));
     }
 
     /**

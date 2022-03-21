@@ -1,0 +1,97 @@
+<template>
+    <div>
+        <div class="font-black text-xl mb-2 flex flex-wrap justify-between items-center">
+            <h2 class="">Assign Permissions</h2>
+            <div class="space-x-2">
+                <Button class="p-button-success" icon="pi pi-check" type="button" @click="toggleAll(true)"
+                        label="Assign All"/>
+                <Button class="p-button-danger text-white" type="button" @click="toggleAll(false)" icon='pi pi-ban' label="Revoke All"/>
+            </div>
+        </div>
+        <hr>
+        <div class="p-4 mt-2 md:grid grid-cols-2 border rounded">
+            <div v-for="(perms, groupIndex) of permissions" :key="groupIndex" class="border-b-2 mb-2">
+                <div class="flex space-x-2 flex-wrap">
+                    <h3 class="font-black text-xl pb-2">{{ groupIndex }}</h3>
+                    <div class="space-x-2">
+                        <Button @click.prevent="togglePermGroup(perms,true)"
+                                class="p-button-success p-button-sm text-sm" label="Assign" icon="pi pi-check"/>
+                        <Button @click.prevent="togglePermGroup(perms,false)"
+                                class="p-button-danger p-button-sm text-sm" label="Revoke" icon="pi pi-ban"/>
+                    </div>
+                </div>
+                <div style="cursor: pointer" v-for="(perm, idx) of perms" :key="idx"
+                     class=" sm:col-span-4 sm:pl-10 flex border-b border-gray-100 py-3 items-center text-gray-600">
+                    <Checkbox :id="perm.name" @change="togglePerm(perm)" :name="perm.name" v-model="perm.checked"
+                              :binary="true" />
+                    <label style="cursor: pointer" :for="perm.name" :class="`text-gray-400 hover:text-gray-600`"
+                           class="inline-block font-black text-xl ml-3">{{ perm.title }}</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import Axios from "axios";
+import Button from "primevue/button";
+import Checkbox from "primevue/checkbox";
+import route from "ziggy-js";
+
+const props = defineProps({
+    permissions: Object,
+    role: {
+        required: true,
+        type: Object,
+    }
+});
+
+const emit = defineEmits(['toggle-success', 'toggle-error', 'group-toggle-success']);
+const togglePerm = async (perm, all=false, checked=true) => {
+    Axios.post(route("api.v1.roles.role.assign-permission", props.role?.id), {
+        permission: perm,
+        all: all,
+        checked: checked,
+    })
+        .then((res) => {
+            emit("toggle-success", res.data?.message);
+        })
+        .catch((err) => {
+            emit(
+                "toggle-error",
+                err.response?.data?.message || err.message || err
+            );
+        });
+};
+const toggleAll = async (checked) => {
+    await togglePerm(null,true,checked)
+    emit(
+        "group-toggle-success",
+        `All permissions have been ${checked ? "Assigned." : "Revoked."}`
+    );
+};
+const togglePermGroup = async (permGroup, checked) => {
+    for (const key in permGroup) {
+        if (!permGroup.hasOwnProperty(key)) {
+            return false;
+        }
+        let perm = permGroup[key];
+        if (perm.checked && !checked) {
+            // Uncheck
+            perm.checked = false;
+            await togglePerm(perm);
+        } else if (checked && !perm.checked) {
+            // Check
+            perm.checked = true;
+            await togglePerm(perm);
+        } else {
+        }
+    }
+    emit('group-toggle-success', `All permissions in the group have been ${checked ? 'Assigned.' : 'Revoked.'}`);
+}
+</script>
+
+<style scoped>
+
+</style>
