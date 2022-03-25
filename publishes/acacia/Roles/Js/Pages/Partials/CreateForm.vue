@@ -45,7 +45,7 @@ const showModal = ref(false);
 const toast = useToast();
 const form = useForm({ name: null, guard_name: null });
 const createModel = async () => {
-    form.post(route("acacia.backend.roles.store"), {
+    form.post(route("acacia.auth.roles.store"), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

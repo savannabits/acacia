@@ -3,7 +3,7 @@
     <Backend>
         <template #header>
             <div class="flex items-center flex-wrap gap-x-2">
-                <BackLink :href="route('acacia.backend.users.index')" />
+                <BackLink :href="route('acacia.auth.users.index')" />
                 <h4 class="font-bold text-xl">Edit User</h4>
             </div>
         </template>
@@ -40,7 +40,7 @@ const toast = useToast();
 
 const onUpdated = (e) => {
     // console.log(e.payload);
-    Inertia.visit(route("acacia.backend.users.index"));
+    Inertia.visit(route("acacia.auth.users.index"));
 };
 </script>
 <style scoped></style>

@@ -3,7 +3,7 @@
     <Backend>
         <template #header>
             <div class="flex items-center flex-wrap gap-x-2">
-                <BackLink :href="route('acacia.backend.roles.index')" />
+                <BackLink :href="route('acacia.auth.roles.index')" />
                 <h4 class="font-bold text-xl">New Role</h4>
             </div>
         </template>
@@ -40,7 +40,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const onCreated = (e) => {
     // console.log(e.payload);
-    Inertia.visit(route("acacia.backend.roles.index"));
+    Inertia.visit(route("acacia.auth.roles.index"));
 };
 </script>
 <style scoped></style>

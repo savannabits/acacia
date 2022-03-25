@@ -108,9 +108,7 @@
                     label="Open in a Page"
                     icon="pi pi-window"
                     @click="
-                        $inertia.visit(
-                            route('acacia.backend.permissions.create')
-                        )
+                        $inertia.visit(route('acacia.auth.permissions.create'))
                     "
                     class="p-button-text"
                 />
@@ -144,10 +142,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route(
-                                'acacia.backend.permissions.show',
-                                currentModel
-                            )
+                            route('acacia.auth.permissions.show', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -186,10 +181,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route(
-                                'acacia.backend.permissions.edit',
-                                currentModel
-                            )
+                            route('acacia.auth.permissions.edit', currentModel)
                         )
                     "
                     class="p-button-text"

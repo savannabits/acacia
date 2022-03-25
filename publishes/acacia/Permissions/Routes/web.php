@@ -13,7 +13,7 @@
 
 Route::prefix(config("acacia.route_prefix", "acacia"))
     ->middleware(["auth:sanctum"])
-    ->as("acacia.backend.")
+    ->as("acacia.auth.")
     ->group(function () {
         Route::resource("permissions", "PermissionController");
     });

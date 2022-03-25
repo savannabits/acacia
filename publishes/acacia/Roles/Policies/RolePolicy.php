@@ -54,7 +54,8 @@ class RolePolicy
     public function update(AuthUser $user, Role $model): Response|bool
     {
         return $user->hasPermissionTo("$this->basePerm.update") &&
-            \Str::slug($model->name) !== "administrator";
+            (\Str::slug($model->name) !== "administrator" ||
+                $user->hasRole("administrator"));
     }
 
     /**

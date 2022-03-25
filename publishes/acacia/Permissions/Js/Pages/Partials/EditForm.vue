@@ -46,7 +46,7 @@ const toast = useToast();
 const model = props.model;
 const form = useForm({ ...model });
 const updateModel = async () => {
-    form.put(route("acacia.backend.permissions.update", model), {
+    form.put(route("acacia.auth.permissions.update", model), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({
