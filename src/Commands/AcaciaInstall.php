@@ -3,7 +3,9 @@
 namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
+use Savannabits\Acacia\Helpers\Helpers;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Process\Process;
 
 class AcaciaInstall extends Command
 {
@@ -45,7 +47,10 @@ class AcaciaInstall extends Command
         $scout =  ['--provider' => 'Laravel\Scout\ScoutServiceProvider'];
         $this->alert("Begin Installation");
         if ($force) {
-            shell_exec('rm -rf acacia/');
+            Helpers::runShellCommand('rm -rf acacia/');
+            if (file_exists(config_path('acacia.php'))) {
+                Helpers::runShellCommand('rm -rf '.config_path('acacia.php'));
+            }
         }
         $this->info("1. Publishing files");
         $this->info("   a. Publishing acacia configs");
@@ -57,27 +62,32 @@ class AcaciaInstall extends Command
         $this->info("   d. Publishing laravel scout config");
         $this->call("vendor:publish",$scout);
         $this->info("Dump autoload");
-        shell_exec('composer dump-autoload');
-        $this->info("Clear the config cache");
-        $this->call('config:clear');
+        Helpers::runShellCommand('composer dump-autoload');
         $this->info("3. Enable initial modules");
         $this->call("acacia:enable");
-        $this->call("config:clear");
+        $this->info("Configure acacia db config temporarily");
+        Helpers::configureAcaciaDb();
+        Helpers::runShellCommand('composer dump-autoload', $this);
         $this->info("2. Running GPanel Migrations");
         $this->call('migrate:fresh',['--path' => 'acacia/Core/Database/SqliteMigrations', '--database' =>'acacia']);
         $this->info("2. Running Initial Modules Seeders");
         $this->call('acacia:seed');
+        $this->info("Ensure breeze is installed");
+        $this->call('breeze:install');
+        $this->info("Attempt to install the app's npm dependencies");
+        Helpers::runShellCommand("npm install && npm run dev", $this);
+        $this->info("Attempt to install acacia's npm dependencies");
+        Helpers::runShellCommand("cd acacia && npm install && npm run build", $this);
+        $this->alert('Installation Complete');
+        $this->warn("NB: To install npm dependencies: `cd acacia/ && npm install` or simply run `php artisan acacia:assets-install`");
+        $this->warn("NB: to compile npm assets: `cd acacia/ && npm run dev` or `cd acacia/ && npm run build`, or run the command `php artisan acacia:assets-build`");
+        return 0;
+
+        /**
         $this->call('acacia:blueprint',['table' => 'Permissions']);
         $this->call('acacia:blueprint',['table' => 'Roles']);
         $this->call('acacia:blueprint',['table' => 'Users']);
-        $this->info("Ensure breeze is installed");
-        $this->call('breeze:install');
-        $this->info("Attempt to install npm dependencies");
-        run_shell_command("npm install && npm run dev",$this);
-        $this->call('acacia:assets-install');
-        $this->call('acacia:assets-build');
-        $this->warn("Done. NB: to compile assets, `cd acacia/ && npm run dev` or `cd acacia/ && npm run build`");
-        $this->alert('Installation Complete');
-        return 0;
+         */
+
     }
 }
