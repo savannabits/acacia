@@ -70,7 +70,7 @@ const form = useForm({
     remember_token: null,
 });
 const createModel = async () => {
-    form.post(route("acacia.backend.users.store"), {
+    form.post(route("acacia.auth.users.store"), {
         onSuccess: (res) => {
             const fl = res.props.flash as any;
             toast.add({

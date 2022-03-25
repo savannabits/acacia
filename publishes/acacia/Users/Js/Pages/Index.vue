@@ -118,9 +118,7 @@
                 <Button
                     label="Open in a Page"
                     icon="pi pi-window"
-                    @click="
-                        $inertia.visit(route('acacia.backend.users.create'))
-                    "
+                    @click="$inertia.visit(route('acacia.auth.users.create'))"
                     class="p-button-text"
                 />
                 <Button
@@ -153,7 +151,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.backend.users.show', currentModel)
+                            route('acacia.auth.users.show', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -192,7 +190,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.backend.users.edit', currentModel)
+                            route('acacia.auth.users.edit', currentModel)
                         )
                     "
                     class="p-button-text"

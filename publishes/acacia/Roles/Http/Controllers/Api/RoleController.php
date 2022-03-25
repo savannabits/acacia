@@ -15,9 +15,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Savannabits\Acacia\Helpers\ApiResponse;
+use Acacia\Permissions\Models\Permission;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class RoleController extends Controller
 {
+    use AuthorizesRequests, ValidatesRequests;
     public function __construct(private ApiResponse $api, private Roles $repo)
     {
     }
@@ -166,5 +170,29 @@ class RoleController extends Controller
                 ->message($e->getMessage())
                 ->send();
         }
+    }
+
+    public function assignPermission(Request $request, Role $role): JsonResponse
+    {
+        $this->authorize("update", $role);
+        $validated = $request->validate([
+            "permission" => ["nullable", "array"],
+            "all" => ["required", "boolean"],
+            "checked" => ["required", "boolean"],
+        ]);
+        if ($validated["all"]) {
+            $res = $this->repo
+                ->setModel($role)
+                ->toggleAllPermissions($validated["checked"]);
+        } else {
+            $res = $this->repo
+                ->setModel($role)
+                ->assignPermission($validated["permission"]);
+        }
+        return $this->api
+            ->success()
+            ->message("Role assignment updated")
+            ->payload($res)
+            ->send();
     }
 }

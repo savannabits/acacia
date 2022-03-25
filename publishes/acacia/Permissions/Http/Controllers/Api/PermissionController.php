@@ -15,9 +15,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Savannabits\Acacia\Helpers\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class PermissionController extends Controller
 {
+    use AuthorizesRequests, ValidatesRequests;
     public function __construct(
         private ApiResponse $api,
         private Permissions $repo

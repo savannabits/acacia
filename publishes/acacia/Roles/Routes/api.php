@@ -17,6 +17,10 @@ Route::prefix("v1")
     ->middleware(["auth:sanctum"])
     ->as("api.v1.")
     ->group(function () {
+        Route::post(
+            "roles/{role}/assign-permission",
+            "Api\RoleController@assignPermission"
+        )->name("roles.role.assign-permission");
         Route::get("roles/dt", "Api\RoleController@dt")->name("roles.dt");
         Route::apiResource("roles", "Api\RoleController");
     });

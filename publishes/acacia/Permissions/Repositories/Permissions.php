@@ -11,7 +11,7 @@ class Permissions
     private ?Permission $model = null;
     private array $relationships = [];
     /**
-     * Create a new policy instance.
+     * Create a new permissions repository instance.
      *
      * @return void
      */
@@ -57,6 +57,7 @@ class Permissions
     {
         $relationships = $this->relationships;
         $this->model->load($relationships);
+        $this->model->assigned = \Auth::user()->hasPermissionTo($this->model);
         return $this->model;
     }
 

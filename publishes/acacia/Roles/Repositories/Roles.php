@@ -5,13 +5,14 @@ namespace Acacia\Roles\Repositories;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Throwable;
 use Illuminate\Support\Str;
+use Acacia\Permissions\Models\Permission;
 use Acacia\Roles\Models\Role;
 class Roles
 {
     private ?Role $model = null;
     private array $relationships = [];
     /**
-     * Create a new policy instance.
+     * Create a new repository instance.
      *
      * @return void
      */
@@ -57,6 +58,13 @@ class Roles
     {
         $relationships = $this->relationships;
         $this->model->load($relationships);
+        $this->model->load("permissions");
+        $this->model->perms = Permission::all()
+            ->map(function ($perm) {
+                $perm->checked = $this->model->hasDirectPermission($perm);
+                return $perm->toArray();
+            })
+            ->groupBy("group");
         return $this->model;
     }
 
@@ -85,5 +93,29 @@ class Roles
     {
         $q = Role::query();
         return \PrimevueDatatables::of($q)->make();
+    }
+
+    public function assignPermission(array $data): bool
+    {
+        $perm = Permission::whereId($data["id"])->firstOrFail();
+        if ($data["checked"]) {
+            $this->model->givePermissionTo($perm);
+        } else {
+            if ($this->model->hasPermissionTo($perm)) {
+                $this->model->revokePermissionTo($perm);
+            }
+        }
+        return $this->model->hasPermissionTo($perm);
+    }
+
+    public function toggleAllPermissions(bool $checked): bool
+    {
+        $all = Permission::all();
+        if ($checked) {
+            $this->model->givePermissionTo($all);
+        } else {
+            $this->model->revokePermissionTo($all);
+        }
+        return $checked;
     }
 }

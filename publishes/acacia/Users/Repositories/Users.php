@@ -11,7 +11,7 @@ class Users
     private ?User $model = null;
     private array $relationships = [];
     /**
-     * Create a new policy instance.
+     * Create a new repository instance.
      *
      * @return void
      */

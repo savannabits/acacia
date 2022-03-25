@@ -107,9 +107,7 @@
                 <Button
                     label="Open in a Page"
                     icon="pi pi-window"
-                    @click="
-                        $inertia.visit(route('acacia.backend.roles.create'))
-                    "
+                    @click="$inertia.visit(route('acacia.auth.roles.create'))"
                     class="p-button-text"
                 />
                 <Button
@@ -142,7 +140,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.backend.roles.show', currentModel)
+                            route('acacia.auth.roles.show', currentModel)
                         )
                     "
                     class="p-button-text"
@@ -165,7 +163,7 @@
                 '960px': '75vw',
                 '540px': '100vw',
             }"
-            :style="{ width: '35vw' }"
+            :style="{ width: '50vw' }"
         >
             <template #header>
                 <h4 class="font-black text-xl">Edit Single Role</h4>
@@ -181,7 +179,7 @@
                     icon="pi pi-window"
                     @click="
                         $inertia.visit(
-                            route('acacia.backend.roles.edit', currentModel)
+                            route('acacia.auth.roles.edit', currentModel)
                         )
                     "
                     class="p-button-text"
