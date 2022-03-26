@@ -45,8 +45,8 @@
 
     <!-- Content -->
     <div class="relative">
-      <h1 class="text-2xl md:text-3xl text-gray-800 font-bold mb-1">Good afternoon, Acme Inc. 👋</h1>
-      <p>Here is what’s happening with your projects today:</p>
+      <h1 class="text-2xl md:text-3xl text-gray-800 font-bold mb-1">Greetings {{ $page.props.auth?.user?.name }}! 👋</h1>
+      <p>Here is a summary of what's happening in your system today:</p>
     </div>
 
   </div>
