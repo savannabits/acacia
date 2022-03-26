@@ -29,7 +29,7 @@
                 </button>
                 <!-- Logo -->
                 <a class="block" :href="route('dashboard')">
-                    <img alt="Acacia" :src="logo">
+                    <img width="160" alt="Acacia" :src="logo">
                 </a>
 <!--                <h4 class="font-black text-gray-100 uppercase" :class="!sidebarExpanded && 'hidden'">{{$page.props.acacia?.sidebar_heading}}</h4>-->
             </div>
@@ -69,7 +69,7 @@
 
 <script>
 import {ref, onMounted, onUnmounted, watch, reactive} from 'vue'
-import logo from "@/images/logo.png"
+import logo from "@/images/logo.svg"
 import SidebarLinkGroup from '@/partials/SidebarLinkGroup.vue'
 
 export default {
