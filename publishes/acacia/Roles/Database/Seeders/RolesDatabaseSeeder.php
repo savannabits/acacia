@@ -2,8 +2,10 @@
 
 namespace Acacia\Roles\Database\Seeders;
 
+use Acacia\Roles\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class RolesDatabaseSeeder extends Seeder
 {
@@ -26,6 +28,17 @@ class RolesDatabaseSeeder extends Seeder
             "roles.review",
         ];
         try {
+            // Create administrator if not existing
+            DB::table(config('permission.table_names.roles','roles'))
+                ->where('name','=','administrator')
+                ->existsOr(function () {
+                    DB::table(config('permission.table_names.roles','roles'))->insertGetId([
+                        'name' =>'administrator',
+                        'guard_name' => 'web',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+            });
             \Savannabits\Acacia\Helpers\Permissions::seedPermissions($perms);
         } catch (\Throwable $e) {
             \Log::info($e);
