@@ -43,7 +43,10 @@ class AcaciaServiceProvider extends ServiceProvider
             AssignRoleCommand::class,
         ]);
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-        $kernel->appendMiddlewareToGroup("web",\Acacia\Core\Http\Middleware\HandleInertiaRequests::class);
+        $isAcacia = \Request::is(config('acacia.route_prefix','admin')."*");
+        if ($isAcacia) {
+            $kernel->appendMiddlewareToGroup("web",\Acacia\Core\Http\Middleware\HandleInertiaRequests::class);
+        }
     }
 
     /**
