@@ -1,10 +1,10 @@
 <template>
     <SidebarLinkGroup v-slot="parentLink" :activeCondition="active">
-        <a class="block py-1 text-gray-200 hover:text-white truncate transition duration-150" :class="active && 'hover:text-gray-200'" href="#0" @click.prevent="sidebarExpanded ? parentLink.handleClick() : expandSidebar(parentLink)">
+        <a class="block py-1 text-gray-200 hover:text-primary truncate transition duration-150" :class="active && 'hover:text-gray-200'" href="#0" @click.prevent="sidebarExpanded ? parentLink.handleClick() : expandSidebar(parentLink)">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <slot name="icon">
-                        <i v-if="icon" :class="`${icon} ${active && 'text-indigo-500'}`"></i>
+                        <i v-if="icon" :class="`${icon} ${active && 'text-primary'}`"></i>
                     </slot>
                     <span class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                         <slot name="title">

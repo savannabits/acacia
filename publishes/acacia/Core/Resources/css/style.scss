@@ -6,7 +6,6 @@
 @import './additional-styles/flatpickr.scss';
 @import './additional-styles/theme.scss';
 @import './datatables.scss';
-
 // See Alpine.js: https://github.com/alpinejs/alpine#x-cloak
 [x-cloak] {
     display: none;
@@ -14,4 +13,20 @@
 
 @media screen and (max-width: theme('screens.lg')) {
     [x-cloak="lg"] { display: none; }
+}
+.text-primary {
+    color: var(--primary-color)
+}
+.text-primary-200 {
+    color: var(--primary-color);
+}
+.text-primary-300 {
+    color: var(--primary-color);
+}
+.bg-primary-300 {
+    background-color: var(--primary-color);
+}
+.bg-primary {
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
 }
