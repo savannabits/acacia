@@ -8,7 +8,7 @@
                     v-if="!menu.has_children && menu.shown"
                     :href="menu.href" :active="menu.active">
                     <template #icon>
-                        <i class="menu.icon" :class="[menu.active && 'text-indigo-300', menu.icon]"></i>
+                        <i class="menu.icon" :class="[menu.active && 'text-primary', menu.icon]"></i>
                     </template>
                     {{ menu.title }}
                 </SidebarLink>

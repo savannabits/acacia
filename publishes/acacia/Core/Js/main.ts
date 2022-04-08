@@ -5,10 +5,16 @@ import ToastService from "primevue/toastservice"
 import '~/css/app.css';
 import '~/css/style.scss';
 // import "primevue/resources/themes/tailwind-light/theme.css";
-import "primevue/resources/themes/mdc-light-indigo/theme.css";
+// import "primevue/resources/themes/mdc-light-indigo/theme.css";
+// import "primevue/resources/themes/mdc-light-deeppurple/theme.css";
+// import "primevue/resources/themes/bootstrap4-light-blue/theme.css";
 // import "primevue/resources/themes/fluent-light/theme.css";
 // import "primevue/resources/themes/saga-purple/theme.css";
-import "primevue/resources/primevue.min.css";
+// import "primevue/resources/themes/lara-light-teal/theme.css";
+// import "primevue/resources/themes/lara-light-blue/theme.css";
+import "primevue/resources/themes/lara-light-blue/theme.css";
+// import "primevue/resources/themes/vela-green/theme.css";
+import "~/css/primevue.css";
 import "primeicons/primeicons.css";
 import { createApp, h } from 'vue';
 import {createInertiaApp, Link} from '@inertiajs/inertia-vue3';
