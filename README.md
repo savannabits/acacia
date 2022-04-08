@@ -58,11 +58,9 @@ php artisan acacia:install
 **Top: If you would like to force the replacement of existing Acacia files, add the --force option to the command above**
 From here, you are ready to generate code and interact with your new backend.
 
-## Acacia's Anatomy
-
 ## Preview & Documentation
 
-See a Preview or sample of the backend that you will get using this package [HERE](https://acacia.savannabits.com/admin).
+See a Preview or sample of the backend that you will get using this package [HERE](https://acacia.savannabits.com/backend).
 
 Username: `admin@savannabits.com`<br>
 Password: `password`
