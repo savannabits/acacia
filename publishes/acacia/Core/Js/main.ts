@@ -15,7 +15,9 @@ import {createInertiaApp, Link} from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import route from "ziggy-js";
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
-
+const currencyFormatter = (currency='ksh') => Intl.NumberFormat('en-US',{style: 'currency',currency: currency});
+const formatter = (dp) => Intl.NumberFormat('en-US',{minimumFractionDigits: dp,});
+const unitFormatter = (unit='kilogram') => Intl.NumberFormat('en-US',{style: 'unit', unit: unit});
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async name => {
@@ -30,7 +32,7 @@ createInertiaApp({
             .use(ConfirmationService)
             .use(ToastService)
             .component('router-link', Link)
-            .mixin({ methods: { route } })
+            .mixin({ methods: { route, currencyFormatter, unitFormatter, formatter } })
             .mount(el);
     },
 } as any);
