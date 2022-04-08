@@ -74,10 +74,10 @@ if (!function_exists("prepare_menu")) {
             if ($mod) {
                 $module = Module::find($mod);
             }
-            return app()->environment('production')
+            return (app()->environment('production')
                 && $mod
                 && in_array($mod, $devModules)
-                && $module;
+                && $module) || !$item->active;
         })->map(function (AcaciaMenu $item) {
             $item->has_children = !!$item->children()->count();
             if ($item->has_children) {

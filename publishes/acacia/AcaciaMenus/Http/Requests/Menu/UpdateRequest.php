@@ -24,6 +24,7 @@ class UpdateRequest extends FormRequest
             "module_name" => ["nullable", "string"],
             "description" => ["nullable", "string"],
             "parent" => ["nullable", "array"],
+            "active" =>["sometimes","boolean"],
         ];
     }
 

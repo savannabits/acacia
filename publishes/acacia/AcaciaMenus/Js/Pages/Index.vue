@@ -43,34 +43,14 @@
                             <i :class="data?.icon" :title="data.icon"></i>
                         </template>
                     </Column>
-                    <Column
-                        field="created_at"
-                        header="Created At"
-                        :sortable="true"
-                    >
+                    <Column field="active" header="Active" :sortable="true">
                         <template #body="{ data }">
-                            <span>{{
-                                data.created_at
-                                    ? dayjs(data.created_at).format(
-                                          "MMM DD, YYYY hh:mm a"
-                                      )
-                                    : "-"
-                            }}</span>
-                        </template>
-                    </Column>
-                    <Column
-                        field="updated_at"
-                        header="Updated At"
-                        :sortable="true"
-                    >
-                        <template #body="{ data }">
-                            <span>{{
-                                data.updated_at
-                                    ? dayjs(data.updated_at).format(
-                                          "MMM DD, YYYY hh:mm a"
-                                      )
-                                    : "-"
-                            }}</span>
+                            <Badge
+                                severity="success"
+                                v-if="data.active"
+                                value="YES"
+                            />
+                            <Badge severity="danger" v-else value="NO" />
                         </template>
                     </Column>
 

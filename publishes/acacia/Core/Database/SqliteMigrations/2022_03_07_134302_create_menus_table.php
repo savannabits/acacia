@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('permission_name')->nullable();
             $table->string('module_name')->nullable();
             $table->string('description')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

@@ -21,6 +21,16 @@
             {{ model?.url || "-" }}
         </AcaciaDd>
         <AcaciaDd class="my-1">
+            <template #dt>Active</template>
+            <Tag
+                v-if="model?.active"
+                icon="pi pi-check"
+                severity="success"
+                value="Yes"
+            />
+            <Tag v-else icon="pi pi-times" severity="danger" value="No" />
+        </AcaciaDd>
+        <AcaciaDd class="my-1">
             <template #dt>Active Pattern</template>
             {{ model?.active_pattern || "-" }}
         </AcaciaDd>
