@@ -17,6 +17,7 @@ class Menu extends AcaciaMenu
         "icon",
         "route",
         "url",
+        "active",
         "active_pattern",
         "position",
         "permission_name",
@@ -24,7 +25,7 @@ class Menu extends AcaciaMenu
         "description",
     ];
     protected $hidden = ["password", "remember_token"];
-    protected $casts = ["created_at" => "datetime", "updated_at" => "datetime"];
+    protected $casts = ["active" =>"boolean","created_at" => "datetime", "updated_at" => "datetime"];
     protected $appends = ["can"];
 
     protected function getCanAttribute(): array

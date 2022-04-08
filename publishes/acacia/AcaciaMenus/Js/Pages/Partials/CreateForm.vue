@@ -40,6 +40,10 @@
                 <label>Description</label>
                 <InputText class="block w-full" v-model="form.description" />
             </div>
+            <div class="my-2 flex items-center flex-wrap gap-x-2">
+                <label>Active</label>
+                <InputSwitch class="block" v-model="form.active" />
+            </div>
             <div class="my-2">
                 <label>Parent</label>
                 <AcaciaRichSelect
@@ -78,6 +82,7 @@ import { useToast } from "primevue/usetoast";
 import { Inertia } from "@inertiajs/inertia";
 import Message from "primevue/message";
 import InputText from "primevue/inputtext";
+import InputSwitch from "primevue/inputswitch";
 import AcaciaRichSelect from "@/Components/AcaciaRichSelect.vue";
 const emit = defineEmits(["created", "error"]);
 const flash = computed(() => usePage().props?.value?.flash) as any;
@@ -95,6 +100,7 @@ const form = useForm({
     module_name: null,
     description: null,
     parent: null,
+    active: true,
 });
 const createModel = async () => {
     form.post(route("acacia.g-panel.acacia-menus.store"), {
