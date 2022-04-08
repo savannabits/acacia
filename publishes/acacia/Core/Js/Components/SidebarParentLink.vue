@@ -13,7 +13,7 @@
                     </span>
                 </div>
                 <!-- Icon -->
-                <div class="flex shrink-0 ml-2">
+                <div class="flex shrink-0 ml-0">
                     <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400" :class="parentLink.expanded && 'transform rotate-180'" viewBox="0 0 12 12">
                         <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                     </svg>
@@ -21,7 +21,7 @@
             </div>
         </a>
         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-            <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+            <ul class="pl-2 mt-1" :class="!parentLink.expanded && 'hidden'">
                 <slot/>
             </ul>
         </div>

@@ -85,10 +85,27 @@ if (!function_exists("prepare_menu")) {
             } else {
                 $item->href = $item->route ? (Route::has($item->route) ? route($item->route) : '') : $item->url;
             }
-            $item->active = $item->active_pattern && Route::is($item->active_pattern);
+            if ($item->has_children) {
+                //TODO: activate menu if it has children and one of the children is active
+                $item->active = menu_has_active_child($item->children);
+            } else {
+                $item->active = $item->active_pattern && Route::is($item->active_pattern);
+            }
             $item->shown = Auth::check() && (!$item->permission_name || Auth::user()->hasPermissionTo($item->permission_name));
             return $item;
         });
+    }
+}
+
+if (!function_exists("menu_has_active_child")) {
+    function menu_has_active_child(Collection $children): bool
+    {
+        foreach ($children as $child) {
+            if ($child->active) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -103,5 +120,19 @@ if (!function_exists("get_default_html_field")) {
             "datetime" => FormFields::DATETIME,
             default => FormFields::TEXT,
         };
+    }
+}
+
+if (!function_exists("getGlobalCan")) {
+    function getGlobalCan(): array
+    {
+        $modules = \Module::all();
+        $names = collect($modules)->keys()->reject(fn($item) => in_array($item,['Core']));
+        $models = $names->map(fn($name) => ["namespace" => "Acacia\\$name\\Models\\".Str::singular($name),"name" => Str::singular($name)]);
+        $perms = $models->flatMap(fn($model) => [
+            "viewAny".$model["name"] => Auth::check() && Auth::user()->can("viewAny",$model['namespace']),
+            "create".$model["name"] => Auth::check() && Auth::user()->can("create", $model['namespace']),
+        ]);
+        return $perms->toArray();
     }
 }

@@ -7,7 +7,7 @@
             <WelcomeBanner/>
         </template>
         <div class="mx-2">
-            Populate your backend analytics here.
+            Here is the backend
         </div>
     </Backend>
 </template>
