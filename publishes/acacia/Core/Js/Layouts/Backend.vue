@@ -19,11 +19,26 @@
                                    :active="menu.active">
                     <template v-for="(child, idx) of menu.children"
                               :key="idx">
-                        <SidebarLink v-if="child.shown" :submenu="true" :href="child.href"
+                        <SidebarLink v-if="!child.has_children && child.shown" :submenu="true" :href="child.href"
                                      :icon="child.icon"
                                      :active="child.active">
                             {{ child.title }}
                         </SidebarLink>
+                        <SidebarParentLink v-else-if="child.shown" :submenu="true" :sidebar-expanded="slotProps.sidebarExpanded"
+                                           @expandSidebar="slotProps.expandSidebar"
+                                           :icon="child.icon"
+                                           :header="child.title"
+                                           :active="child.active">
+                            <template v-for="(grandchild, idx) of child.children"
+                                      :key="idx">
+                                <SidebarLink v-if=" grandchild.shown" :submenu="true" :href="grandchild.href"
+                                             :icon="grandchild.icon"
+                                             :active="grandchild.active">
+                                    {{ grandchild.title }}
+                                </SidebarLink>
+
+                            </template>
+                        </SidebarParentLink>
                     </template>
                 </SidebarParentLink>
             </template>

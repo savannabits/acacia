@@ -42,13 +42,10 @@
                         </router-link>
                     </li>
                     <li>
-                        <form method="POST" @submit.prevent="logout">
-                            <button
-                                type="submit"
-                                class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                                @click="dropdownOpen = false">Sign Out
-                            </button>
-                        </form>
+                        <router-link
+                            class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                            :href="route('logout')" @click="dropdownOpen = false">Sign Out
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -60,8 +57,6 @@
 import {ref, onMounted, onUnmounted, computed} from 'vue'
 import {usePage} from "@inertiajs/inertia-vue3";
 import userAvatar from "@/images/user-avatar-32.png";
-import {Inertia} from "@inertiajs/inertia";
-import route from "ziggy-js";
 
 export default {
     name: 'DropdownProfile',
@@ -84,10 +79,6 @@ export default {
             if (!dropdownOpen.value || keyCode !== 27) return
             dropdownOpen.value = false
         }
-        const logout = async () => {
-            Inertia.post(route('logout'));
-            window.location.reload()
-        }
 
         onMounted(() => {
             document.addEventListener('click', clickHandler)
@@ -105,7 +96,6 @@ export default {
             dropdownOpen,
             trigger,
             dropdown,
-            logout
         }
     }
 }

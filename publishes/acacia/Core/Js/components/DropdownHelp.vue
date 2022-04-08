@@ -29,13 +29,13 @@
           @focusout="dropdownOpen = false"
         >
           <li>
-            <a href="/docs" class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3" @click="dropdownOpen = false">
+            <router-link class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3" to="#0" @click="dropdownOpen = false">
               <svg class="w-3 h-3 fill-current text-indigo-300 shrink-0 mr-2" viewBox="0 0 12 12">
                 <rect y="3" width="12" height="9" rx="1" />
                 <path d="M2 0h8v2H2z" />
               </svg>
               <span>Documentation</span>
-            </a>
+            </router-link>
           </li>
           <li>
             <router-link class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3" to="#0" @click="dropdownOpen = false">
@@ -54,7 +54,7 @@
             </router-link>
           </li>
         </ul>
-      </div>
+      </div> 
     </transition>
   </div>
 </template>

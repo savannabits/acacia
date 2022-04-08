@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
      * @param Request $request
      * @return array
      */
-    public function share(Request $request)
+    public function share(Request $request): array
     {
         $routes = \Route::getRoutes();
         $routeNames = collect($routes->getRoutesByName())->keys()->toArray();
@@ -56,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                     ? $request->user()->only('id', 'name', 'email')
                     : null,
             ],
+            "userCan" => getGlobalCan(),
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'payload' => $request->session()->get('payload')
