@@ -11,12 +11,14 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Savannabits\Acacia\Contracts\ActivatorInterface;
 use Savannabits\Acacia\FileRepository;
 use Savannabits\Acacia\Module;
 use Savannabits\Acacia\Support\Config\GenerateConfigReader;
 use Savannabits\Acacia\Support\Stub;
+use Spatie\Permission\Models\Permission;
 
 class ModuleGenerator extends Generator
 {
@@ -940,6 +942,7 @@ class ModuleGenerator extends Generator
         if (in_array($this->getLowerNameReplacement(),$auth)) {
             "acacia.auth.".$this->getLowerNameReplacement().".index";
         }
+        Permission::query()->where("name",'like',$this->getLowerNameReplacement().'.%')->forceDelete();
         AcaciaMenu::query()->where("route","=", $route)->forceDelete();
     }
 }
