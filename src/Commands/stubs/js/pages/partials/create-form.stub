@@ -1,5 +1,5 @@
 <template>
-    <form v-if="$page.props.can?.create" @submit.prevent="createModel">
+    <form v-if="$page.props.userCan?.create$MODEL_NAME$" @submit.prevent="createModel">
         <div class="">
             $CREATE_FORM_FIELDS$
         </div>

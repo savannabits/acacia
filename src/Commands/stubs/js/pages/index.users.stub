@@ -8,8 +8,8 @@
         </template>
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
-                <div class="flex flex-wrap items-center justify-end gap-2">
-                    <Button v-if="$page.props.can?.create" @click="createModal = true" aria-label="New Comment" label="New $JS_SINGULAR_TITLE$" icon="pi pi-plus"/>
+                <div class="flex mb-2 flex-wrap items-center justify-end gap-2">
+                    <Button v-if="$page.props.userCan?.createUser" @click="createModal = true" aria-label="New $JS_SINGULAR_TITLE$" label="New $JS_SINGULAR_TITLE$" icon="pi pi-plus"/>
                 </div>
                 <PrimeDatatables
                     v-if="$page.props.can?.viewAny"

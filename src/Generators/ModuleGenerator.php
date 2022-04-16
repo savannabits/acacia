@@ -731,6 +731,10 @@ class ModuleGenerator extends Generator
     {
         return $this->getPluralName();
     }
+    protected function getModelNameReplacement(): string
+    {
+        return $this->schematic?->model_class ?? Str::singular($this->getName());
+    }
     protected function getStudlySingularNameReplacement(): string
     {
         return $this->getName();

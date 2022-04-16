@@ -8,11 +8,11 @@
         </template>
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
-                <div class="flex flex-wrap items-center justify-end gap-2">
-                    <Button v-if="$page.props.can?.create" @click="createModal = true" aria-label="New Comment" label="New $JS_SINGULAR_TITLE$" icon="pi pi-plus"/>
+                <div class="flex mb-2 flex-wrap items-center justify-end gap-2">
+                    <Button v-if="$page.props.userCan?.create$MODEL_NAME$" @click="createModal = true" aria-label="New $JS_SINGULAR_TITLE$" label="New $JS_SINGULAR_TITLE$" icon="pi pi-plus"/>
                 </div>
                 <PrimeDatatables
-                    v-if="$page.props.can?.viewAny"
+                    v-if="$page.props.userCan?.viewAny$MODEL_NAME$"
                     :apiUrl="apiUrl"
                     :columnFilters="{}"
                     :searchableColumns="searchableCols"
@@ -45,7 +45,7 @@
                 :maximizable="true"
                 v-model:visible="createModal"
                 :modal="true"
-                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '50vw'}"
         >
             <template #header>
                 <h4 class="font-black text-xl">
@@ -62,7 +62,7 @@
                 :maximizable="true"
                 v-model:visible="showModal"
                 :modal="true"
-                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '50vw'}"
         >
             <template #header>
                 <h4 class="font-black text-xl">
@@ -79,7 +79,7 @@
                 :maximizable="true"
                 v-model:visible="editModal"
                 :modal="true"
-                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '35vw'}"
+                :breakpoints="{'1600px':'50vw','960px': '75vw','540px': '100vw'}" :style="{width: '50vw'}"
         >
             <template #header>
                 <h4 class="font-black text-xl">
