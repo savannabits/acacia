@@ -199,6 +199,9 @@ class RequestMakeCommand extends GeneratorCommand
             return $item;
         })->keyBy("snake_method")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
             ->get('store') ?? []);
+        if($rules->isEmpty()) {
+            return $bRules;
+        }
         return $rules->merge($bRules);
     }
     private function makeUpdateRules(): Collection
@@ -211,6 +214,9 @@ class RequestMakeCommand extends GeneratorCommand
             return $item;
         })->keyBy("snake_method")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
             ->get('store') ?? []);
+        if($rules->isEmpty()) {
+            return $bRules;
+        }
         return $rules->merge($bRules);
     }
     private function makeDestroyRules(): Collection
