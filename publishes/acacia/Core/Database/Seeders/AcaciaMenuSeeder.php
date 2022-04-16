@@ -37,13 +37,12 @@ class AcaciaMenuSeeder extends Seeder
             AcaciaMenu::query()->truncate();
             $backend = new AcaciaMenu();
             $backend->id = 1;
-            $backend->title = "Backend";
+            $backend->title = "Dashboard";
             $backend->icon = "pi pi-chart-bar";
             $backend->route = 'acacia.backend.index';
-            $backend->active_pattern = "acacia.backend.*";
             $backend->permission_name = $backendPerm?->name;
             $backend->description = "The landing page of the backend module";
-            $backend->position = 1;
+            $backend->position = 0;
             $backend->saveOrFail();
 
             $gen = new AcaciaMenu();
@@ -54,7 +53,7 @@ class AcaciaMenuSeeder extends Seeder
             $gen->active_pattern = "acacia.g-panel.*";
             $gen->permission_name = $genPerm?->name;
             $gen->description = "Responsible for generation of modular code during development";
-            $gen->position = 0;
+            $gen->position = 99;
             $gen->saveOrFail();
 
             $gen = new AcaciaMenu();
