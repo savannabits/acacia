@@ -136,3 +136,16 @@ if (!function_exists("getGlobalCan")) {
         return $perms->toArray();
     }
 }
+if (!function_exists('getSpecialModules')) {
+    function getSpecialModules(): array
+    {
+        return config('acacia.special_modules', []);
+    }
+}
+
+if (!function_exists('getFinishedModules')) {
+    function getFinishedModules(): array
+    {
+        return config('acacia.finished_modules', []);
+    }
+}

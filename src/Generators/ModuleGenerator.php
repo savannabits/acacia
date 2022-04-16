@@ -11,12 +11,15 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command as Console;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Savannabits\Acacia\Commands\ModuleDeleteCommand;
 use Savannabits\Acacia\Contracts\ActivatorInterface;
 use Savannabits\Acacia\FileRepository;
 use Savannabits\Acacia\Module;
 use Savannabits\Acacia\Support\Config\GenerateConfigReader;
 use Savannabits\Acacia\Support\Stub;
+use Spatie\Permission\Models\Permission;
 
 class ModuleGenerator extends Generator
 {
@@ -314,17 +317,26 @@ class ModuleGenerator extends Generator
 
     /**
      * Generate the module.
-     * @throws \Savannabits\Acacia\Exceptions\ModuleNotFoundException
+     * @return int
      */
     public function generate() : int
     {
         $name = $this->getPluralName();
+        // Check if it is special:
+        if (in_array($name,getSpecialModules())) {
+            $this->getConsole()->error( "The module name $name has been listed as special and cannot be generated.");
+            return E_ERROR;
+        }
+        // Check if it is finished
+        if (in_array($name,getFinishedModules())) {
 
+            $this->getConsole()->error( "The module $name has been listed as finished/modified and cannot be re-generated.");
+            return E_ERROR;
+        }
         if ($this->module->has($name)) {
             if ($this->force) {
-                $this->module->delete($name);
-                // Delete menu
-                $this->deleteMenuEntry();
+                $this->console->comment("Module [{$name}] already exist, it will be deleted first.");
+                $this->console->call(ModuleDeleteCommand::class,['module' => $name]);
             } else {
                 $this->console->error("Module [{$name}] already exist!");
 
@@ -940,6 +952,7 @@ class ModuleGenerator extends Generator
         if (in_array($this->getLowerNameReplacement(),$auth)) {
             "acacia.auth.".$this->getLowerNameReplacement().".index";
         }
+        Permission::query()->where("name",'like',$this->getLowerNameReplacement().'.%')->forceDelete();
         AcaciaMenu::query()->where("route","=", $route)->forceDelete();
     }
 }

@@ -118,9 +118,9 @@
     import {Inertia} from "@inertiajs/inertia";
     import axios from "axios";
     import Dialog from "primevue/dialog"
-    import CreateForm from"./Partials/CreateForm.vue"
-    import EditForm from"./Partials/EditForm.vue";
-    import ShowForm from "./Partials/ShowForm.vue";
+    import CreateForm from"@Acacia/$STUDLY_NAME$/Js/Pages/Partials/CreateForm.vue"
+    import EditForm from"@Acacia/$STUDLY_NAME$/Js/Pages/Partials/EditForm.vue";
+    import ShowForm from "@Acacia/$STUDLY_NAME$/Js/Pages/Partials/ShowForm.vue";
     import Message from "primevue/message";
 
     const apiUrl = route('api.v1.$LOWER_NAME$.dt');
