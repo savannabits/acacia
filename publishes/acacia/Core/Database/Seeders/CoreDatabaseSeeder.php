@@ -16,6 +16,8 @@ class CoreDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-         $this->call(AcaciaMenuSeeder::class);
+        if (config("acacia.seeder.seed_menu", false)) {
+            $this->call(AcaciaMenuSeeder::class);
+        }
     }
 }

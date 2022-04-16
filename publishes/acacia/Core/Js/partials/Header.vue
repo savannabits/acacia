@@ -15,6 +15,7 @@
               <rect x="4" y="17" width="16" height="2" />
             </svg>
           </button>
+            <a :href="route('dashboard')" class="py-3"><i class="pi pi-home mr-2"></i> Home</a>
 
         </div>
 
