@@ -15,6 +15,7 @@ class AcaciaServiceProvider extends ModulesServiceProvider
     {
         $this->registerNamespaces();
         $this->registerModules();
+        \DB::getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
     }
 
     /**
