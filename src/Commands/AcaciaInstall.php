@@ -78,7 +78,7 @@ class AcaciaInstall extends Command
         $this->info("Dump autoload");
         $newDb = false;
         Helpers::runShellCommand('composer dump-autoload');
-        if (file_exists('./acacia/Core/Database/acacia.sqlite')){
+        if (!file_exists('./acacia/Core/Database/acacia.sqlite')){
             $newDb = true;
             $this->info("Creating initial sqlite db");
             Helpers::runShellCommand('cp ./acacia/acacia.sqlite.latest ./acacia/Core/Database/acacia.sqlite');
