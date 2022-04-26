@@ -94,6 +94,8 @@ class AcaciaServiceProvider extends ServiceProvider
         ], ['views', $this->moduleNameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
+        \Blade::anonymousComponentNamespace('components',$this->moduleNameLower);
+        \Blade::componentNamespace('Acacia\\Core\\Components',$this->moduleNameLower);
     }
 
     /**

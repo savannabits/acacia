@@ -3,6 +3,7 @@
 namespace Savannabits\Acacia\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Route;
 use Savannabits\Acacia\Helpers\Helpers;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
@@ -47,7 +48,20 @@ class AcaciaInstall extends Command
         $scout =  ['--provider' => 'Laravel\Scout\ScoutServiceProvider'];
         $this->alert("Begin Installation");
         if ($force) {
-            Helpers::runShellCommand('rm -rf acacia/');
+            if (file_exists('./acacia/Core/Database/acacia.sqlite')){
+                $this->info("Backing up the SQlite DB");
+                Helpers::runShellCommand('cp ./acacia/Core/Database/acacia.sqlite ./acacia/acacia.sqlite.latest');
+            }
+            $this->info("Removing acacia/Core");
+            Helpers::runShellCommand('rm -rf acacia/Core');
+            $this->info("Removing acacia/package.json");
+            Helpers::runShellCommand('rm -rf acacia/package.json');
+            $this->info("Removing acacia/tsconfig.json");
+            Helpers::runShellCommand('rm -rf acacia/tsconfig.json');
+            $this->info("Removing acacia/tailwind.config..ts");
+            Helpers::runShellCommand('rm -rf acacia/tailwind.config.ts');
+            $this->info("Removing acacia/vite.config..ts");
+            Helpers::runShellCommand('rm -rf acacia/vite.config.ts');
             if (file_exists(config_path('acacia.php'))) {
                 Helpers::runShellCommand('rm -rf '.config_path('acacia.php'));
             }
@@ -62,20 +76,30 @@ class AcaciaInstall extends Command
         $this->info("   d. Publishing laravel scout config");
         $this->call("vendor:publish",$scout);
         $this->info("Dump autoload");
+        $newDb = false;
         Helpers::runShellCommand('composer dump-autoload');
+        if (file_exists('./acacia/Core/Database/acacia.sqlite')){
+            $newDb = true;
+            $this->info("Creating initial sqlite db");
+            Helpers::runShellCommand('cp ./acacia/acacia.sqlite.latest ./acacia/Core/Database/acacia.sqlite');
+        }
         $this->info("3. Enable initial modules");
         $this->call("acacia:enable");
         $this->info("Configure acacia db config temporarily");
         Helpers::configureAcaciaDb();
         Helpers::runShellCommand('composer dump-autoload', $this);
-        $this->info("2. Running GPanel Migrations");
-        $this->call('migrate:fresh',['--path' => 'acacia/Core/Database/SqliteMigrations', '--database' =>'acacia']);
+        if ($newDb) {
+            $this->info("2. Running GPanel Migrations");
+            $this->call('migrate:fresh',['--path' => 'acacia/Core/Database/SqliteMigrations', '--database' =>'acacia']);
+        }
         $this->info("2. Running Initial Modules Seeders");
         $this->call('acacia:seed');
-        $this->info("Ensure breeze is installed");
-        $this->call('breeze:install');
+        if (!Route::has('login')) {
+            $this->info("We couldn't find the login route. Ensuring breeze is installed");
+            $this->call('breeze:install');
+        }
         $this->info("Attempt to install the app's npm dependencies");
-        Helpers::runShellCommand("npm install && npm run dev", $this);
+        Helpers::runShellCommand("npm install && npm run prod", $this);
         $this->info("Attempt to install acacia's npm dependencies");
         Helpers::runShellCommand("cd acacia && npm install && npm run build", $this);
         $this->alert('Installation Complete');
