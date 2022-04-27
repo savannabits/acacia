@@ -213,7 +213,7 @@ class RequestMakeCommand extends GeneratorCommand
             $item->snake_method = Str::snake($item->method);
             return $item;
         })->keyBy("snake_method")->map(fn($field) => collect(json_decode($field->server_validation ?? '[]'))
-            ->get('store') ?? []);
+            ->get('update') ?? []);
         if($rules->isEmpty()) {
             return $bRules;
         }
