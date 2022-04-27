@@ -177,9 +177,22 @@ class RequestMakeCommand extends GeneratorCommand
             default => collect([])
         });
         foreach ($rules as $field => $rule) {
-            $content.="'$field' => ".json_encode($rule).",";
+            $content.="'$field' => ".$this->renderRule($rule).",";
         }
         return "[$content]";
+    }
+    public function renderRule($rules): string
+    {
+        $content = "[";
+        foreach ($rules as $rule) {
+            if (Str::contains($rule,"::")) {
+                $content.= $rule.',';
+            } else {
+                $content .= "'".$rule."',";
+            }
+        }
+        $content.="]";
+        return $content;
     }
     private function makeIndexRules(): Collection
     {
