@@ -4,6 +4,8 @@ namespace $NAMESPACE$;
 
 use Illuminate\Foundation\Http\FormRequest;
 use $MODULE_NAMESPACE$\$MODULE_NAME$\$MODEL_NAMESPACE$\$MODEL_NAME$;
+use Illuminate\Validation\Rule;
+
 class $CLASS$ extends FormRequest
 {
     /**
