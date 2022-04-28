@@ -32,7 +32,7 @@ import route from "ziggy-js";
 import { Inertia } from "@inertiajs/inertia";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
-import ShowForm from "./Partials/ShowForm.vue";
+import ShowForm from "@Acacia/Users/Js/Pages/Partials/ShowForm.vue";
 const model = computed(() => usePage().props.value?.model);
 
 const confirm = useConfirm();

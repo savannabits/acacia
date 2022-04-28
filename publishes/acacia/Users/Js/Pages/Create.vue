@@ -30,7 +30,7 @@ import Backend from "@Acacia/Core/Js/Layouts/Backend.vue";
 import BackLink from "@Acacia/Core/Js/Components/BackLink.vue";
 import route from "ziggy-js";
 import { Inertia } from "@inertiajs/inertia";
-import CreateForm from "./Partials/CreateForm.vue";
+import CreateForm from "@Acacia/Users/Js/Pages/Partials/CreateForm.vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 

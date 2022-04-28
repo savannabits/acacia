@@ -2,10 +2,8 @@
 
 namespace Acacia\Users\Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Role;
 
 class UsersDatabaseSeeder extends Seeder
 {
@@ -27,19 +25,7 @@ class UsersDatabaseSeeder extends Seeder
             "users.force-delete",
             "users.review",
         ];
-        try {// Create default admin user
-            $user = User::firstOrCreate(['email' => 'admin@savannabits.com'],[
-                'email' => 'admin@savannabits.com',
-                'name' => 'System Admin',
-                'email_verified_at' => now(),
-                'password' => \Hash::make('password'),
-            ]);
-
-            // Give admin role
-            $admin = Role::query()->where('name','=','administrator')->first();
-            if (!$user->hasRole($admin)) {
-                $user->roles()->save($admin);
-            }
+        try {
             \Savannabits\Acacia\Helpers\Permissions::seedPermissions($perms);
         } catch (\Throwable $e) {
             \Log::info($e);

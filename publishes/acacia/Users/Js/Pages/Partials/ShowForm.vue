@@ -79,6 +79,7 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import InputText from "primevue/inputtext";
 import AcaciaDatepicker from "@/Components/AcaciaDatepicker.vue";
+import Password from "primevue/password";
 const emit = defineEmits(["updated", "error"]);
 const props = defineProps({ model: {} });
 const flash = computed(() => usePage().props?.value?.flash) as any;

@@ -18,4 +18,5 @@ class FormFields
     const MASK = "mask";
     const MULTI_CHECKBOX = "multi-checkbox";
     const PASSWORD = "password";
+    const SECRET = "secret";
 }
