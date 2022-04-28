@@ -8,11 +8,11 @@
         </template>
         <div class="mx-auto flex container items-center justify-center mt-4">
             <div class="rounded w-full p-2 bg-white">
-                <div class="flex flex-wrap items-center justify-end gap-2">
+                <div class="flex mb-2 flex-wrap items-center justify-end gap-2">
                     <Button
-                        v-if="$page.props.can?.create"
+                        v-if="$page.props.userCan?.createUser"
                         @click="createModal = true"
-                        aria-label="New Comment"
+                        aria-label="New User"
                         label="New User"
                         icon="pi pi-plus"
                     />
@@ -229,9 +229,9 @@ import { useToast } from "primevue/usetoast";
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 import Dialog from "primevue/dialog";
-import CreateForm from "./Partials/CreateForm.vue";
-import EditForm from "./Partials/EditForm.vue";
-import ShowForm from "./Partials/ShowForm.vue";
+import CreateForm from "@Acacia/Users/Js/Pages/Partials/CreateForm.vue";
+import EditForm from "@Acacia/Users/Js/Pages/Partials/EditForm.vue";
+import ShowForm from "@Acacia/Users/Js/Pages/Partials/ShowForm.vue";
 import Message from "primevue/message";
 
 const apiUrl = route("api.v1.users.dt");

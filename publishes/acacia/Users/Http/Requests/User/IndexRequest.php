@@ -4,6 +4,9 @@ namespace Acacia\Users\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Acacia\Users\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+
 class IndexRequest extends FormRequest
 {
     /**

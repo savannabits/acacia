@@ -91,7 +91,7 @@ if (!function_exists("prepare_menu")) {
             } else {
                 $item->active = $item->active_pattern && Route::is($item->active_pattern);
             }
-            $item->shown = Auth::check() && (!$item->permission_name || Auth::user()->hasPermissionTo($item->permission_name));
+            $item->shown = Auth::check() && (!$item->permission_name || Auth::user()->can($item->permission_name));
             return $item;
         });
     }
@@ -110,8 +110,14 @@ if (!function_exists("menu_has_active_child")) {
 }
 
 if (!function_exists("get_default_html_field")) {
-    function get_default_html_field(string $dbColumnType): string
+    function get_default_html_field(string $dbColumnType, ?string $columnName = null): string
     {
+        if (in_array($columnName,['password','user_password'])) {
+            return FormFields::PASSWORD;
+        }
+        if (in_array($columnName,['secret','api_token'])) {
+            return FormFields::SECRET;
+        }
         return match ($dbColumnType) {
             "boolean", "bool", "tinyinteger" => FormFields::SWITCH,
             "text", "longtext" => FormFields::TEXTAREA,

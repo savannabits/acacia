@@ -90,7 +90,7 @@ class GPanelRepo
                 $field->title = \Str::replace("_"," ",\Str::title($key));
                 $field->name = $key;
                 $field->db_type = $column->getType()->getName();
-                $field->html_type = get_default_html_field($column->getType()->getName());
+                $field->html_type = get_default_html_field($column->getType()->getName(), $column->getName());
                 $field->has_options = false;
                 $field->is_guarded = in_array($column->getName(),["id","password","username","created_at","updated_at"]);
                 $field->is_vue = true;
@@ -245,12 +245,6 @@ class GPanelRepo
             }
         }
 
-        if (in_array($column->getName(),['password','user_password'])) {
-            $validation->merge([
-                'confirmed',
-                'Illuminate\Validation\Rules\Password::min(8)'
-            ]);
-        }
 
 
         $otherRules = match ($field->db_type) {
@@ -259,10 +253,20 @@ class GPanelRepo
             "boolean","bool","tinyint", => "boolean",
             "json","longtext","relationship" => "array",
             "date","datetime","timestamp" => "date",
-            default => 'string'
+            default => 'string',
         };
-        $validation->get('store')->push($otherRules);
-        $validation->get('update')->push($otherRules);
+
+        if (in_array($column->getName(),['password','user_password'])) {
+            $validation->get('store')
+                ->push('confirmed')
+                ->push('Password::min(8)->mixedCase()->numbers()->symbols()');
+            $validation->get('update')
+                ->push('confirmed')
+                ->push('Illuminate\Validation\Rules\Password::min(8)->mixedCase()->numbers()->symbols()');
+        } else {
+            $validation->get('store')->push($otherRules);
+            $validation->get('update')->push($otherRules);
+        }
 
         return $validation->toJson();
     }

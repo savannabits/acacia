@@ -4,6 +4,9 @@ namespace Acacia\Users\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Acacia\Users\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+
 class UpdateRequest extends FormRequest
 {
     /**
@@ -15,9 +18,24 @@ class UpdateRequest extends FormRequest
     {
         return [
             "name" => ["sometimes", "string"],
-            "email" => ["sometimes", "string"],
+            "email" => [
+                "sometimes",
+                "email",
+                Rule::unique("users", "email")->ignore(
+                    $this->user->getKey(),
+                    $this->user->getKeyName()
+                ),
+                "string",
+            ],
             "email_verified_at" => ["nullable", "date"],
-            "password" => ["sometimes", "string"],
+            "password" => [
+                "sometimes",
+                "confirmed",
+                Illuminate\Validation\Rules\Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+            ],
             "remember_token" => ["nullable", "string"],
         ];
     }

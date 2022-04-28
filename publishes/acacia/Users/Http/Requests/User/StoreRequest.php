@@ -4,6 +4,9 @@ namespace Acacia\Users\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Acacia\Users\Models\User;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
+
 class StoreRequest extends FormRequest
 {
     /**
@@ -15,9 +18,21 @@ class StoreRequest extends FormRequest
     {
         return [
             "name" => ["required", "string"],
-            "email" => ["required", "string"],
+            "email" => [
+                "required",
+                "email",
+                Rule::unique("users", "email"),
+                "string",
+            ],
             "email_verified_at" => ["nullable", "date"],
-            "password" => ["required", "string"],
+            "password" => [
+                "required",
+                "confirmed",
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+            ],
             "remember_token" => ["nullable", "string"],
         ];
     }
