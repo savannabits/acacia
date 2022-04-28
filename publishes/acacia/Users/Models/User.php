@@ -2,8 +2,10 @@
 
 namespace Acacia\Users\Models;
 
+use Acacia\Roles\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Acacia\Users\Database\Factories\UserFactory;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
 
 class User extends \App\Models\User
@@ -46,6 +48,16 @@ class User extends \App\Models\User
             )
             ->pluck("can", "policy")
             ->toArray();
+    }
+
+    public function getAssignedRolesAttribute(): \Illuminate\Database\Eloquent\Collection|Collection
+    {
+        $authUser = \App\Models\User::query()->find($this->id);
+        $roles = Role::all();
+        return $roles->map(function (Role $role) use (&$authUser) {
+            $role->assigned = $authUser->hasRole($role?->name);
+            return $role;
+        });
     }
 
     protected static function newFactory(): UserFactory

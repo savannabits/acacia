@@ -10,13 +10,16 @@ use Acacia\Users\Http\Requests\User\ViewRequest;
 use Acacia\Users\Http\Requests\User\StoreRequest;
 use Acacia\Users\Http\Requests\User\UpdateRequest;
 use Acacia\Users\Http\Requests\User\DestroyRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Log;
 use Savannabits\Acacia\Helpers\ApiResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -38,8 +41,8 @@ class UserController extends Controller
                 ->message("List of Users")
                 ->payload($data)
                 ->send();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
@@ -56,8 +59,8 @@ class UserController extends Controller
     {
         try {
             return $this->repo->dt();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
@@ -81,8 +84,8 @@ class UserController extends Controller
                 ->message($success)
                 ->payload($payload)
                 ->send();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
@@ -107,8 +110,8 @@ class UserController extends Controller
                 ->message($success)
                 ->payload($payload)
                 ->send();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
@@ -135,8 +138,8 @@ class UserController extends Controller
                 ->message($success)
                 ->payload($payload)
                 ->send();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
@@ -161,8 +164,37 @@ class UserController extends Controller
                 ->message($success)
                 ->payload($payload)
                 ->send();
-        } catch (\Throwable $e) {
-            \Log::error($e);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->api
+                ->failed()
+                ->code(500)
+                ->message($e->getMessage())
+                ->send();
+        }
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function toggleRole(Request $request, User $user): JsonResponse
+    {
+        $this->authorize('update',$user);
+        $validated = $request->validate([
+            'role_id' => ['required','integer'],
+            'assigned' => ['required','boolean'],
+        ]);
+        try {
+            $payload = $this->repo
+                ->setModel($user)
+                ->toggleRole((object) $validated);
+            $success = "Record updated successfully";
+            return $this->api
+                ->success()
+                ->message($success)
+                ->send();
+        } catch (Throwable $e) {
+            Log::error($e);
             return $this->api
                 ->failed()
                 ->code(500)
