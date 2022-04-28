@@ -2,7 +2,11 @@
 
 namespace Acacia\Users\Repositories;
 
+use Acacia\Roles\Models\Role;
+use Hash;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use PrimevueDatatables;
 use Throwable;
 use Illuminate\Support\Str;
 use Acacia\Users\Models\User;
@@ -43,6 +47,9 @@ class Users
     {
         $relationships = $this->relationships;
         $model = new User((array) $data);
+        if (isset($data->password) && $data->password) {
+            $model->password = Hash::make($data->password);
+        }
         foreach ($relationships as $relationship) {
             $method = Str::snake($relationship);
             if (isset($data->$method) && $data->$method?->id) {
@@ -57,6 +64,7 @@ class Users
     {
         $relationships = $this->relationships;
         $this->model->load($relationships);
+        $this->model->append('assigned_roles');
         return $this->model;
     }
 
@@ -72,6 +80,9 @@ class Users
             }
         }
         $this->model->update((array) $data);
+        if (isset($data->password) && $data->password) {
+            $this->model->password = Hash::make($data->password);
+        }
 
         $this->model->saveOrFail();
         return $this->model;
@@ -81,9 +92,19 @@ class Users
     {
         return !!$this->model->delete();
     }
+    public function toggleRole(object $data): bool
+    {
+        $authUser = \App\Models\User::query()->find($this->model->id);
+        if ($data->assigned) {
+            $authUser->assignRole($data->role_id);
+        } else {
+            $authUser->removeRole($data->role_id);
+        }
+        return true;
+    }
     public function dt(): LengthAwarePaginator
     {
         $q = User::query();
-        return \PrimevueDatatables::of($q)->make();
+        return PrimevueDatatables::of($q)->make();
     }
 }

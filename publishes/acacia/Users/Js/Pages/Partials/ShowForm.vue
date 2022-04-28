@@ -54,7 +54,15 @@
                 </AcaciaDd>
             </dl>
         </TabPanel>
-        <TabPanel header="Roles"> Assigned Roles </TabPanel>
+        <TabPanel lazy header="Roles">
+            <template v-for="role in model.assigned_roles">
+                <div class="field-checkbox flex items-center gap-2 gap-x-4">
+                    <Checkbox :id="role.id" :disabled="true" v-model="role.assigned" :binary="true" />
+                    <label :for="role.id">{{role.name}}</label>
+                </div>
+                <Divider/>
+            </template>
+        </TabPanel>
     </TabView>
     <Message v-else severity="error"
         >You are not authorized to view this record</Message
@@ -78,6 +86,8 @@ import AcaciaDd from "@/Components/AcaciaDd.vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import InputText from "primevue/inputtext";
+import Checkbox from "primevue/checkbox";
+import Divider from "primevue/divider";
 import AcaciaDatepicker from "@/Components/AcaciaDatepicker.vue";
 import Password from "primevue/password";
 const emit = defineEmits(["updated", "error"]);
