@@ -2,8 +2,10 @@
 
 namespace Acacia\Users\Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class UsersDatabaseSeeder extends Seeder
 {
@@ -26,6 +28,13 @@ class UsersDatabaseSeeder extends Seeder
             "users.review",
         ];
         try {
+            $admin = Role::query()->firstOrCreate(["name" => "administrator"],["name" => "administrator","guard_name" => "web"]);
+            $user = User::query()->firstOrCreate(['email' => 'admin@savannabits.com'],[
+                'email' => 'admin@savannabits.com',
+                'name' => 'System Admin',
+                'email_verified_at' => now(),
+                'password' => \Hash::make('password'),
+            ]);
             \Savannabits\Acacia\Helpers\Permissions::seedPermissions($perms);
         } catch (\Throwable $e) {
             \Log::info($e);
